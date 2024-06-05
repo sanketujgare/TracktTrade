@@ -1,0 +1,19 @@
+.ButtonContainer {
+  //   display: flex;
+  padding: 0.5rem;
+
+  .Button {
+    padding: 0.4rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.5rem;
+    .ButtonText {
+      font-size: 1rem;
+    }
+    &:hover {
+    }
+    &:active {
+      transform: scale(110%);
+    }
+  }
+}
