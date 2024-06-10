@@ -20,7 +20,6 @@ const order_responses_1 = require("./order.responses");
 const placeOrder = (order) => {
     try {
         const newOrder = order_repo_1.default.placeOrder(order);
-        console.log(newOrder.products);
         if (!newOrder)
             return order_responses_1.orderResponses.CAN_NOT_PLACE_ORDER;
         return order_responses_1.orderResponses.ORDER_PLACED_SUCCESSFULLY;

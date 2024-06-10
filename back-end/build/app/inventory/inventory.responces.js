@@ -14,4 +14,8 @@ exports.inventoryResponses = {
         statusCode: 400,
         message: "NO ITEMS FOUND IN INVENTORY ITS EMPTY",
     },
+    NO_DATA_FOUND: {
+        statusCode: 404,
+        message: "NO DATA FOUND",
+    },
 };

@@ -1,3 +1,4 @@
+import { productResponses } from "../Products/product.responses";
 import productService from "../Products/product.service";
 import { userResponses } from "../users/user.responses";
 import userService from "../users/user.service";
@@ -18,9 +19,19 @@ export const addProductToInventory = async (productId: string) => {
     }
 };
 
-export const getInventory = async () => {
+export const getInventory = async (userId: string) => {
     try {
-    } catch (e) {}
+        const userInventory = await userService.getInventory(userId);
+        if (!userInventory) return inventoryResponses.NO_DATA_FOUND;
+        if (!userInventory.inventory) return inventoryResponses.EMPTY_INVENTORY;
+        const inventory = userInventory.inventory.map((product) => {
+            const { productId, quantity } = product;
+            return { product: productId, quantity };
+        });
+        return inventory;
+    } catch (e) {
+        throw e;
+    }
 };
 
 export const checkInventoryLevel = async (
@@ -51,6 +62,29 @@ export const checkInventoryLevel = async (
                 }
             }
         }
+    } catch (e) {
+        throw e;
+    }
+};
+
+export const updateManufacturersInventory = async (
+    userId: string,
+    product: IInventorySchema
+) => {
+    try {
+        const user = await userService.getSpecificUser(userId);
+        await productService.getSpecificProduct(product.productId);
+
+        if (user.inventory) {
+            const inventoryItem = user.inventory.find(
+                (item) =>
+                    item.productId.toString() === product.productId.toString()
+            );
+            if (inventoryItem) inventoryItem.quantity += product.quantity;
+        } else {
+            throw inventoryResponses.EMPTY_INVENTORY;
+        }
+        await user.save();
     } catch (e) {
         throw e;
     }
@@ -87,4 +121,6 @@ export default {
     addProductToInventory,
     updateInventory,
     checkInventoryLevel,
+    updateManufacturersInventory,
+    getInventory,
 };

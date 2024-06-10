@@ -30,6 +30,7 @@ userRouter.get(
         try {
             const userId = req.params.userid;
             const result = userService.getSpecificUser(userId);
+            res.send(new ResponseHandler(result));
         } catch (e) {
             next(e);
         }

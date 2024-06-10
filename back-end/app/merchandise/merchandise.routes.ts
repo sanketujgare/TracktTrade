@@ -9,33 +9,32 @@ import { permissionsToCreate } from "../utility/pemissions";
 const merchandiseRouter = Router();
 
 merchandiseRouter.post(
-  "/add-merchandise",
-  authPermissions(permissionsToCreate),
-  ...merchandiseValidations,
-  (req, res, next) => {
-    try {
-      const manufacturerId = req.currentUser._id;
-      // console.log(manufacturerId);
-      const result = merchandiseService.addMerchandise(
-        req.body,
-        manufacturerId
-      );
-      res.send(new ResponseHandler(result));
-    } catch (e) {
-      next(e);
+    "/add-merchandise",
+    authPermissions(permissionsToCreate),
+    ...merchandiseValidations,
+    (req, res, next) => {
+        try {
+            const manufacturerId = req.currentUser._id;
+            const result = merchandiseService.addMerchandise(
+                req.body,
+                manufacturerId
+            );
+            res.send(new ResponseHandler(result));
+        } catch (e) {
+            next(e);
+        }
     }
-  }
 );
 merchandiseRouter.get(
-  "/allmerchandise",
-  authPermissions(["viewAllMerchandise"]),
-  async (req, res, next) => {
-    try {
-      const result = await merchandiseService.getAllMerchandise();
-      res.send(new ResponseHandler(result));
-    } catch (e) {
-      next(e);
+    "/allmerchandise",
+    authPermissions(["viewAllMerchandise"]),
+    async (req, res, next) => {
+        try {
+            const result = await merchandiseService.getAllMerchandise();
+            res.send(new ResponseHandler(result));
+        } catch (e) {
+            next(e);
+        }
     }
-  }
 );
 export default new Route("/merchandise", merchandiseRouter);

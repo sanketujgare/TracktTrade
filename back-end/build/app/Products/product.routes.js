@@ -31,7 +31,6 @@ productRouter.post("/add-product", ...product_validations_1.productValidations, 
 }));
 productRouter.get("/allproducts", (0, auth_permissions_1.authPermissions)(["viewAppProducts"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("Product route");
         const result = yield product_service_1.default.getAllProduct();
         res.send(new response_handler_1.ResponseHandler(result));
     }

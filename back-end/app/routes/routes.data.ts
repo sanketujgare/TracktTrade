@@ -9,22 +9,22 @@ import merchandiseRoutes from "../merchandise/merchandise.routes";
 import inventoryRoutes from "../inventory/inventory.routes";
 
 export const routes = [
-  authRoutes,
-  userRoutes,
-  productRoutes,
-  orderRoutes,
-  merchandiseRoutes,
-  salesRoutes,
-  inventoryRoutes,
+    authRoutes,
+    userRoutes,
+    productRoutes,
+    orderRoutes,
+    merchandiseRoutes,
+    salesRoutes,
+    inventoryRoutes,
 ];
 
 export const excludedRoutes: ExcludedRoutes = [
-  {
-    path: match("/auth/login"),
-    method: "POST",
-  },
-  {
-    path: match("/auth/signup"),
-    method: "POST",
-  },
+    {
+        path: match("/auth/login"),
+        method: "POST",
+    },
+    {
+        path: match("/auth/signup"),
+        method: "POST",
+    },
 ];

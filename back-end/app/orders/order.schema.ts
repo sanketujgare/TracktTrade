@@ -3,25 +3,26 @@ import { BaseSchema } from "../utility/base.schema";
 import { IOrderSchema } from "./orders.types";
 
 const orderSchema = new BaseSchema({
-  distributorId: {
-    type: Types.ObjectId,
-    required: true,
-  },
-  products: [
-    {
-      productId: {
+    distributorId: {
         type: Types.ObjectId,
         required: true,
-      },
-      quantity: {
-        type: Number,
-      },
     },
-  ],
-  status: {
-    type: String,
-    enum: ["pending", "completed"],
-  },
+    products: [
+        {
+            productId: {
+                type: Types.ObjectId,
+                required: true,
+            },
+            quantity: {
+                type: Number,
+            },
+        },
+    ],
+    status: {
+        type: String,
+        enum: ["pending", "completed"],
+        default: "pending",
+    },
 });
 
 const orderModel = model<IOrderSchema>("Order", orderSchema);

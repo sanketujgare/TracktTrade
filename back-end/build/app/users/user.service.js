@@ -75,8 +75,9 @@ const getSpecificUser = (userId) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getSpecificUser = getSpecificUser;
 const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const inventory = yield user_repo_1.default.getInventory(userId);
-    // if (!inventory || inventory.length === 0) inventoryResponses.EMPTY_INVENTORY;
+    const userInventory = yield user_repo_1.default.getInventory(userId);
+    if (userInventory)
+        return userInventory;
 });
 exports.getInventory = getInventory;
 exports.default = {
@@ -84,4 +85,5 @@ exports.default = {
     createUser: exports.createUser,
     addProductToInventory: exports.addProductToInventory,
     getSpecificUser: exports.getSpecificUser,
+    getInventory: exports.getInventory,
 };

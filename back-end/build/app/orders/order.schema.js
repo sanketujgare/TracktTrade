@@ -21,6 +21,7 @@ const orderSchema = new base_schema_1.BaseSchema({
     status: {
         type: String,
         enum: ["pending", "completed"],
+        default: "pending",
     },
 });
 const orderModel = (0, mongoose_1.model)("Order", orderSchema);

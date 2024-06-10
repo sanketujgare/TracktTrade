@@ -29,11 +29,11 @@ userRouter.post("/create-user", (0, auth_permissions_1.authPermissions)(pemissio
         next(e);
     }
 }));
-userRouter.get("/user/:userid", (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userRouter.get("/getuser/:userid", (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.params.userid;
-        // const result = await trialFInd(userId);
-        // res.send(new ResponseHandler());
+        const result = user_service_1.default.getSpecificUser(userId);
+        res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
         next(e);

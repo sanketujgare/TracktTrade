@@ -3,18 +3,18 @@ import { BaseSchema } from "../utility/base.schema";
 import { IProductSchema } from "./product.types";
 
 const productSchema = new BaseSchema({
-  productName: {
-    type: String,
-  },
-  productDescription: {
-    type: String,
-  },
-  productPrice: {
-    type: Number,
-  },
-  productImage: {
-    type: String,
-  },
+    productName: {
+        type: String,
+    },
+    productDescription: {
+        type: String,
+    },
+    productPrice: {
+        type: Number,
+    },
+    productImage: {
+        type: String,
+    },
 });
 
 const productModel = model<IProductSchema>("Product", productSchema);

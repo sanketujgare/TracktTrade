@@ -44,7 +44,7 @@ const getAllProduct = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.getAllProduct = getAllProduct;
 const getSpecificProduct = (productId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const product = product_repo_1.default.getSpecificProduct(productId);
+        const product = yield product_repo_1.default.getSpecificProduct(productId);
         if (!product)
             throw product_responses_1.productResponses.PRODUCTS_NOT_FOUND;
         return product;

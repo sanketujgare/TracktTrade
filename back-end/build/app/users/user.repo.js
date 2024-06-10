@@ -42,6 +42,7 @@ exports.getSpecificUser = getSpecificUser;
 const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const inventory = yield user_schema_1.default
         .findById(userId)
+        .select("inventory")
         .populate("inventory.productId");
     return inventory;
 });

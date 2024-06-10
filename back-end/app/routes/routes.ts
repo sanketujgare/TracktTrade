@@ -5,17 +5,17 @@ import { ResponseHandler } from "../utility/response-handler";
 import { validateToken } from "../utility/validate-token";
 import helmet from "helmet";
 export const registerMiddlewares = (app: Application) => {
-  app.use(json());
-  app.use(cors());
-  app.use(helmet());
+    app.use(json());
+    app.use(cors());
+    app.use(helmet());
 
-  app.use(validateToken(excludedRoutes));
+    app.use(validateToken(excludedRoutes));
 
-  for (let route of routes) {
-    app.use(route.path, route.router);
-  }
+    for (let route of routes) {
+        app.use(route.path, route.router);
+    }
 
-  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    res.status(err.statusCode || 500).send(new ResponseHandler(null, err));
-  });
+    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+        res.status(err.statusCode || 500).send(new ResponseHandler(null, err));
+    });
 };

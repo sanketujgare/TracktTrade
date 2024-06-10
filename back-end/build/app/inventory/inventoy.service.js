@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateInventory = exports.checkInventoryLevel = exports.getInventory = exports.addProductToInventory = void 0;
+exports.updateInventory = exports.updateManufacturersInventory = exports.checkInventoryLevel = exports.getInventory = exports.addProductToInventory = void 0;
 const product_service_1 = __importDefault(require("../Products/product.service"));
 const user_responses_1 = require("../users/user.responses");
 const user_service_1 = __importDefault(require("../users/user.service"));
@@ -30,10 +30,22 @@ const addProductToInventory = (productId) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.addProductToInventory = addProductToInventory;
-const getInventory = () => __awaiter(void 0, void 0, void 0, function* () {
+const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const userInventory = yield user_service_1.default.getInventory(userId);
+        if (!userInventory)
+            return inventory_responces_1.inventoryResponses.NO_DATA_FOUND;
+        if (!userInventory.inventory)
+            return inventory_responces_1.inventoryResponses.EMPTY_INVENTORY;
+        const inventory = userInventory.inventory.map((product) => {
+            const { productId, quantity } = product;
+            return { product: productId, quantity };
+        });
+        return inventory;
     }
-    catch (e) { }
+    catch (e) {
+        throw e;
+    }
 });
 exports.getInventory = getInventory;
 const checkInventoryLevel = (user, products) => __awaiter(void 0, void 0, void 0, function* () {
@@ -57,6 +69,25 @@ const checkInventoryLevel = (user, products) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.checkInventoryLevel = checkInventoryLevel;
+const updateManufacturersInventory = (userId, product) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield user_service_1.default.getSpecificUser(userId);
+        yield product_service_1.default.getSpecificProduct(product.productId);
+        if (user.inventory) {
+            const inventoryItem = user.inventory.find((item) => item.productId.toString() === product.productId.toString());
+            if (inventoryItem)
+                inventoryItem.quantity += product.quantity;
+        }
+        else {
+            throw inventory_responces_1.inventoryResponses.EMPTY_INVENTORY;
+        }
+        yield user.save();
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.updateManufacturersInventory = updateManufacturersInventory;
 const updateInventory = (userId, products) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_service_1.default.getSpecificUser(userId);
@@ -81,4 +112,6 @@ exports.default = {
     addProductToInventory: exports.addProductToInventory,
     updateInventory: exports.updateInventory,
     checkInventoryLevel: exports.checkInventoryLevel,
+    updateManufacturersInventory: exports.updateManufacturersInventory,
+    getInventory: exports.getInventory,
 };

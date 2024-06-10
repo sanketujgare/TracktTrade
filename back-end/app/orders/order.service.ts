@@ -7,7 +7,6 @@ import { IOrderSchema, IStatusUpdate, statusUpdate } from "./orders.types";
 export const placeOrder = (order: IOrderSchema) => {
     try {
         const newOrder = orderRepo.placeOrder(order);
-        console.log(newOrder.products);
         if (!newOrder) return orderResponses.CAN_NOT_PLACE_ORDER;
         return orderResponses.ORDER_PLACED_SUCCESSFULLY;
     } catch (e) {

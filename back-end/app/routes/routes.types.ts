@@ -2,21 +2,21 @@ import { Router } from "express";
 import { MatchFunction } from "path-to-regexp";
 
 export class Route {
-  static registeredRoutes: Route[] = [];
-  constructor(public path: string, public router: Router) {
-    if (!this.path.startsWith("/")) {
-      throw new Error("INVALID PATH !!!");
+    static registeredRoutes: Route[] = [];
+    constructor(public path: string, public router: Router) {
+        if (!this.path.startsWith("/")) {
+            throw new Error("INVALID PATH !!!");
+        }
+        if (Route.registeredRoutes.find((r) => r.path === this.path)) {
+            throw new Error("PATH ALREADY EXISTS");
+        }
+        Route.registeredRoutes.push(this);
     }
-    if (Route.registeredRoutes.find((r) => r.path === this.path)) {
-      throw new Error("PATH ALREADY EXISTS");
-    }
-    Route.registeredRoutes.push(this);
-  }
 }
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 type ExcludedRoute = {
-  path: MatchFunction<any>;
-  method: Method;
+    path: MatchFunction<any>;
+    method: Method;
 };
 export type ExcludedRoutes = ExcludedRoute[];

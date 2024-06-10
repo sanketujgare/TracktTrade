@@ -23,7 +23,6 @@ const merchandiseRouter = (0, express_1.Router)();
 merchandiseRouter.post("/add-merchandise", (0, auth_permissions_1.authPermissions)(pemissions_1.permissionsToCreate), ...merchandise_validations_1.merchandiseValidations, (req, res, next) => {
     try {
         const manufacturerId = req.currentUser._id;
-        // console.log(manufacturerId);
         const result = merchandise_service_1.default.addMerchandise(req.body, manufacturerId);
         res.send(new response_handler_1.ResponseHandler(result));
     }
