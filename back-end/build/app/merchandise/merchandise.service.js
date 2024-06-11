@@ -20,7 +20,7 @@ const addMerchandise = (merchandise, manufacturerId) => {
         merchandise.createdBy = manufacturerId;
         const newMerchandise = merchandise_repo_1.default.insertOne(merchandise);
         if (!newMerchandise)
-            return merchandise_responses_1.merchandiseResponses.CAN_NOT_ADD_MERCHANDISE;
+            throw merchandise_responses_1.merchandiseResponses.CAN_NOT_ADD_MERCHANDISE;
         return merchandise_responses_1.merchandiseResponses.MERCHANDISE_ADDED;
     }
     catch (e) {
@@ -32,7 +32,7 @@ const getAllMerchandise = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const merchandise = yield merchandise_repo_1.default.getAllMerchandise();
         if (!merchandise)
-            return merchandise_responses_1.merchandiseResponses.MERCHANDISE_NOT_FOUND;
+            throw merchandise_responses_1.merchandiseResponses.MERCHANDISE_NOT_FOUND;
         return merchandise;
     }
     catch (e) {

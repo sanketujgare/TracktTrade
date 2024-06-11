@@ -22,20 +22,12 @@ export const userResponses: IUserResponses = {
         statusCode: 400,
         message: "CAN NOT CREATE USER",
     },
-    COULD_NOT_UPDATE_PURCHACE_HISTORY: {
+    CAN_NOT_UPDATE_USER: {
         statusCode: 400,
-        message: "COULD NOT UPDATE CUSTOMERS PURCHACE HISTORY",
+        message: "CAN NOT UPDATE USER",
     },
-    PURCHACE_HISTORY_UPDATED: {
+    USER_UPDATED_SUCCESSFULLY: {
         statusCode: 200,
-        message: "CUSTOMER PURCHACE HISTORY UPDATED",
-    },
-    CANNOT_CREATE_CUSTOMER: {
-        statusCode: 400,
-        message: "CAN NOT CREATE USER",
-    },
-    NEW_CUSTOMER_CREATED: {
-        statusCode: 200,
-        message: "NEW CUSTOMER CREATED",
+        message: "USER UPDATED SUCCESSFULLY",
     },
 };

@@ -1,7 +1,7 @@
 import { authResponses } from "../auth/auth.responses";
 import { encrypt } from "../utility/encrypt";
 import userRepo from "./user.repo";
-import { ICustomerSchema, IUserSchema } from "./user.types";
+import { IUserSchema, IUserUpdateSchema } from "./user.types";
 import { IInventorySchema } from "../inventory/inventory.types";
 import { userResponses } from "./user.responses";
 import { inventoryResponses } from "../inventory/inventory.responces";
@@ -31,7 +31,7 @@ export const createUser = async (newUser: IUserSchema) => {
         newUser.password = await encrypt(newUser.password);
 
         const result = userRepo.insertOne(newUser);
-        if (!result) return userResponses.CANNOT_CREATE_USER;
+        if (!result) throw userResponses.CANNOT_CREATE_USER;
         return userResponses.USER_CREATED_SUCCESSFULLY;
     } catch (e) {
         throw e;
@@ -67,38 +67,6 @@ export const getInventory = async (userId: string) => {
     }
 };
 
-export const updateCustomerDetails = async (
-    customerDetails: ICustomerSchema
-) => {
-    try {
-        const user = await userRepo.findByMobileNumber(
-            customerDetails.mobileNumber
-        );
-
-        if (user) {
-            let purchaceHistory = user.customerPurchaseHistory;
-            if (customerDetails.salesId && purchaceHistory) {
-                const sale = { salesId: customerDetails.salesId };
-                purchaceHistory.push(sale);
-            }
-
-            if (purchaceHistory) {
-                await userRepo.updatePurchaseHistroy(
-                    purchaceHistory,
-                    user._id.toString()
-                );
-                return userResponses.PURCHACE_HISTORY_UPDATED;
-            }
-        }
-
-        customerDetails.role = "Customer";
-        const newCustomer = userRepo.addCustomer(customerDetails);
-        if (!newCustomer) throw userResponses.CANNOT_CREATE_CUSTOMER;
-        return userResponses.NEW_CUSTOMER_CREATED;
-    } catch (e) {
-        throw e;
-    }
-};
 export const updateInventory = async (
     newInventory: IInventorySchema[],
     userId: string
@@ -111,6 +79,16 @@ export const updateInventory = async (
         throw e;
     }
 };
+
+export const updateUser = async (
+    updates: IUserUpdateSchema,
+    userId: string
+) => {
+    const isUpdated = await userRepo.updateUser(updates, userId);
+    if (!isUpdated) throw userResponses.CAN_NOT_UPDATE_USER;
+    return userResponses.USER_UPDATED_SUCCESSFULLY;
+};
+
 export default {
     findUser,
     createUser,
@@ -118,5 +96,5 @@ export default {
     getSpecificUser,
     getInventory,
     updateInventory,
-    updateCustomerDetails,
+    updateUser,
 };

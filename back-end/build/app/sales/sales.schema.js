@@ -6,6 +6,7 @@ const salesSchema = new base_schema_1.BaseSchema({
     distributorId: {
         type: mongoose_1.Types.ObjectId,
         required: true,
+        ref: "User",
     },
     customerName: {
         type: String,

@@ -37,4 +37,14 @@ userRouter.get(
     }
 );
 
+userRouter.put("/update/:id", async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const result = await userService.updateUser(req.body, userId);
+        res.send(new ResponseHandler(result));
+    } catch (e) {
+        next(e);
+    }
+});
+
 export default new Route("/users", userRouter);

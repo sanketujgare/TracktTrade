@@ -11,7 +11,7 @@ export const addProduct = async (
         product.createdBy = manufacturerId;
         const newProduct = productRepo.insertOne(product);
 
-        if (!newProduct) return productResponses.CAN_NOT_ADD_PRODUCT;
+        if (!newProduct) throw productResponses.CAN_NOT_ADD_PRODUCT;
         await inventoyService.addProductToInventory(newProduct._id.toString());
         return productResponses.PRODUCT_ADDED;
     } catch (e) {
@@ -22,7 +22,7 @@ export const addProduct = async (
 export const getAllProduct = async () => {
     try {
         const products = await productRepo.getAllProduct();
-        if (!products) return productResponses.PRODUCTS_NOT_FOUND;
+        if (!products) throw productResponses.PRODUCTS_NOT_FOUND;
         return products;
     } catch (e) {
         throw e;
@@ -50,7 +50,7 @@ export const updateProduct = async (
             updatedFields,
             productId
         );
-        if (!isUpdated) return productResponses.CANNOT_UPDATE_PRODUCT;
+        if (!isUpdated) throw productResponses.CANNOT_UPDATE_PRODUCT;
         return productResponses.PRODUCT_UPDATED;
     } catch (e) {
         throw e;
@@ -59,7 +59,7 @@ export const updateProduct = async (
 export const deleteProduct = async (productId: string) => {
     try {
         const isDeleted = await productRepo.deleteProduct(productId);
-        if (!isDeleted) return productResponses.CAN_NOT_DELETE_PRODUCT;
+        if (!isDeleted) throw productResponses.CAN_NOT_DELETE_PRODUCT;
         return productResponses.PRODUCT_DELETED_SUCCESSFULLY;
     } catch (e) {
         throw e;

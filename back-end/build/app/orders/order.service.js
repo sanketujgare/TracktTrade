@@ -21,7 +21,7 @@ const placeOrder = (order) => {
     try {
         const newOrder = order_repo_1.default.placeOrder(order);
         if (!newOrder)
-            return order_responses_1.orderResponses.CAN_NOT_PLACE_ORDER;
+            throw order_responses_1.orderResponses.CAN_NOT_PLACE_ORDER;
         return order_responses_1.orderResponses.ORDER_PLACED_SUCCESSFULLY;
     }
     catch (e) {
@@ -33,7 +33,7 @@ const getAllorders = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orders = order_repo_1.default.getAllorders();
         if (!orders)
-            return order_responses_1.orderResponses.ORDERS_NOT_FOUND;
+            throw order_responses_1.orderResponses.ORDERS_NOT_FOUND;
         return orders;
     }
     catch (e) { }
@@ -52,7 +52,7 @@ const updateOrderStatus = (updates, orderId, manufacturerId) => __awaiter(void 0
             yield inventoy_service_1.default.updateInventory(orderToComplete.distributorId, orderToComplete.products);
             const isUpdated = yield order_repo_1.default.updateOrderStatus(updates, orderId);
             if (!isUpdated) {
-                return order_responses_1.orderResponses.CAN_NOT_UPDATE_ORDER;
+                throw order_responses_1.orderResponses.CAN_NOT_UPDATE_ORDER;
             }
             return order_responses_1.orderResponses.ORDER_STATUS_UPDATED;
         }

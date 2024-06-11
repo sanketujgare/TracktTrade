@@ -9,8 +9,7 @@ export const addMerchandise = (
     try {
         merchandise.createdBy = manufacturerId;
         const newMerchandise = merchandiseRepo.insertOne(merchandise);
-        if (!newMerchandise)
-            return merchandiseResponses.CAN_NOT_ADD_MERCHANDISE;
+        if (!newMerchandise) throw merchandiseResponses.CAN_NOT_ADD_MERCHANDISE;
         return merchandiseResponses.MERCHANDISE_ADDED;
     } catch (e) {
         throw e;
@@ -20,7 +19,7 @@ export const addMerchandise = (
 export const getAllMerchandise = async () => {
     try {
         const merchandise = await merchandiseRepo.getAllMerchandise();
-        if (!merchandise) return merchandiseResponses.MERCHANDISE_NOT_FOUND;
+        if (!merchandise) throw merchandiseResponses.MERCHANDISE_NOT_FOUND;
 
         return merchandise;
     } catch (e) {

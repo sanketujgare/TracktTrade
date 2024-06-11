@@ -23,8 +23,8 @@ export const addProductToInventory = async (productId: string) => {
 export const getInventory = async (userId: string) => {
     try {
         const userInventory = await userService.getInventory(userId);
-        if (!userInventory) return inventoryResponses.NO_DATA_FOUND;
-        if (!userInventory.inventory) return inventoryResponses.EMPTY_INVENTORY;
+        if (!userInventory) throw inventoryResponses.NO_DATA_FOUND;
+        if (!userInventory.inventory) throw inventoryResponses.EMPTY_INVENTORY;
         const inventory = userInventory.inventory.map((product) => {
             const { productId, quantity } = product;
             return { product: productId, quantity };
@@ -89,7 +89,7 @@ export const updateManufacturersInventory = async (
 
         if (inventory) {
             await userService.updateInventory(inventory, user._id.toString());
-            return userResponses.INVENTORY_UPDATED;
+            return inventoryResponses.INVENTORY_UPDATED;
         }
     } catch (e) {
         throw e;

@@ -25,7 +25,6 @@ inventoryRouter.get("/getinventory", (req, res, next) => __awaiter(void 0, void 
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
-        console.log(e);
         next(e);
     }
 }));
@@ -42,7 +41,6 @@ inventoryRouter.get("/getinventory/:id", (req, res, next) => __awaiter(void 0, v
 inventoryRouter.put("/update", ...inventory_validations_1.inventoryValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const manufacturerId = req.currentUser._id;
-        console.log(req.body);
         const result = yield inventoy_service_1.default.updateManufacturersInventory(manufacturerId, req.body);
         res.send(new response_handler_1.ResponseHandler(result));
     }

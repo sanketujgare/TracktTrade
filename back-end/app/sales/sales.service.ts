@@ -23,10 +23,10 @@ export const createSales = async (sale: ISalesSchema) => {
         const totalPrice = calculateTotalPrice(sale);
 
         sale.totalPrice = totalPrice;
-        // const pointsEarned = totalPrice / 1000;
+        const points = totalPrice / 1000;
 
         const newSale = salesRepo.createSales(sale);
-        if (!newSale) return salesResponses.CAN_NOT_UPDATE_SALES;
+        if (!newSale) throw salesResponses.CAN_NOT_UPDATE_SALES;
 
         const customerDetails = extractCustomerDetails(newSale);
 

@@ -8,6 +8,7 @@ exports.permissions = {
         "createMerchandise",
         "viewAllMerchandise",
         "viewCustomer",
+        "viewAllProducts",
     ],
     Distributor: [],
 };

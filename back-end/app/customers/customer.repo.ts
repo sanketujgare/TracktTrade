@@ -1,4 +1,3 @@
-import { IInventorySchema } from "../inventory/inventory.types";
 import customerModel from "./customer.schema";
 import { ICustomerSchema, IPurchaseSchema } from "./customer.types";
 

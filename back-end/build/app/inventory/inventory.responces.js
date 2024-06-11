@@ -7,7 +7,7 @@ exports.inventoryResponses = {
         message: "CAN NOT UPDATE INVENTORY",
     },
     INVENTORY_UPDATED: {
-        statusCode: 400,
+        statusCode: 200,
         message: "INVENTORY UPDATED",
     },
     EMPTY_INVENTORY: {

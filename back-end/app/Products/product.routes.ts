@@ -28,7 +28,7 @@ productRouter.post(
 
 productRouter.get(
     "/allproducts",
-    authPermissions(["viewAppProducts"]),
+    authPermissions(["viewAllProducts"]),
     async (req, res, next) => {
         try {
             const result = await productService.getAllProduct();

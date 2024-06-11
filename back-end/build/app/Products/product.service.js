@@ -21,7 +21,7 @@ const addProduct = (product, manufacturerId) => __awaiter(void 0, void 0, void 0
         product.createdBy = manufacturerId;
         const newProduct = product_repo_1.default.insertOne(product);
         if (!newProduct)
-            return product_responses_1.productResponses.CAN_NOT_ADD_PRODUCT;
+            throw product_responses_1.productResponses.CAN_NOT_ADD_PRODUCT;
         yield inventoy_service_1.default.addProductToInventory(newProduct._id.toString());
         return product_responses_1.productResponses.PRODUCT_ADDED;
     }
@@ -34,7 +34,7 @@ const getAllProduct = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const products = yield product_repo_1.default.getAllProduct();
         if (!products)
-            return product_responses_1.productResponses.PRODUCTS_NOT_FOUND;
+            throw product_responses_1.productResponses.PRODUCTS_NOT_FOUND;
         return products;
     }
     catch (e) {
@@ -59,7 +59,7 @@ const updateProduct = (updatedFields, productId, userId) => __awaiter(void 0, vo
         updatedFields.updatedBy = userId;
         const isUpdated = yield product_repo_1.default.updateProduct(updatedFields, productId);
         if (!isUpdated)
-            return product_responses_1.productResponses.CANNOT_UPDATE_PRODUCT;
+            throw product_responses_1.productResponses.CANNOT_UPDATE_PRODUCT;
         return product_responses_1.productResponses.PRODUCT_UPDATED;
     }
     catch (e) {
@@ -71,7 +71,7 @@ const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function*
     try {
         const isDeleted = yield product_repo_1.default.deleteProduct(productId);
         if (!isDeleted)
-            return product_responses_1.productResponses.CAN_NOT_DELETE_PRODUCT;
+            throw product_responses_1.productResponses.CAN_NOT_DELETE_PRODUCT;
         return product_responses_1.productResponses.PRODUCT_DELETED_SUCCESSFULLY;
     }
     catch (e) {

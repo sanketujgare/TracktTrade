@@ -7,7 +7,7 @@ import { IOrderSchema, IStatusUpdate, statusUpdate } from "./orders.types";
 export const placeOrder = (order: IOrderSchema) => {
     try {
         const newOrder = orderRepo.placeOrder(order);
-        if (!newOrder) return orderResponses.CAN_NOT_PLACE_ORDER;
+        if (!newOrder) throw orderResponses.CAN_NOT_PLACE_ORDER;
         return orderResponses.ORDER_PLACED_SUCCESSFULLY;
     } catch (e) {
         throw e;
@@ -17,7 +17,7 @@ export const placeOrder = (order: IOrderSchema) => {
 export const getAllorders = async () => {
     try {
         const orders = orderRepo.getAllorders();
-        if (!orders) return orderResponses.ORDERS_NOT_FOUND;
+        if (!orders) throw orderResponses.ORDERS_NOT_FOUND;
         return orders;
     } catch (e) {}
 };
@@ -56,7 +56,7 @@ export const updateOrderStatus = async (
             );
 
             if (!isUpdated) {
-                return orderResponses.CAN_NOT_UPDATE_ORDER;
+                throw orderResponses.CAN_NOT_UPDATE_ORDER;
             }
             return orderResponses.ORDER_STATUS_UPDATED;
         } else {

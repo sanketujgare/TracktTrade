@@ -9,15 +9,15 @@ const userSchema = new BaseSchema({
     },
     username: {
         type: String,
-        // required: true,
+        required: true,
     },
     password: {
         type: String,
-        // required: true,
+        required: true,
     },
     role: {
         type: String,
-        enum: ["Manufacturer", "Distributor", "Customer"],
+        enum: ["Manufacturer", "Distributor"],
     },
     mobileNumber: {
         type: String,
@@ -56,27 +56,16 @@ const userSchema = new BaseSchema({
             },
         },
     ],
-    // distributorSales: [
-    //     {
-    //         salesId: {
-    //             type: Types.ObjectId,
-    //             ref: "Sales",
-    //         },
-    //     },
-    // ],
-    customerPurchaseHistory: [
+
+    merchandiseRedeemed: [
         {
-            salesId: {
+            merchandiseId: {
                 type: Types.ObjectId,
-                ref: "Sales",
+                ref: "Merchandise",
             },
-        },
-    ],
-    rewardsRedeemed: [
-        {
-            rewardId: {
-                type: Types.ObjectId,
-                ref: "Reward",
+            status: {
+                type: String,
+                enum: ["Pending", "Completed"],
             },
         },
     ],

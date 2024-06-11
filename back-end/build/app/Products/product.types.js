@@ -18,6 +18,6 @@ exports.updatedFields = zod_1.z.object({
     productDescription: zod_1.z.string(),
     productPrice: zod_1.z.number(),
     productImage: zod_1.z.string(),
-    updatedBy: zod_1.z.string(),
-    updatedAt: zod_1.z.string(),
+    updatedBy: zod_1.z.string().optional(),
+    updatedAt: zod_1.z.string().optional(),
 });

@@ -8,15 +8,15 @@ const userSchema = new base_schema_1.BaseSchema({
     },
     username: {
         type: String,
-        // required: true,
+        required: true,
     },
     password: {
         type: String,
-        // required: true,
+        required: true,
     },
     role: {
         type: String,
-        enum: ["Manufacturer", "Distributor", "Customer"],
+        enum: ["Manufacturer", "Distributor"],
     },
     mobileNumber: {
         type: String,
@@ -27,8 +27,20 @@ const userSchema = new base_schema_1.BaseSchema({
         type: String,
         required: true,
     },
-    points: {
+    pointsEarned: [
+        {
+            points: {
+                type: Number,
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now(),
+            },
+        },
+    ],
+    totalPoints: {
         type: Number,
+        default: 0,
     },
     inventory: [
         {
@@ -43,27 +55,15 @@ const userSchema = new base_schema_1.BaseSchema({
             },
         },
     ],
-    distributorSales: [
+    merchandiseRedeemed: [
         {
-            salesId: {
+            merchandiseId: {
                 type: mongoose_1.Types.ObjectId,
-                ref: "Sales",
+                ref: "Merchandise",
             },
-        },
-    ],
-    customerPurchaceHistory: [
-        {
-            salesId: {
-                type: mongoose_1.Types.ObjectId,
-                ref: "Sales",
-            },
-        },
-    ],
-    rewardsRedeemed: [
-        {
-            rewardId: {
-                type: mongoose_1.Types.ObjectId,
-                ref: "Reward",
+            status: {
+                type: String,
+                enum: ["Pending", "Completed"],
             },
         },
     ],

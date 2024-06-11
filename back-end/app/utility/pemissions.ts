@@ -10,6 +10,7 @@ export const permissions: IPermissions = {
         "createMerchandise",
         "viewAllMerchandise",
         "viewCustomer",
+        "viewAllProducts",
     ],
     Distributor: [],
 };

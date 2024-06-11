@@ -18,8 +18,8 @@ export const updatedFields = z.object({
     productDescription: z.string(),
     productPrice: z.number(),
     productImage: z.string(),
-    updatedBy: z.string(),
-    updatedAt: z.string(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.string().optional(),
 });
 
 export interface IUpdatedFields extends z.infer<typeof updatedFields> {}

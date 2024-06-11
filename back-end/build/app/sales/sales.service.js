@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extractCustomerDetails = exports.calculateTotalPrice = exports.createSales = void 0;
+const customer_service_1 = __importDefault(require("../customers/customer.service"));
 const inventoy_service_1 = __importDefault(require("../inventory/inventoy.service"));
 const user_service_1 = __importDefault(require("../users/user.service"));
 const sales_repo_1 = __importDefault(require("./sales.repo"));
@@ -30,12 +31,13 @@ const createSales = (sale) => __awaiter(void 0, void 0, void 0, function* () {
         // );
         const totalPrice = (0, exports.calculateTotalPrice)(sale);
         sale.totalPrice = totalPrice;
+        const points = totalPrice / 1000;
         const newSale = sales_repo_1.default.createSales(sale);
         if (!newSale)
-            return sales_responses_1.salesResponses.CAN_NOT_UPDATE_SALES;
+            throw sales_responses_1.salesResponses.CAN_NOT_UPDATE_SALES;
         const customerDetails = (0, exports.extractCustomerDetails)(newSale);
         if (customerDetails) {
-            const updateCustomerDetails = yield user_service_1.default.updateCustomerDetails(customerDetails);
+            const updateCustomerDetails = yield customer_service_1.default.updateCustomerDetails(customerDetails, newSale._id.toString());
             if (updateCustomerDetails) {
                 return sales_responses_1.salesResponses.SALES_UPDATED_SUCCESSFULLY;
             }
@@ -63,12 +65,11 @@ const calculateTotalPrice = (sale) => {
 exports.calculateTotalPrice = calculateTotalPrice;
 const extractCustomerDetails = (sale) => {
     try {
-        const { customerName, customerEmail, customerMobileNumber, _id } = sale;
+        const { customerName, customerEmail, customerMobileNumber } = sale;
         const customerDetails = {
             name: customerName,
             email: customerEmail,
             mobileNumber: customerMobileNumber,
-            salesId: _id,
         };
         return customerDetails;
     }

@@ -39,4 +39,14 @@ userRouter.get("/getuser/:userid", (0, auth_permissions_1.authPermissions)(pemis
         next(e);
     }
 }));
+userRouter.put("/update/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.id;
+        const result = yield user_service_1.default.updateUser(req.body, userId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
 exports.default = new routes_types_1.Route("/users", userRouter);

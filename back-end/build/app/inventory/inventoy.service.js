@@ -34,9 +34,9 @@ const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const userInventory = yield user_service_1.default.getInventory(userId);
         if (!userInventory)
-            return inventory_responces_1.inventoryResponses.NO_DATA_FOUND;
+            throw inventory_responces_1.inventoryResponses.NO_DATA_FOUND;
         if (!userInventory.inventory)
-            return inventory_responces_1.inventoryResponses.EMPTY_INVENTORY;
+            throw inventory_responces_1.inventoryResponses.EMPTY_INVENTORY;
         const inventory = userInventory.inventory.map((product) => {
             const { productId, quantity } = product;
             return { product: productId, quantity };
@@ -84,9 +84,8 @@ const updateManufacturersInventory = (userId, product) => __awaiter(void 0, void
         }
         if (inventory) {
             yield user_service_1.default.updateInventory(inventory, user._id.toString());
-            return user_responses_1.userResponses.INVENTORY_UPDATED;
+            return inventory_responces_1.inventoryResponses.INVENTORY_UPDATED;
         }
-        // await user.save();
     }
     catch (e) {
         throw e;
@@ -110,7 +109,6 @@ const updateInventory = (userId, products) => __awaiter(void 0, void 0, void 0, 
             yield user_service_1.default.updateInventory(inventory, user._id.toString());
             return user_responses_1.userResponses.INVENTORY_UPDATED;
         }
-        // await user.save();
     }
     catch (e) {
         throw e;

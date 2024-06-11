@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 export interface IUserResponses {
     [key: string]: {
         statusCode: number;
@@ -10,9 +11,10 @@ export const userSchema = z.object({
     name: z.string(),
     username: z.string(),
     password: z.string(),
-    role: z.enum(["Manufacturer", "Distributor", "Customer"]),
+    role: z.enum(["Manufacturer", "Distributor"]),
     mobileNumber: z.string(),
     email: z.string(),
+
     pointsEarned: z.array(
         z.object({
             points: z.number(),
@@ -20,6 +22,7 @@ export const userSchema = z.object({
         })
     ),
     totalPoints: z.number().optional(),
+
     inventory: z
         .array(
             z.object({
@@ -28,13 +31,7 @@ export const userSchema = z.object({
             })
         )
         .optional(),
-    customerPurchaseHistory: z
-        .array(
-            z.object({
-                salesId: z.string(),
-            })
-        )
-        .optional(),
+
     rewardsRedeemed: z
         .array(
             z.object({
@@ -46,18 +43,13 @@ export const userSchema = z.object({
 
 export const credentials = userSchema.pick({ username: true, password: true });
 export interface ICredentials extends z.infer<typeof credentials> {}
-export const recordsPerPage = 5;
 export interface IUserSchema extends z.infer<typeof userSchema> {}
 
-export const customerSchema = z.object({
+export const UserUpdateSchema = z.object({
     name: z.string(),
+    username: z.string(),
     mobileNumber: z.string(),
     email: z.string(),
-    salesId: z.string().optional(),
-    role: z.string().optional(),
 });
-export interface ICustomerSchema extends z.infer<typeof customerSchema> {}
 
-export const purchaseHistorySchema = z.object({ salesId: z.string() });
-export interface IPurchaseSchema
-    extends z.infer<typeof purchaseHistorySchema> {}
+export interface IUserUpdateSchema extends z.infer<typeof UserUpdateSchema> {}

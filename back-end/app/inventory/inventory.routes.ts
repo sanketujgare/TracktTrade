@@ -12,7 +12,6 @@ inventoryRouter.get("/getinventory", async (req, res, next) => {
         const result = await inventoryService.getInventory(userId);
         res.send(new ResponseHandler(result));
     } catch (e) {
-        console.log(e);
         next(e);
     }
 });
@@ -33,7 +32,6 @@ inventoryRouter.put(
     async (req, res, next) => {
         try {
             const manufacturerId = req.currentUser._id;
-            console.log(req.body);
             const result = await inventoryService.updateManufacturersInventory(
                 manufacturerId,
                 req.body

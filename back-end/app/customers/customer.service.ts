@@ -29,6 +29,9 @@ export const updateCustomerDetails = async (
                 return customerResponses.PURCHACE_HISTORY_UPDATED;
             }
         }
+        if (salesId) {
+            customerDetails.purchaseHistory?.push({ salesId });
+        }
 
         const newCustomer = customerRepo.addCustomer(customerDetails);
         if (!newCustomer) throw customerResponses.CANNOT_CREATE_CUSTOMER;
