@@ -1,3 +1,5 @@
+import customerService from "../customers/customer.service";
+import inventoyService from "../inventory/inventoy.service";
 import userService from "../users/user.service";
 import salesRepo from "./sales.repo";
 import { salesResponses } from "./sales.responses";
@@ -5,8 +7,23 @@ import { ISalesSchema } from "./sales.types";
 
 export const createSales = async (sale: ISalesSchema) => {
     try {
+        const user = await userService.getSpecificUser(sale.distributorId);
+
+        await inventoyService.checkInventoryLevel(user, sale.products);
+
+        // await inventoyService.updateInventory(
+        //     user._id.toString(),
+
+        //     sale.products.map((product) => ({
+        //         productId: product.productId,
+        //         quantity: -product.quantity,
+        //     }))
+        // );
+
         const totalPrice = calculateTotalPrice(sale);
-        if (totalPrice) sale.totalPrice = totalPrice;
+
+        sale.totalPrice = totalPrice;
+        // const pointsEarned = totalPrice / 1000;
 
         const newSale = salesRepo.createSales(sale);
         if (!newSale) return salesResponses.CAN_NOT_UPDATE_SALES;
@@ -15,7 +32,10 @@ export const createSales = async (sale: ISalesSchema) => {
 
         if (customerDetails) {
             const updateCustomerDetails =
-                await userService.updateCustomerDetails(customerDetails);
+                await customerService.updateCustomerDetails(
+                    customerDetails,
+                    newSale._id.toString()
+                );
             if (updateCustomerDetails) {
                 return salesResponses.SALES_UPDATED_SUCCESSFULLY;
             }
@@ -27,12 +47,13 @@ export const createSales = async (sale: ISalesSchema) => {
 
 export const calculateTotalPrice = (sale: ISalesSchema) => {
     try {
-        return sale.products.reduce((totalPriice, product) => {
+        const totalPrice = sale.products.reduce((totalPrice, product) => {
             if (product.currentPrice && product.quantity) {
-                return totalPriice + product.currentPrice * product.quantity;
+                return totalPrice + product.currentPrice * product.quantity;
             }
-            return totalPriice;
+            return totalPrice;
         }, 0);
+        return totalPrice;
     } catch (e) {
         throw e;
     }
@@ -40,12 +61,11 @@ export const calculateTotalPrice = (sale: ISalesSchema) => {
 
 export const extractCustomerDetails = (sale: ISalesSchema) => {
     try {
-        const { customerName, customerEmail, customerMobileNumber, _id } = sale;
+        const { customerName, customerEmail, customerMobileNumber } = sale;
         const customerDetails = {
             name: customerName,
             email: customerEmail,
             mobileNumber: customerMobileNumber,
-            salesId: _id,
         };
         return customerDetails;
     } catch (e) {

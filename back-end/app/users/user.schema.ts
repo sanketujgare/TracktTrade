@@ -5,15 +5,15 @@ import { string } from "zod";
 
 const userSchema = new BaseSchema({
     name: {
-        type: string,
+        type: String,
     },
     username: {
         type: String,
-        required: true,
+        // required: true,
     },
     password: {
         type: String,
-        required: true,
+        // required: true,
     },
     role: {
         type: String,
@@ -28,8 +28,20 @@ const userSchema = new BaseSchema({
         type: String,
         required: true,
     },
-    points: {
+    pointsEarned: [
+        {
+            points: {
+                type: Number,
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now(),
+            },
+        },
+    ],
+    totalPoints: {
         type: Number,
+        default: 0,
     },
     inventory: [
         {
@@ -44,15 +56,15 @@ const userSchema = new BaseSchema({
             },
         },
     ],
-    distributorSales: [
-        {
-            salesId: {
-                type: Types.ObjectId,
-                ref: "Sales",
-            },
-        },
-    ],
-    customerPurchaceHistory: [
+    // distributorSales: [
+    //     {
+    //         salesId: {
+    //             type: Types.ObjectId,
+    //             ref: "Sales",
+    //         },
+    //     },
+    // ],
+    customerPurchaseHistory: [
         {
             salesId: {
                 type: Types.ObjectId,

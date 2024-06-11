@@ -1,5 +1,5 @@
 import userModel from "./user.schema";
-import { ICustomerSchema, IUserSchema } from "./user.types";
+import { ICustomerSchema, IPurchaseSchema, IUserSchema } from "./user.types";
 import { IInventorySchema } from "../inventory/inventory.types";
 
 export const findUser = async (query: Partial<IUserSchema>) => {
@@ -42,16 +42,33 @@ export const getInventory = async (userId: string) => {
 };
 
 export const findByMobileNumber = async (mobileNumber: string) => {
-    const user = await userModel.find({ mobileNumber: mobileNumber });
+    const user = await userModel.findOne({ mobileNumber });
     return user;
 };
 
-export const addSaleToPurchaceHistory = async (salesId?: string) => {
-    const isAdded = await userModel.updateMany({
-        $push: { customerPurchaceHistory: salesId },
-    });
-    return isAdded;
+export const updateInventory = async (
+    newInventory: IInventorySchema[],
+    userId: string
+) => {
+    const isUpdated = await userModel.findOneAndUpdate(
+        { _id: userId },
+        { $set: { inventory: newInventory } }
+    );
+    return isUpdated;
 };
+
+export const updatePurchaseHistroy = async (
+    newHistory: IPurchaseSchema[],
+    userId: string
+) => {
+    const isUpated = await userModel.findOneAndUpdate(
+        { _id: userId },
+        { $set: { customerPurchaseHistory: newHistory } }
+    );
+    return isUpated;
+};
+
+export const updateDistributorSales = () => {};
 
 export default {
     findUser,
@@ -61,5 +78,7 @@ export default {
     getSpecificUser,
     getInventory,
     findByMobileNumber,
-    addSaleToPurchaceHistory,
+    updateInventory,
+    updatePurchaseHistroy,
+    // addSaleToPurchaceHistory,
 };

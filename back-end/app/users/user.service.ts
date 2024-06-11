@@ -61,7 +61,6 @@ export const getSpecificUser = async (userId: string) => {
 export const getInventory = async (userId: string) => {
     try {
         const userInventory = await userRepo.getInventory(userId);
-
         if (userInventory) return userInventory;
     } catch (e) {
         throw e;
@@ -75,18 +74,42 @@ export const updateCustomerDetails = async (
         const user = await userRepo.findByMobileNumber(
             customerDetails.mobileNumber
         );
+
         if (user) {
-            const isAdded = await userRepo.addSaleToPurchaceHistory(
-                customerDetails.salesId
-            );
-            if (!isAdded) throw userResponses.COULD_NOT_UPDATE_PURCHACE_HISTORY;
-            return userResponses.PURCHACE_HISTORY_UPDATED;
+            let purchaceHistory = user.customerPurchaseHistory;
+            if (customerDetails.salesId && purchaceHistory) {
+                const sale = { salesId: customerDetails.salesId };
+                purchaceHistory.push(sale);
+            }
+
+            if (purchaceHistory) {
+                await userRepo.updatePurchaseHistroy(
+                    purchaceHistory,
+                    user._id.toString()
+                );
+                return userResponses.PURCHACE_HISTORY_UPDATED;
+            }
         }
+
         customerDetails.role = "Customer";
         const newCustomer = userRepo.addCustomer(customerDetails);
         if (!newCustomer) throw userResponses.CANNOT_CREATE_CUSTOMER;
         return userResponses.NEW_CUSTOMER_CREATED;
-    } catch (e) {}
+    } catch (e) {
+        throw e;
+    }
+};
+export const updateInventory = async (
+    newInventory: IInventorySchema[],
+    userId: string
+) => {
+    try {
+        const isUpdated = userRepo.updateInventory(newInventory, userId);
+        if (!isUpdated) throw inventoryResponses.CAN_NOT_UPDATE_INVENTORY;
+        return isUpdated;
+    } catch (e) {
+        throw e;
+    }
 };
 export default {
     findUser,
@@ -94,5 +117,6 @@ export default {
     addProductToInventory,
     getSpecificUser,
     getInventory,
+    updateInventory,
     updateCustomerDetails,
 };

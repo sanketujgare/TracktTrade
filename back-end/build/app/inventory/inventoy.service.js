@@ -73,15 +73,20 @@ const updateManufacturersInventory = (userId, product) => __awaiter(void 0, void
     try {
         const user = yield user_service_1.default.getSpecificUser(userId);
         yield product_service_1.default.getSpecificProduct(product.productId);
-        if (user.inventory) {
-            const inventoryItem = user.inventory.find((item) => item.productId.toString() === product.productId.toString());
+        let inventory = user.inventory;
+        if (inventory) {
+            const inventoryItem = inventory.find((item) => item.productId.toString() === product.productId.toString());
             if (inventoryItem)
                 inventoryItem.quantity += product.quantity;
         }
         else {
             throw inventory_responces_1.inventoryResponses.EMPTY_INVENTORY;
         }
-        yield user.save();
+        if (inventory) {
+            yield user_service_1.default.updateInventory(inventory, user._id.toString());
+            return user_responses_1.userResponses.INVENTORY_UPDATED;
+        }
+        // await user.save();
     }
     catch (e) {
         throw e;
@@ -91,17 +96,21 @@ exports.updateManufacturersInventory = updateManufacturersInventory;
 const updateInventory = (userId, products) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_service_1.default.getSpecificUser(userId);
+        let inventory = user.inventory;
         products.forEach((product) => {
-            if (user.inventory) {
-                const inventoryItem = user.inventory.find((item) => item.productId.toString() ===
+            if (inventory) {
+                const inventoryItem = inventory.find((item) => item.productId.toString() ===
                     product.productId.toString());
                 if (inventoryItem) {
                     inventoryItem.quantity += product.quantity;
                 }
             }
         });
-        yield user.save();
-        return user_responses_1.userResponses.INVENTORY_UPDATED;
+        if (inventory) {
+            yield user_service_1.default.updateInventory(inventory, user._id.toString());
+            return user_responses_1.userResponses.INVENTORY_UPDATED;
+        }
+        // await user.save();
     }
     catch (e) {
         throw e;

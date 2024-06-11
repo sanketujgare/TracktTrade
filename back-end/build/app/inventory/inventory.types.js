@@ -9,4 +9,5 @@ exports.inventorySchema = zod_1.z.object({
 exports.inventoryUpdates = zod_1.z.object({
     productId: zod_1.z.string(),
     quantity: zod_1.z.number().positive(),
+    // currentPrise: z.number().optional(),
 });

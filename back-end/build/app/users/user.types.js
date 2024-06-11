@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recordsPerPage = exports.credentials = exports.userSchema = void 0;
+exports.customerSchema = exports.recordsPerPage = exports.credentials = exports.userSchema = void 0;
 const zod_1 = require("zod");
 exports.userSchema = zod_1.z.object({
+    name: zod_1.z.string(),
     username: zod_1.z.string(),
     password: zod_1.z.string(),
     role: zod_1.z.enum(["Manufacturer", "Distributor", "Customer"]),
@@ -33,3 +34,10 @@ exports.userSchema = zod_1.z.object({
 });
 exports.credentials = exports.userSchema.pick({ username: true, password: true });
 exports.recordsPerPage = 5;
+exports.customerSchema = zod_1.z.object({
+    name: zod_1.z.string(),
+    mobileNumber: zod_1.z.string(),
+    email: zod_1.z.string(),
+    salesId: zod_1.z.string().optional(),
+    role: zod_1.z.string().optional(),
+});

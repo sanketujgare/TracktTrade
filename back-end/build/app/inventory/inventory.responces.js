@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.inventoryResponses = void 0;
 exports.inventoryResponses = {
-    CANNOT_UPDATE_INVENTORY: {
+    CAN_NOT_UPDATE_INVENTORY: {
         statusCode: 400,
         message: "CAN NOT UPDATE INVENTORY",
     },

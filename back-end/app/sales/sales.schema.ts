@@ -6,6 +6,7 @@ const salesSchema = new BaseSchema({
     distributorId: {
         type: Types.ObjectId,
         required: true,
+        ref: "User",
     },
     customerName: {
         type: String,
@@ -33,7 +34,7 @@ const salesSchema = new BaseSchema({
         },
     ],
     totalPrice: {
-        Type: Number,
+        type: Number,
     },
 });
 const salesModel = model<ISalesSchema>("Sales", salesSchema);

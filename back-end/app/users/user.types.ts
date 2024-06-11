@@ -13,7 +13,13 @@ export const userSchema = z.object({
     role: z.enum(["Manufacturer", "Distributor", "Customer"]),
     mobileNumber: z.string(),
     email: z.string(),
-    points: z.number().optional(),
+    pointsEarned: z.array(
+        z.object({
+            points: z.number(),
+            createdAt: z.date(),
+        })
+    ),
+    totalPoints: z.number().optional(),
     inventory: z
         .array(
             z.object({
@@ -22,14 +28,7 @@ export const userSchema = z.object({
             })
         )
         .optional(),
-    distributorSales: z
-        .array(
-            z.object({
-                salesId: z.string(),
-            })
-        )
-        .optional(),
-    customerPurchaceHistory: z
+    customerPurchaseHistory: z
         .array(
             z.object({
                 salesId: z.string(),
@@ -57,5 +56,8 @@ export const customerSchema = z.object({
     salesId: z.string().optional(),
     role: z.string().optional(),
 });
-
 export interface ICustomerSchema extends z.infer<typeof customerSchema> {}
+
+export const purchaseHistorySchema = z.object({ salesId: z.string() });
+export interface IPurchaseSchema
+    extends z.infer<typeof purchaseHistorySchema> {}

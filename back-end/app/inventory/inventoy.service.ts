@@ -1,5 +1,6 @@
 import { productResponses } from "../Products/product.responses";
 import productService from "../Products/product.service";
+import userRepo from "../users/user.repo";
 import { userResponses } from "../users/user.responses";
 import userService from "../users/user.service";
 import { IUserSchema } from "../users/user.types";
@@ -75,8 +76,9 @@ export const updateManufacturersInventory = async (
         const user = await userService.getSpecificUser(userId);
         await productService.getSpecificProduct(product.productId);
 
-        if (user.inventory) {
-            const inventoryItem = user.inventory.find(
+        let inventory = user.inventory;
+        if (inventory) {
+            const inventoryItem = inventory.find(
                 (item) =>
                     item.productId.toString() === product.productId.toString()
             );
@@ -84,7 +86,11 @@ export const updateManufacturersInventory = async (
         } else {
             throw inventoryResponses.EMPTY_INVENTORY;
         }
-        await user.save();
+
+        if (inventory) {
+            await userService.updateInventory(inventory, user._id.toString());
+            return userResponses.INVENTORY_UPDATED;
+        }
     } catch (e) {
         throw e;
     }
@@ -96,10 +102,10 @@ export const updateInventory = async (
 ) => {
     try {
         const user = await userService.getSpecificUser(userId);
-
+        let inventory = user.inventory;
         products.forEach((product) => {
-            if (user.inventory) {
-                const inventoryItem = user.inventory.find(
+            if (inventory) {
+                const inventoryItem = inventory.find(
                     (item) =>
                         item.productId.toString() ===
                         product.productId.toString()
@@ -110,9 +116,10 @@ export const updateInventory = async (
                 }
             }
         });
-
-        await user.save();
-        return userResponses.INVENTORY_UPDATED;
+        if (inventory) {
+            await userService.updateInventory(inventory, user._id.toString());
+            return userResponses.INVENTORY_UPDATED;
+        }
     } catch (e) {
         throw e;
     }

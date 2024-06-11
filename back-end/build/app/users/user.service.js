@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getInventory = exports.getSpecificUser = exports.addProductToInventory = exports.createUser = exports.findUser = void 0;
+exports.updateInventory = exports.updateCustomerDetails = exports.getInventory = exports.getSpecificUser = exports.addProductToInventory = exports.createUser = exports.findUser = void 0;
 const auth_responses_1 = require("../auth/auth.responses");
 const encrypt_1 = require("../utility/encrypt");
 const user_repo_1 = __importDefault(require("./user.repo"));
 const user_responses_1 = require("./user.responses");
+const inventory_responces_1 = require("../inventory/inventory.responces");
 const findUser = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_repo_1.default.findUser(query);
@@ -75,15 +76,57 @@ const getSpecificUser = (userId) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getSpecificUser = getSpecificUser;
 const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const userInventory = yield user_repo_1.default.getInventory(userId);
-    if (userInventory)
-        return userInventory;
+    try {
+        const userInventory = yield user_repo_1.default.getInventory(userId);
+        if (userInventory)
+            return userInventory;
+    }
+    catch (e) {
+        throw e;
+    }
 });
 exports.getInventory = getInventory;
+const updateCustomerDetails = (customerDetails) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const user = yield user_repo_1.default.findByMobileNumber(customerDetails.mobileNumber);
+        if (user) {
+            if (customerDetails.salesId) {
+                const sale = { salesId: customerDetails.salesId };
+                (_a = user.customerPurchaceHistory) === null || _a === void 0 ? void 0 : _a.push(sale);
+                user.save();
+                return user_responses_1.userResponses.PURCHACE_HISTORY_UPDATED;
+            }
+        }
+        customerDetails.role = "Customer";
+        const newCustomer = user_repo_1.default.addCustomer(customerDetails);
+        if (!newCustomer)
+            throw user_responses_1.userResponses.CANNOT_CREATE_CUSTOMER;
+        return user_responses_1.userResponses.NEW_CUSTOMER_CREATED;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.updateCustomerDetails = updateCustomerDetails;
+const updateInventory = (newInventory, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const isUpdated = user_repo_1.default.updateInventory(newInventory, userId);
+        if (!isUpdated)
+            throw inventory_responces_1.inventoryResponses.CAN_NOT_UPDATE_INVENTORY;
+        return isUpdated;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.updateInventory = updateInventory;
 exports.default = {
     findUser: exports.findUser,
     createUser: exports.createUser,
     addProductToInventory: exports.addProductToInventory,
     getSpecificUser: exports.getSpecificUser,
     getInventory: exports.getInventory,
+    updateInventory: exports.updateInventory,
+    updateCustomerDetails: exports.updateCustomerDetails,
 };

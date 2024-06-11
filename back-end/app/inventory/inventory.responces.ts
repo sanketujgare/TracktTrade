@@ -1,7 +1,7 @@
 import { IInventoryResponses } from "./inventory.types";
 
 export const inventoryResponses: IInventoryResponses = {
-    CANNOT_UPDATE_INVENTORY: {
+    CAN_NOT_UPDATE_INVENTORY: {
         statusCode: 400,
         message: "CAN NOT UPDATE INVENTORY",
     },

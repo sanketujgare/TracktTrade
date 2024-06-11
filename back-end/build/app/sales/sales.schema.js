@@ -33,7 +33,7 @@ const salesSchema = new base_schema_1.BaseSchema({
         },
     ],
     totalPrice: {
-        Type: Number,
+        type: Number,
     },
 });
 const salesModel = (0, mongoose_1.model)("Sales", salesSchema);
