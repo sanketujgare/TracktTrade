@@ -1,0 +1,27 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseSchema = void 0;
+const mongoose_1 = require("mongoose");
+class BaseSchema extends mongoose_1.Schema {
+    constructor(schema) {
+        super(Object.assign(Object.assign({}, schema), { isDeleted: {
+                type: Boolean,
+                require: false,
+            }, createdAt: {
+                type: Date,
+                default: Date.now(),
+            }, updatedAt: {
+                type: Date,
+                default: Date.now(),
+            }, updatedBy: {
+                require: true,
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: "User",
+            }, createdBy: {
+                require: true,
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: "User",
+            } }));
+    }
+}
+exports.BaseSchema = BaseSchema;
