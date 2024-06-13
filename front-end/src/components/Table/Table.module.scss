@@ -1,0 +1,35 @@
+/* src/components/Table.css */
+
+.CustomTable {
+  padding: 0.5rem;
+  width: 100%;
+  // border-collapse: collapse;
+  // margin: 20px 0;
+  // border: 1px solid ;
+  table-layout: auto;
+  overflow-y: scroll;
+
+  .TBody {
+    padding: 0.5rem;
+  }
+  .TBody,
+  .THead {
+    padding: 0.5rem;
+    background-color: #f4f4f4;
+    text-align: center;
+    .TRow {
+      padding: 0.5rem;
+
+      .TData {
+        .Image {
+          width: 8rem;
+          border-radius: 0.5rem;
+        }
+        border-bottom: 1px;
+      }
+      .THeader {
+        padding: 0.5rem;
+      }
+    }
+  }
+}
