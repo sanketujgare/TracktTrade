@@ -1,10 +1,16 @@
 import { FieldValues, SubmitHandler } from "react-hook-form";
+import { ZodType } from "zod";
 
 export interface LoginInputType {
   username: string;
   password: string;
 }
-
+export interface productInputType {
+  productName: string;
+  productImage: string;
+  productPrice: number;
+  productDescription: string;
+}
 
 type FieldType = {
   name: string;
@@ -16,6 +22,6 @@ type FieldType = {
 
 export interface FormProps {
   fields: FieldType[];
-  onSubmit: SubmitHandler<FieldValues>;
+  submitData: (data: LoginInputType | productInputType) => void;
   SubmitButtontext: string;
 }
