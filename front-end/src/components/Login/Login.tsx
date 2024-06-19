@@ -6,6 +6,7 @@ import { LoginProps } from "./Login.types.ts";
 import { Navigate, useNavigate } from "react-router-dom";
 import { loginRequst } from "../../services/Authentication.services.ts";
 import { useState } from "react";
+import { LoginInputType } from "../Form/Form.types.ts";
 
 const Login = ({}: LoginProps) => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Login = ({}: LoginProps) => {
     },
   ];
 
-  const handleFormSubmit = async (data: FieldValues) => {
+  const handleFormSubmit = async (data: LoginInputType) => {
     try {
       const response = await loginRequst(data);
       console.log(response);
@@ -59,7 +60,7 @@ const Login = ({}: LoginProps) => {
       <div className={styles.LoginForm}>
         <Form
           fields={formFields}
-          onSubmit={handleFormSubmit}
+          submitData={handleFormSubmit}
           SubmitButtontext="Login"
         />
       </div>
