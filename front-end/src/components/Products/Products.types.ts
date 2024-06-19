@@ -1,5 +1,3 @@
-import { Value } from "sass";
-
 export interface ProductsProps {}
 
 export const columns = [
@@ -9,10 +7,34 @@ export const columns = [
   { header: "Image", accessor: "productImage" },
 ];
 
-export const AddProductFormFields = [
+type ValidationOptions = {
+  required: boolean;
+  pattern?: {
+    value: RegExp;
+    message: string;
+  };
+  valueAsNumber?: boolean;
+};
+export interface Field {
+  name: keyof productType;
+  label: string;
+  placeholder: string;
+  type: "text" | "number" | "url";
+  validation: ValidationOptions;
+}
+
+export type productType = {
+  _id?: string;
+  productName: string;
+  productPrice: number;
+  productDescription: string;
+  productImage: string;
+};
+
+export const ProductFormFields: Field[] = [
   {
-    name: "ProductName",
-    label: "productName",
+    name: "productName",
+    label: "Product Name",
     placeholder: "Enter product name",
     type: "text",
     validation: {
@@ -20,34 +42,57 @@ export const AddProductFormFields = [
     },
   },
   {
-    name: "ProductPrice",
-    label: "producPrice",
+    name: "productPrice",
+    label: "Product Price",
     placeholder: "Enter product price",
     type: "number",
     validation: {
       required: true,
+      valueAsNumber: true,
     },
   },
   {
-    name: "ProductDescription",
-    label: "productDescription",
-    placeholder: "Enter product Description",
+    name: "productDescription",
+    label: "Product Description",
+    placeholder: "Enter product description",
     type: "text",
     validation: {
       required: true,
-      maxLength: {
-        value: 25,
-        message: `The Description shouls less than 25 characters`,
-      },
     },
   },
   {
-    name: "ProductImage",
-    label: "productImage",
-    placeholder: "Enter product Image",
+    name: "productImage",
+    label: "Product Image",
+    placeholder: "Enter product image URL",
     type: "url",
     validation: {
       required: true,
+      pattern: {
+        value: /^(http|https):\/\/[^ "]+$/,
+        message: "Product image must be a valid URL",
+      },
     },
   },
 ];
+
+export type InitialStateType = {
+  data: productType[];
+  modal: boolean;
+  currentProduct: productType | {};
+  productMode: "add" | "edit";
+  selectedCategory: "All Products" | string;
+  searchQuery: "";
+  deleteModal: boolean;
+};
+
+export type productAction =
+  | { type: "SET_PRODUCTS_DATA"; payload: { data: productType[] } }
+  | { type: "SET_MODAL"; payload: { modal: boolean } }
+  | {
+      type: "SET_CURRENT_PRODUCT";
+      payload: { currentProduct: productType | {} };
+    }
+  | { type: "RESET_FORM" }
+  | { type: "SET_SELECTED_CATEGORY"; payload: { selectedCategory: string } }
+  | { type: "SET_SEARCH_QUERY"; payload: { searchQuery: string } }
+  | { type: "SET_DELETE_MODAL"; payload: { deleteModal: boolean } };
