@@ -1,4 +1,4 @@
-export interface ManufactureradminProps {}
+export interface ManufactureradminPageProps {}
 
 export const columns = [
   { header: "Name", accessor: "name" },

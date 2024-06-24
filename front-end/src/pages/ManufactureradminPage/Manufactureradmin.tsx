@@ -1,16 +1,18 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/Sidebar/Sidebar.tsx";
-import styles from "./Manufactureradmin.module.scss";
+
+import styles from "./ManufactureradminPage.module.scss";
 import {
-  ManufactureradminProps,
+  ManufactureradminPageProps,
   columns,
   data,
-} from "./Manufactureradmin.types.ts";
+} from "./ManufactureradminPage.types.ts";
 import Table from "../../components/Table/Table.tsx";
 import Header from "../../components/Header/Header.tsx";
 import Button from "../../components/Button/Button.tsx";
+import Products from "../../components/Products/Products.tsx";
 
-const Manufactureradmin = ({}: ManufactureradminProps) => {
+const ManufactureradminPage = ({}: ManufactureradminPageProps) => {
   return (
     <div className={styles.ManufacturerAdminPage}>
       <div className={styles.Sidebar}>
@@ -27,12 +29,4 @@ const Manufactureradmin = ({}: ManufactureradminProps) => {
   );
 };
 
-export default Manufactureradmin;
-
-// <div className={styles.AddButton}>
-//   <Button buttonText="+ Add" handleClick={() => ""} />
-// </div>
-// <div className={styles.Table}>
-//   <h3>Table Component</h3>
-//   <Table columns={columns} data={data} />
-// </div>
+export default ManufactureradminPage;
