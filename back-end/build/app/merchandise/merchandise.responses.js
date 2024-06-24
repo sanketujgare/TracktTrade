@@ -14,4 +14,12 @@ exports.merchandiseResponses = {
         statusCode: 404,
         message: "MERCHANDISE NOT FOUND",
     },
+    CAN_NOT_REDEEM_MERCHANDISE: {
+        statusCode: 400,
+        message: "CAN NOT UPDATE REDEEMED MERCHANDISES",
+    },
+    REQUESTED_TO_REDEEM_MERCHANDISE: {
+        statusCode: 200,
+        message: "REQUESTED TO REDDEM MERCHANDISE",
+    },
 };

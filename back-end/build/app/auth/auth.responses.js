@@ -4,26 +4,30 @@ exports.authResponses = void 0;
 exports.authResponses = {
     INVALID_CREDENTIALS: {
         statusCode: 400,
-        message: "Invalid credentials",
+        message: "INVALID CREDENTIALS",
     },
     EMAIL_ALREADY_EXISTS: {
         statusCode: 400,
-        message: "Email already exists",
+        message: "EMAIL ALREADY EXISTS",
     },
     USERNAME_ALREADY_EXISTS: {
         statusCode: 400,
-        message: "Username already exists",
+        message: "USERNAME ALREADY EXISTS",
+    },
+    MOBILE_NUMBER_ALREADY_EXISTS: {
+        statusCode: 400,
+        message: "MOBILE NUMBER ALREADY EXISTS",
     },
     USER_REGISTRATION_FAILED: {
         statusCode: 500,
-        message: "User registration failed",
+        message: "USER REGISTRATION FAILED",
     },
     SOMETHING_WENT_WRONG: {
         statusCode: 500,
-        message: "Something went wrong",
+        message: "SOMETHING WENT WRONG",
     },
     USER_IS_NOT_AUTHORIZED: {
         statusCode: 401,
-        message: "User is not authorized",
+        message: "USER IS NOT AUTHORIZED",
     },
 };

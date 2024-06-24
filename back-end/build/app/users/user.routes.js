@@ -22,27 +22,49 @@ const auth_permissions_1 = require("../utility/auth-permissions");
 const userRouter = (0, express_1.Router)();
 userRouter.post("/create-user", (0, auth_permissions_1.authPermissions)(pemissions_1.permissionsToCreate), ...user_validations_1.createValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield user_service_1.default.createUser(req.body);
+        const creatorId = req.currentUser._id;
+        const result = yield user_service_1.default.createUser(req.body, creatorId);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
         next(e);
     }
 }));
-userRouter.get("/getuser/:userid", (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const userId = req.params.userid;
-        const result = user_service_1.default.getSpecificUser(userId);
-        res.send(new response_handler_1.ResponseHandler(result));
-    }
-    catch (e) {
-        next(e);
-    }
-}));
-userRouter.put("/update/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userRouter.get("/getuser/:id", ...user_validations_1.getAndDeleteValidations, (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.params.id;
-        const result = yield user_service_1.default.updateUser(req.body, userId);
+        const result = user_service_1.default.getUserById(userId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+userRouter.get("/distributors", (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.getAllDistributors();
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+userRouter.put("/update/:id", (0, auth_permissions_1.authPermissions)(["updateDistributor"]), ...user_validations_1.updateValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.id;
+        const updatorId = req.currentUser._id;
+        const result = yield user_service_1.default.updateUser(req.body, userId, updatorId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+userRouter.delete("/delete/:id", (0, auth_permissions_1.authPermissions)(["deleteUser"]), ...user_validations_1.getAndDeleteValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.params.id;
+        const deletedBy = req.currentUser._id;
+        const result = yield user_service_1.default.deleteUserById(userId, deletedBy);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {

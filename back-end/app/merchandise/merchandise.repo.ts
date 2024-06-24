@@ -12,7 +12,14 @@ export const getAllMerchandise = async () => {
 
     return merchandise;
 };
+
+export const getMerchandiseById = async (merchandiseId: string) => {
+    const merchandise = await merchandiseModel.findById(merchandiseId);
+    return merchandise;
+};
+
 export default {
     insertOne,
     getAllMerchandise,
+    getMerchandiseById,
 };

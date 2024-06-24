@@ -3,22 +3,21 @@ import { ZodObject, ZodRawShape } from "zod";
 
 export const validator =
     <T extends ZodRawShape>(
-        sourse: "body" | "params" | "query",
+        source: "body" | "params" | "query",
         schema: ZodObject<T>,
         passthrough: boolean = false
     ) =>
     (req: Request, res: Response, next: NextFunction) => {
         try {
             if (passthrough) {
-                req[sourse] = schema.passthrough().parse(req[sourse]);
+                req[source] = schema.passthrough().parse(req[source]);
             }
-
-            req[sourse] = schema.parse(req[sourse]);
+            req[source] = schema.parse(req[source]);
             next();
         } catch (e) {
             next({
                 statusCOde: 400,
-                message: "BAD REQUEST",
+                message: " BAD REQUEST ZOD ERROR",
                 error: e,
             });
         }

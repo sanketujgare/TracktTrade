@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllMerchandise = exports.insertOne = void 0;
+exports.getMerchandiseById = exports.getAllMerchandise = exports.insertOne = void 0;
 const merchandise_schema_1 = __importDefault(require("./merchandise.schema"));
 const insertOne = (merchandise) => {
     const newMerchandise = new merchandise_schema_1.default(merchandise);
@@ -25,7 +25,13 @@ const getAllMerchandise = () => __awaiter(void 0, void 0, void 0, function* () {
     return merchandise;
 });
 exports.getAllMerchandise = getAllMerchandise;
+const getMerchandiseById = (merchandiseId) => __awaiter(void 0, void 0, void 0, function* () {
+    const merchandise = yield merchandise_schema_1.default.findById(merchandiseId);
+    return merchandise;
+});
+exports.getMerchandiseById = getMerchandiseById;
 exports.default = {
     insertOne: exports.insertOne,
     getAllMerchandise: exports.getAllMerchandise,
+    getMerchandiseById: exports.getMerchandiseById,
 };

@@ -25,34 +25,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.login = void 0;
 const user_service_1 = __importDefault(require("../users/user.service"));
-const auth_responses_1 = require("./auth.responses");
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcrypt_1 = require("bcrypt");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_responses_1 = require("../users/user.responses");
+const auth_responses_1 = require("./auth.responses");
 const login = (credentials) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield user_service_1.default.findUser({ username: credentials.username });
+        const user = yield user_service_1.default.findUser({
+            username: credentials.username,
+        });
         if (!user) {
-            throw user_responses_1.userResponses.INVALID_CREDENTIALS;
+            throw auth_responses_1.authResponses.INVALID_CREDENTIALS;
         }
-        const didMatch = yield bcrypt_1.default.compare(credentials.password, user.password);
+        const didMatch = yield (0, bcrypt_1.compare)(credentials.password, user.password);
         if (!didMatch) {
-            throw user_responses_1.userResponses.INVALID_CREDENTIALS;
+            throw auth_responses_1.authResponses.INVALID_CREDENTIALS;
         }
         const role = user.role;
+        const userId = user._id;
         const _a = user.toObject(), { password } = _a, restOfTheUser = __rest(_a, ["password"]);
         const { JWT_SECRET } = process.env;
         const token = jsonwebtoken_1.default.sign(restOfTheUser, JWT_SECRET || "");
-        return { token, role };
+        return { token, role, userId };
     }
     catch (e) {
-        throw auth_responses_1.authResponses.INVALID_CREDENTIALS;
+        throw e;
     }
 });
 exports.login = login;
 const logout = (token) => {
     try {
-        // what is this API doing?
         const { MANIPULATE_TOKEN } = process.env;
         token = token + MANIPULATE_TOKEN;
         return token;

@@ -12,6 +12,7 @@ const sales_routes_1 = __importDefault(require("../sales/sales.routes"));
 const user_routes_1 = __importDefault(require("../users/user.routes"));
 const merchandise_routes_1 = __importDefault(require("../merchandise/merchandise.routes"));
 const inventory_routes_1 = __importDefault(require("../inventory/inventory.routes"));
+const customer_routes_1 = __importDefault(require("../customers/customer.routes"));
 exports.routes = [
     auth_routes_1.default,
     user_routes_1.default,
@@ -20,6 +21,7 @@ exports.routes = [
     merchandise_routes_1.default,
     sales_routes_1.default,
     inventory_routes_1.default,
+    customer_routes_1.default,
 ];
 exports.excludedRoutes = [
     {

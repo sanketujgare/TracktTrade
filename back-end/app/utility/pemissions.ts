@@ -8,11 +8,30 @@ export const permissions: IPermissions = {
         "createDistributor",
         "createProduct",
         "createMerchandise",
-        "viewAllMerchandise",
+        "updateDistributor",
+        "updateProduct",
+        "updateMerchandise",
+        "updateInventory",
+        "updateOrder",
+
+        "viewInventory",
+        "viewMerchandise",
+        "viewCustomers",
+        "viewProducts",
+        "viewDistrinutors",
+        "completeOrder",
         "viewCustomer",
-        "viewAllProducts",
+        "deleteProduct",
+        "deleteUser",
+        "viewOwnInventory",
     ],
-    Distributor: [],
+    Distributor: [
+        "redeemMerchandise",
+        "placeOrder",
+        "createSales",
+        "viewProducts",
+        "viewOwnInventory",
+    ],
 };
 
 export type Role = "Manufacturer" | "Distributor";
@@ -25,5 +44,4 @@ export const permissionsToCreate = [
     "createMerchandise",
 ];
 export const viewUser = ["viewCustomer", "viewDistributor"];
-
-export default {};
+export const updateDistributor = [""];

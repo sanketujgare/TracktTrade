@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateOrderStatus = exports.getAllorders = exports.placeOrder = void 0;
-const inventoy_service_1 = __importDefault(require("../inventory/inventoy.service"));
+const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
 const user_service_1 = __importDefault(require("../users/user.service"));
 const order_repo_1 = __importDefault(require("./order.repo"));
 const order_responses_1 = require("./order.responses");
@@ -42,14 +42,15 @@ exports.getAllorders = getAllorders;
 const updateOrderStatus = (updates, orderId, manufacturerId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderToComplete = yield order_repo_1.default.getSpecificOrder(orderId);
-        const user = yield user_service_1.default.getSpecificUser(manufacturerId);
+        const user = yield user_service_1.default.getUserById(manufacturerId);
         if (orderToComplete && user) {
-            yield inventoy_service_1.default.checkInventoryLevel(user, orderToComplete.products);
-            yield inventoy_service_1.default.updateInventory(manufacturerId, orderToComplete.products.map((product) => ({
+            yield inventory_service_1.default.checkInventoryLevel(user, orderToComplete.products);
+            // transaction
+            yield inventory_service_1.default.updateInventory(manufacturerId, orderToComplete.products.map((product) => ({
                 productId: product.productId,
                 quantity: -product.quantity,
             })));
-            yield inventoy_service_1.default.updateInventory(orderToComplete.distributorId, orderToComplete.products);
+            yield inventory_service_1.default.updateInventory(orderToComplete.distributorId, orderToComplete.products);
             const isUpdated = yield order_repo_1.default.updateOrderStatus(updates, orderId);
             if (!isUpdated) {
                 throw order_responses_1.orderResponses.CAN_NOT_UPDATE_ORDER;

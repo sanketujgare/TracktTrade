@@ -12,11 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateInventory = exports.updateUser = exports.getInventory = exports.getSpecificUser = exports.addProductToInventory = exports.insertOne = exports.findUser = void 0;
+exports.deleteUserById = exports.updateRedeemedMerchandises = exports.updatePointesEarned = exports.updateInventory = exports.updateUser = exports.getInventory = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.insertOne = exports.findUser = void 0;
 const user_schema_1 = __importDefault(require("./user.schema"));
 const findUser = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_schema_1.default.findOne({
-        $or: [{ username: query.username }, { email: query.email }],
+        $or: [
+            { username: query.username },
+            { email: query.email },
+            { mobileNumber: query.mobileNumber },
+        ],
     });
     return user;
 });
@@ -34,11 +38,10 @@ const addProductToInventory = (newProduct) => __awaiter(void 0, void 0, void 0, 
     return isAdded;
 });
 exports.addProductToInventory = addProductToInventory;
-const getSpecificUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = user_schema_1.default.findById(userId);
-    return user;
-});
-exports.getSpecificUser = getSpecificUser;
+const getAllDistributors = () => user_schema_1.default.find({ role: "Distributor" });
+exports.getAllDistributors = getAllDistributors;
+const getUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () { return user_schema_1.default.findById(userId); });
+exports.getUserById = getUserById;
 const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const inventory = yield user_schema_1.default
         .findById(userId)
@@ -48,7 +51,7 @@ const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getInventory = getInventory;
 const updateUser = (updates, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const isUpdated = yield user_schema_1.default.findByIdAndUpdate({ userId }, { $set: { updates } });
+    const isUpdated = yield user_schema_1.default.findByIdAndUpdate(userId, updates);
     return isUpdated;
 });
 exports.updateUser = updateUser;
@@ -57,12 +60,31 @@ const updateInventory = (newInventory, userId) => __awaiter(void 0, void 0, void
     return isUpdated;
 });
 exports.updateInventory = updateInventory;
+const updatePointesEarned = (points, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const isUpdated = yield user_schema_1.default.findByIdAndUpdate({ _id: userId }, { $set: { pointsEarned: points } });
+    return isUpdated;
+});
+exports.updatePointesEarned = updatePointesEarned;
+const updateRedeemedMerchandises = (newRedeemed, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const isUpdated = yield user_schema_1.default.findByIdAndUpdate({ _id: userId }, { $set: { merchandiseRedeemed: newRedeemed } });
+    return isUpdated;
+});
+exports.updateRedeemedMerchandises = updateRedeemedMerchandises;
+const deleteUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const isDeleted = user_schema_1.default.findByIdAndDelete({ _id: userId });
+    return isDeleted;
+});
+exports.deleteUserById = deleteUserById;
 exports.default = {
     findUser: exports.findUser,
     insertOne: exports.insertOne,
     addProductToInventory: exports.addProductToInventory,
-    getSpecificUser: exports.getSpecificUser,
+    getUserById: exports.getUserById,
     getInventory: exports.getInventory,
     updateInventory: exports.updateInventory,
     updateUser: exports.updateUser,
+    updatePointesEarned: exports.updatePointesEarned,
+    updateRedeemedMerchandises: exports.updateRedeemedMerchandises,
+    getAllDistributors: exports.getAllDistributors,
+    deleteUserById: exports.deleteUserById,
 };

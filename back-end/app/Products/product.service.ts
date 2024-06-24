@@ -1,7 +1,7 @@
 import productRepo from "./product.repo";
 import { productResponses } from "./product.responses";
 import { IProductSchema, IUpdatedFields } from "./product.types";
-import inventoyService from "../inventory/inventoy.service";
+import inventoryService from "../inventory/inventory.service";
 
 export const addProduct = async (
     product: IProductSchema,
@@ -12,7 +12,9 @@ export const addProduct = async (
         const newProduct = productRepo.insertOne(product);
 
         if (!newProduct) throw productResponses.CAN_NOT_ADD_PRODUCT;
-        await inventoyService.addProductToInventory(newProduct._id.toString());
+
+        // check for bottle neck.
+        await inventoryService.addProductToInventory(newProduct._id.toString());
         return productResponses.PRODUCT_ADDED;
     } catch (e) {
         throw e;
@@ -29,9 +31,9 @@ export const getAllProduct = async () => {
     }
 };
 
-export const getSpecificProduct = async (productId: string) => {
+export const getProductById = async (productId: string) => {
     try {
-        const product = await productRepo.getSpecificProduct(productId);
+        const product = await productRepo.getProductById(productId);
         if (!product) throw productResponses.PRODUCTS_NOT_FOUND;
         return product;
     } catch (e) {
@@ -69,7 +71,7 @@ export const deleteProduct = async (productId: string) => {
 export default {
     addProduct,
     getAllProduct,
-    getSpecificProduct,
+    getProductById,
     updateProduct,
     deleteProduct,
 };

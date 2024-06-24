@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { permissions, Role, roles } from "./pemissions";
+import { permissions, Role } from "./pemissions";
 
 export const authPermissions =
     (requiredPermissions: string[]) =>
     (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userRoles: Role = req.currentUser.role;
+            const userRole: Role = req.currentUser.role;
             let flag = false;
-            if (permissions[userRoles]) {
-                const rolePermissions = permissions[userRoles];
+            if (permissions[userRole]) {
+                const rolePermissions = permissions[userRole];
                 for (let permission of rolePermissions) {
                     if (requiredPermissions.includes(permission)) {
                         flag = true;
@@ -16,7 +16,11 @@ export const authPermissions =
                     }
                 }
             }
-            if (flag) next();
+            if (flag) {
+                next();
+            } else {
+                throw "";
+            }
         } catch (e) {
             next({
                 statusCode: 403,
