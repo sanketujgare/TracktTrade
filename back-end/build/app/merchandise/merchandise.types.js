@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.merchandiseSchema = void 0;
+exports.redeemRequest = exports.redeemedSchema = exports.merchandiseSchema = void 0;
 const zod_1 = require("zod");
 exports.merchandiseSchema = zod_1.z.object({
     merchandiseName: zod_1.z.string(),
@@ -12,4 +12,13 @@ exports.merchandiseSchema = zod_1.z.object({
     isDeleted: zod_1.z.string().optional(),
     createdAt: zod_1.z.string().optional(),
     updatedAt: zod_1.z.string().optional(),
+});
+exports.redeemedSchema = zod_1.z.object({
+    merchandiseId: zod_1.z.string(),
+    status: zod_1.z.enum(["pending", "completed"]).optional(),
+    createdAt: zod_1.z.date().optional(),
+});
+exports.redeemRequest = zod_1.z.object({
+    merchandiseId: zod_1.z.string(),
+    userId: zod_1.z.string(),
 });

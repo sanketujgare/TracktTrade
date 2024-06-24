@@ -1,6 +1,7 @@
+import userService from "../users/user.service";
 import merchandiseRepo from "./merchandise.repo";
 import { merchandiseResponses } from "./merchandise.responses";
-import { IMerchandiseSchema } from "./merchandise.types";
+import { IMerchandiseSchema, IRedeemeRequest } from "./merchandise.types";
 
 export const addMerchandise = (
     merchandise: IMerchandiseSchema,
@@ -26,8 +27,43 @@ export const getAllMerchandise = async () => {
         throw e;
     }
 };
+export const getMerchandiseById = async (merchandiseId: string) => {
+    try {
+        const merchandise = await merchandiseRepo.getMerchandiseById(
+            merchandiseId
+        );
+        if (!merchandise) throw merchandiseResponses.MERCHANDISE_NOT_FOUND;
+        return merchandise;
+    } catch (e) {
+        throw e;
+    }
+};
+
+export const reedeemMerchandises = async (redeemRequest: IRedeemeRequest) => {
+    try {
+        const { merchandiseId, userId } = redeemRequest;
+        const user = await userService.checkPointsLevel(merchandiseId, userId);
+        if (user) {
+            const redeemedMerchandise = user.merchandiseRedeemed;
+            if (redeemedMerchandise) {
+                let newMerchandise = { merchandiseId: merchandiseId };
+                redeemedMerchandise.push(newMerchandise);
+
+                await userService.updateRedeemedMerchandise(
+                    redeemedMerchandise,
+                    user._id.toString()
+                );
+            } // what if redeemedMerchandise is null?
+        }
+        return merchandiseResponses.REQUESTED_TO_REDEEM_MERCHANDISE;
+    } catch (e) {
+        throw e;
+    }
+};
 
 export default {
     addMerchandise,
     getAllMerchandise,
+    getMerchandiseById,
+    reedeemMerchandises,
 };

@@ -7,6 +7,7 @@ import userRoutes from "../users/user.routes";
 import { ExcludedRoutes } from "./routes.types";
 import merchandiseRoutes from "../merchandise/merchandise.routes";
 import inventoryRoutes from "../inventory/inventory.routes";
+import customerRoutes from "../customers/customer.routes";
 
 export const routes = [
     authRoutes,
@@ -16,6 +17,7 @@ export const routes = [
     merchandiseRoutes,
     salesRoutes,
     inventoryRoutes,
+    customerRoutes,
 ];
 
 export const excludedRoutes: ExcludedRoutes = [

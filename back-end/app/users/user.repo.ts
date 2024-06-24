@@ -1,10 +1,19 @@
 import userModel from "./user.schema";
-import { IUserSchema, IUserUpdateSchema } from "./user.types";
+import {
+    IPointsEarnedSchema,
+    IUserSchema,
+    IUserUpdateSchema,
+} from "./user.types";
 import { IInventorySchema } from "../inventory/inventory.types";
+import { IRedeemedSchema } from "../merchandise/merchandise.types";
 
 export const findUser = async (query: Partial<IUserSchema>) => {
     const user = await userModel.findOne({
-        $or: [{ username: query.username }, { email: query.email }],
+        $or: [
+            { username: query.username },
+            { email: query.email },
+            { mobileNumber: query.mobileNumber },
+        ],
     });
     return user;
 };
@@ -22,10 +31,9 @@ export const addProductToInventory = async (newProduct: IInventorySchema) => {
     return isAdded;
 };
 
-export const getSpecificUser = async (userId: string) => {
-    const user = userModel.findById(userId);
-    return user;
-};
+export const getAllDistributors = () => userModel.find({ role: "Distributor" });
+
+export const getUserById = async (userId: string) => userModel.findById(userId);
 
 export const getInventory = async (userId: string) => {
     const inventory = await userModel
@@ -39,10 +47,7 @@ export const updateUser = async (
     updates: Partial<IUserUpdateSchema>,
     userId: string
 ) => {
-    const isUpdated = await userModel.findByIdAndUpdate(
-        { userId },
-        { $set: { updates } }
-    );
+    const isUpdated = await userModel.findByIdAndUpdate(userId, updates);
     return isUpdated;
 };
 
@@ -57,12 +62,42 @@ export const updateInventory = async (
     return isUpdated;
 };
 
+export const updatePointesEarned = async (
+    points: IPointsEarnedSchema[],
+    userId: string
+) => {
+    const isUpdated = await userModel.findByIdAndUpdate(
+        { _id: userId },
+        { $set: { pointsEarned: points } }
+    );
+    return isUpdated;
+};
+
+export const updateRedeemedMerchandises = async (
+    newRedeemed: IRedeemedSchema[],
+    userId: string
+) => {
+    const isUpdated = await userModel.findByIdAndUpdate(
+        { _id: userId },
+        { $set: { merchandiseRedeemed: newRedeemed } }
+    );
+    return isUpdated;
+};
+
+export const deleteUserById = async (userId: String) => {
+    const isDeleted = userModel.findByIdAndDelete({ _id: userId });
+    return isDeleted;
+};
 export default {
     findUser,
     insertOne,
     addProductToInventory,
-    getSpecificUser,
+    getUserById,
     getInventory,
     updateInventory,
     updateUser,
+    updatePointesEarned,
+    updateRedeemedMerchandises,
+    getAllDistributors,
+    deleteUserById,
 };

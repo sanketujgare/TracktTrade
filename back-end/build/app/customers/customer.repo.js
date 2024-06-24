@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePurchaseHistroy = exports.findByMobileNumber = exports.addCustomer = void 0;
+exports.getAllCustomers = exports.updatePurchaseHistroy = exports.findByMobileNumber = exports.addCustomer = void 0;
 const customer_schema_1 = __importDefault(require("./customer.schema"));
 const addCustomer = (customer) => {
     const newCustomer = new customer_schema_1.default(customer);
@@ -30,8 +30,15 @@ const updatePurchaseHistroy = (newHistory, userId) => __awaiter(void 0, void 0, 
     return isUpated;
 });
 exports.updatePurchaseHistroy = updatePurchaseHistroy;
+const getAllCustomers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const customers = yield customer_schema_1.default.find();
+    console.log(customers);
+    return customers;
+});
+exports.getAllCustomers = getAllCustomers;
 exports.default = {
     addCustomer: exports.addCustomer,
     findByMobileNumber: exports.findByMobileNumber,
+    getAllCustomers: exports.getAllCustomers,
     updatePurchaseHistroy: exports.updatePurchaseHistroy,
 };

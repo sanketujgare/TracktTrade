@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatedFields = exports.productSchema = void 0;
+exports.id = exports.updatedFields = exports.productSchema = void 0;
 const zod_1 = require("zod");
 exports.productSchema = zod_1.z.object({
     productName: zod_1.z.string(),
@@ -20,4 +20,7 @@ exports.updatedFields = zod_1.z.object({
     productImage: zod_1.z.string(),
     updatedBy: zod_1.z.string().optional(),
     updatedAt: zod_1.z.string().optional(),
+});
+exports.id = zod_1.z.object({
+    id: zod_1.z.string(),
 });

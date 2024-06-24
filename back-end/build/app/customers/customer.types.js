@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.purchaseHistorySchema = exports.customerSchema = void 0;
+exports.mobileNumber = exports.purchaseHistorySchema = exports.customerSchema = void 0;
 const zod_1 = require("zod");
 exports.customerSchema = zod_1.z.object({
     name: zod_1.z.string(),
@@ -12,3 +12,6 @@ exports.customerSchema = zod_1.z.object({
     })),
 });
 exports.purchaseHistorySchema = zod_1.z.object({ salesId: zod_1.z.string() });
+exports.mobileNumber = zod_1.z.object({
+    mobilenumber: zod_1.z.string(),
+});

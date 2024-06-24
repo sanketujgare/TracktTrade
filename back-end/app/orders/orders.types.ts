@@ -6,10 +6,10 @@ export const orderSchema = z.object({
     products: z.array(
         z.object({
             productId: z.string(),
-            quantity: z.number(),
+            quantity: z.number().min(1),
         })
     ),
-    status: z.enum(["pending", "completed"]),
+    status: z.enum(["pending", "completed"]).optional(),
 });
 
 export interface IOrderSchema extends z.infer<typeof orderSchema> {}
@@ -20,3 +20,7 @@ export const statusUpdate = z.object({
 });
 
 export interface IStatusUpdate extends z.infer<typeof statusUpdate> {}
+
+export const id = z.object({
+    id: z.string(),
+});

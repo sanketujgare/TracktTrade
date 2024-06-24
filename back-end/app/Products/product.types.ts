@@ -25,3 +25,7 @@ export const updatedFields = z.object({
 export interface IUpdatedFields extends z.infer<typeof updatedFields> {}
 export interface IProductSchema extends z.infer<typeof productSchema> {}
 export interface IProductResponses extends IUserResponses {}
+
+export const id = z.object({
+    id: z.string(),
+});

@@ -12,7 +12,7 @@ export const getAllProduct = async () => {
     return products;
 };
 
-export const getSpecificProduct = async (productId: string) => {
+export const getProductById = async (productId: string) => {
     const product = productModel.findById(productId);
     return product;
 };
@@ -28,14 +28,14 @@ export const updateProduct = async (
 };
 
 export const deleteProduct = async (productId: string) => {
-    const isDeleted = await productModel.findByIdAndDelete({ productId });
+    const isDeleted = await productModel.findByIdAndDelete({ _id: productId });
     return isDeleted;
 };
 
 export default {
     insertOne,
     getAllProduct,
-    getSpecificProduct,
+    getProductById,
     updateProduct,
     deleteProduct,
 };

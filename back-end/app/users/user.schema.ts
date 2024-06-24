@@ -1,7 +1,6 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Types } from "mongoose";
 import { BaseSchema } from "../utility/base.schema";
 import { IUserSchema } from "./user.types";
-import { string } from "zod";
 
 const userSchema = new BaseSchema({
     name: {
@@ -66,6 +65,11 @@ const userSchema = new BaseSchema({
             status: {
                 type: String,
                 enum: ["Pending", "Completed"],
+                default: "Pending",
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now(),
             },
         },
     ],

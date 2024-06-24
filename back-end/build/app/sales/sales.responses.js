@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.salesResponses = void 0;
 exports.salesResponses = {
     CAN_NOT_UPDATE_SALES: {
-        statusCode: 434,
+        statusCode: 400,
         message: "CAN NOT UPDATE SALES",
     },
     SALES_UPDATED_SUCCESSFULLY: {

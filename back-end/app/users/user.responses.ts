@@ -30,4 +30,16 @@ export const userResponses: IUserResponses = {
         statusCode: 200,
         message: "USER UPDATED SUCCESSFULLY",
     },
+    NO_DISTRIBUTOR_FOUND: {
+        statusCode: 404,
+        message: "NO DISTRIBUTOR FOUND",
+    },
+    INSUFFICIENT_POINTS: {
+        statusCode: 400,
+        message: "INSUFFICIENT POINTS",
+    },
+    CAN_NOT_DELETE_USER: {
+        statusCode: 403,
+        message: "CAN NOT DELETE USER",
+    },
 };

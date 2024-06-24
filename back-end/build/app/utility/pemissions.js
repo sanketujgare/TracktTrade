@@ -1,16 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.viewUser = exports.permissionsToCreate = exports.roles = exports.permissions = void 0;
+exports.updateDistributor = exports.viewUser = exports.permissionsToCreate = exports.roles = exports.permissions = void 0;
 exports.permissions = {
     Manufacturer: [
         "createDistributor",
         "createProduct",
         "createMerchandise",
-        "viewAllMerchandise",
+        "updateDistributor",
+        "updateProduct",
+        "updateMerchandise",
+        "updateInventory",
+        "updateOrder",
+        "viewInventory",
+        "viewMerchandise",
+        "viewCustomers",
+        "viewProducts",
+        "viewDistrinutors",
+        "completeOrder",
         "viewCustomer",
-        "viewAllProducts",
+        "deleteProduct",
+        "deleteUser",
+        "viewOwnInventory",
     ],
-    Distributor: [],
+    Distributor: [
+        "redeemMerchandise",
+        "placeOrder",
+        "createSales",
+        "viewProducts",
+        "viewOwnInventory",
+    ],
 };
 exports.roles = ["Manufacturer", "Distributor"];
 exports.permissionsToCreate = [
@@ -19,4 +37,4 @@ exports.permissionsToCreate = [
     "createMerchandise",
 ];
 exports.viewUser = ["viewCustomer", "viewDistributor"];
-exports.default = {};
+exports.updateDistributor = [""];

@@ -1,4 +1,4 @@
-import inventoyService from "../inventory/inventoy.service";
+import inventoyService from "../inventory/inventory.service";
 import userService from "../users/user.service";
 import orderRepo from "./order.repo";
 import { orderResponses } from "./order.responses";
@@ -29,7 +29,7 @@ export const updateOrderStatus = async (
 ) => {
     try {
         const orderToComplete = await orderRepo.getSpecificOrder(orderId);
-        const user = await userService.getSpecificUser(manufacturerId);
+        const user = await userService.getUserById(manufacturerId);
 
         if (orderToComplete && user) {
             await inventoyService.checkInventoryLevel(
@@ -37,6 +37,7 @@ export const updateOrderStatus = async (
                 orderToComplete.products
             );
 
+            // transaction
             await inventoyService.updateInventory(
                 manufacturerId,
                 orderToComplete.products.map((product) => ({

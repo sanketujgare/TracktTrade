@@ -30,9 +30,18 @@ merchandiseRouter.post("/add-merchandise", (0, auth_permissions_1.authPermission
         next(e);
     }
 });
-merchandiseRouter.get("/allmerchandise", (0, auth_permissions_1.authPermissions)(["viewAllMerchandise"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+merchandiseRouter.get("/allmerchandise", (0, auth_permissions_1.authPermissions)(["viewMerchandise"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield merchandise_service_1.default.getAllMerchandise();
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+merchandiseRouter.post("/redeem", (0, auth_permissions_1.authPermissions)(["redeemMerchandise"]), ...merchandise_validations_1.redeemRequestValidation, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield merchandise_service_1.default.reedeemMerchandises(req.body);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {

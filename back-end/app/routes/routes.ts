@@ -4,6 +4,7 @@ import { excludedRoutes, routes } from "./routes.data";
 import { ResponseHandler } from "../utility/response-handler";
 import { validateToken } from "../utility/validate-token";
 import helmet from "helmet";
+
 export const registerMiddlewares = (app: Application) => {
     app.use(json());
     app.use(cors());

@@ -17,4 +17,12 @@ export const customerResponses: ICustomerResponses = {
         statusCode: 200,
         message: "NEW CUSTOMER CREATED",
     },
+    NO_CUSTOMERS_FOUND: {
+        statusCode: 404,
+        message: "NO CUSTOMERS FOUND",
+    },
+    CUSTOMER_NOT_FOUND: {
+        statusCode: 404,
+        message: "CUSTOMER NOT FOUND",
+    },
 };

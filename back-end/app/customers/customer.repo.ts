@@ -23,8 +23,14 @@ export const updatePurchaseHistroy = async (
     return isUpated;
 };
 
+export const getAllCustomers = async () => {
+    const customers = await customerModel.find();
+    console.log(customers);
+    return customers;
+};
 export default {
     addCustomer,
     findByMobileNumber,
+    getAllCustomers,
     updatePurchaseHistroy,
 };

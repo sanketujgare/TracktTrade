@@ -2,7 +2,7 @@ import { ISaleResponses } from "./sales.types";
 
 export const salesResponses: ISaleResponses = {
     CAN_NOT_UPDATE_SALES: {
-        statusCode: 434,
+        statusCode: 400,
         message: "CAN NOT UPDATE SALES",
     },
     SALES_UPDATED_SUCCESSFULLY: {
