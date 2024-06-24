@@ -32,7 +32,7 @@ const SidebarList = ({ lists }: SidebarListProps) => {
                   to={""}
                   onClick={() => handleToggle(tab.tabName)}
                 >
-                  - {tab.tabName}
+                  {tab.tabName}
                 </Link>
                 {expandedTab === tab.tabName && (
                   <SidebarList lists={tab.path} />
@@ -40,7 +40,7 @@ const SidebarList = ({ lists }: SidebarListProps) => {
               </>
             ) : (
               <Link className={styles.Link} to={tab.path}>
-                - {tab.tabName}
+                {tab.tabName}
               </Link>
             )}
           </li>

@@ -5,6 +5,7 @@ export interface DistributorListProps {}
 export interface DistributorType {
   _id?: string;
   username: string;
+  email: string;
   password: string;
   name: string;
   role: string;
@@ -16,6 +17,7 @@ export const columns = [
   { header: "Name", accessor: "name" },
   { header: "MobileNumber", accessor: "mobileNumber" },
   { header: "totalPoints", accessor: "totalPoints" },
+  { header: "Buttons", accessor: "editDeleteBtns" },
 ];
 
 type ValidationOptions = {
@@ -31,7 +33,7 @@ export interface Field {
   name: keyof DistributorType;
   label: string;
   placeholder: string;
-  type: "text" | "number";
+  type: "text" | "number" | "email";
   validation: ValidationOptions;
 }
 
@@ -55,6 +57,15 @@ export const DistributorFormFields: Field[] = [
     },
   },
   {
+    name: "email",
+    label: "Email",
+    placeholder: "Enter Distributor email",
+    type: "email",
+    validation: {
+      required: true,
+    },
+  },
+  {
     name: "password",
     label: "Password",
     placeholder: "Enter Distributor Password",
@@ -71,6 +82,7 @@ export const DistributorFormFields: Field[] = [
     validation: {
       required: true,
     },
+    value: "Distributor",
   },
   {
     name: "mobileNumber",
@@ -89,7 +101,7 @@ export type InitialStateType = {
   currentDistributor: DistributorType | {};
   distributorMode: "add" | "edit";
   selectedCategory: "All Distributors" | string;
-  searchQuery: "";
+  searchQuery: string;
   deleteModal: boolean;
 };
 
@@ -112,6 +124,7 @@ export const distributors: DistributorType[] = [
     _id: "62f8dff1d1b2b2e8dcd1f1e3",
     username: "john_doe",
     password: "password123",
+    email: "abc@gmail.com",
     name: "John Doe",
     role: "Distributor",
     mobileNumber: "123-456-7890",
@@ -121,6 +134,7 @@ export const distributors: DistributorType[] = [
     _id: "62f8e0a2d1b2b2e8dcd1f1e4",
     username: "jane_smith",
     password: "securepass456",
+    email: "def@gmail.com",
     name: "Jane Smith",
     role: "Distributor",
     mobileNumber: "098-765-4321",
@@ -130,6 +144,7 @@ export const distributors: DistributorType[] = [
     _id: "62f8e0c4d1b2b2e8dcd1f1e5",
     username: "alice_wonder",
     password: "wonderland789",
+    email: "ghi@gmail.com",
     name: "Alice Wonder",
     role: "Distributor",
     mobileNumber: "456-789-0123",
@@ -139,6 +154,7 @@ export const distributors: DistributorType[] = [
     _id: "62f8e0e6d1b2b2e8dcd1f1e6",
     username: "bob_builder",
     password: "builder456",
+    email: "jkl@gmail.com",
     name: "Bob Builder",
     role: "Distributor",
     mobileNumber: "321-654-0987",
@@ -148,6 +164,7 @@ export const distributors: DistributorType[] = [
     _id: "62f8e108d1b2b2e8dcd1f1e7",
     username: "charlie_chaplin",
     password: "funnybone123",
+    email: "lmn@gmail.com",
     name: "Charlie Chaplin",
     role: "Distributor",
     mobileNumber: "789-012-3456",

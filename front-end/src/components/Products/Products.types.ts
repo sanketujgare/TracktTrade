@@ -5,6 +5,7 @@ export const columns = [
   { header: "Description", accessor: "productDescription" },
   { header: "Price", accessor: "productPrice" },
   { header: "Image", accessor: "productImage" },
+  { header: "Buttons", accessor: "editDeleteBtns" },
 ];
 
 type ValidationOptions = {
@@ -24,7 +25,7 @@ export interface Field {
 }
 
 export type productType = {
-  _id?: string;
+  _id: string;
   productName: string;
   productPrice: number;
   productDescription: string;
@@ -83,6 +84,7 @@ export type InitialStateType = {
   selectedCategory: "All Products" | string;
   searchQuery: "";
   deleteModal: boolean;
+  currentPage: number;
 };
 
 export type productAction =
@@ -95,4 +97,16 @@ export type productAction =
   | { type: "RESET_FORM" }
   | { type: "SET_SELECTED_CATEGORY"; payload: { selectedCategory: string } }
   | { type: "SET_SEARCH_QUERY"; payload: { searchQuery: string } }
-  | { type: "SET_DELETE_MODAL"; payload: { deleteModal: boolean } };
+  | { type: "SET_DELETE_MODAL"; payload: { deleteModal: boolean } }
+  | { type: "SET_CURRENT_PAGE"; payload: { currentPage: number } };
+
+export const InitialState: InitialStateType = {
+  data: [],
+  modal: false,
+  currentProduct: {},
+  productMode: "add",
+  selectedCategory: "All Products",
+  searchQuery: "",
+  deleteModal: false,
+  currentPage: 1,
+};

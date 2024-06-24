@@ -14,18 +14,19 @@ export interface AddEditDistributorFormProps {
   DistributorMode: "add" | "edit" | "delete" | "reset";
 }
 
-export interface AddEditDistributorFields {
-  _id?: string;
-  username: string;
-  password: string;
-  name: string;
-  role: string;
-  mobileNumber: string;
-  totalPoints: number;
-}
+// export interface AddEditDistributorFields {
+//   _id?: string;
+//   name: string;
+//   username: string;
+//   password: string;
+//   email: string;
+//   role?: string;
+//   mobileNumber: string;
+//   totalPoints: number;
+// }
 
 export const distributorFormSchema = z.object({
-//    _id:z.string().optional(),
+  //    _id:z.string().optional(),
   name: z.string(),
   username: z.string(),
   password: z.string(),
@@ -34,6 +35,5 @@ export const distributorFormSchema = z.object({
   email: z.string(),
   totalPoints: z.number().optional().default(0),
 });
-
 
 export type DistributorSchemaType = z.infer<typeof distributorFormSchema>;

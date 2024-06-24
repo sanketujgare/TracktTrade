@@ -1,6 +1,7 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import styles from "./Products.module.scss";
 import {
+  InitialState,
   InitialStateType,
   ProductsProps,
   productType,
@@ -17,19 +18,23 @@ import AddEditProductForm from "../AddEditProductForm/AddEditProductForm.tsx";
 import Dropdown from "../DropDown/DropDown.tsx";
 import Search from "../Search/Search.tsx";
 import Modal from "../Modal/Modal.tsx";
-
-export const InitialState: InitialStateType = {
-  data: [],
-  modal: false,
-  currentProduct: {},
-  productMode: "add",
-  selectedCategory: "All Products",
-  searchQuery: "",
-  deleteModal: false,
-};
+import Pagination from "../Pagination/Pagination.tsx";
 
 const Products = ({}: ProductsProps) => {
   const [state, dispatch] = useReducer(ProductsReducer, InitialState);
+
+ 
+  const totalPages = 10;
+  const itemsPerPage = 10;
+  const indexOfLastItem = state.currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const handlePageChange = (pageNumber: number) => {
+    dispatch({
+      type: "SET_CURRENT_PAGE",
+      payload: { currentPage: pageNumber },
+    });
+  };
 
   useEffect(() => {
     getProducts();
@@ -171,6 +176,11 @@ const Products = ({}: ProductsProps) => {
           </div>
         </div>
       )}
+      <Pagination
+        currentPage={state.currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+      />
     </div>
   );
 };

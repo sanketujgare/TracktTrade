@@ -1,4 +1,4 @@
-@mixin Button {
+@mixin Button() {
   padding: 0.5rem 1rem;
   cursor: pointer;
   border: none;
@@ -6,6 +6,7 @@
   font-size: 1rem;
   font-weight: 600;
   color: white;
+  width: auto;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -38,6 +39,7 @@
 
   .EditButton {
     @include Button();
+    width: 5rem;
     background-color: #97f97c;
     background-image: linear-gradient(to right, #97f97c, #5cd25c);
   }
@@ -53,5 +55,11 @@
     background-color: #ccc;
     background-image: linear-gradient(to right, #ccc, #8c8b8b);
     color: #333;
+  }
+  .CancelButton {
+    @include Button();
+    background-color: #ccc;
+    background-image: linear-gradient(to right, #ccc, #8c8b8b);
+    color: #fff;
   }
 }

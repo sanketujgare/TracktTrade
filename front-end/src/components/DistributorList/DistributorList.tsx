@@ -13,7 +13,7 @@ import DropDown from "../DropDown/DropDown.tsx";
 import Search from "../Search/Search.tsx";
 import Table from "../Table/Table.tsx";
 import AddEditDistributorForm from "../AddEditDistributorForm/AddEditDistributorForm.tsx";
-import { getDistributorsData } from "../../services/Manufacturer.services.ts";
+import { deleteDistributor, getDistributorsData } from "../../services/Manufacturer.services.ts";
 
 export const InitialState: InitialStateType = {
   data: [],
@@ -134,8 +134,8 @@ const DistributorList = ({}: DistributorListProps) => {
       <div className={styles.ProductList}>
         <Table
           columns={columns}
-          //   data={state.data}
-          data={distributors}
+            data={state.data}
+          // data={distributors}
           handleDelete={handleDeleteModal}
           handleEdit={handleEdit}
         />

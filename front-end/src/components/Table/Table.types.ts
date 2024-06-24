@@ -1,14 +1,33 @@
+import { DistributorType } from "../DistributorList/DistributorList.types";
+import { DistributorInventoryType } from "../DistributorInventory/DistributorInventory.types";
+import { productType } from "../Products/Products.types";
+import { NewDistributorInventoryType } from "../DistributorOrderModal/DistributorOrderModal.types";
+import { CustomerType } from "../ManufacturerCustomers/ManufacturerCustomers.types";
+
 export interface columnsType {
   header: string;
   accessor: string;
 }
-export interface dataType {
-  productName: string;
-  productImage: string;
-  productprice: string;
-  productDescription: string;
-}
+
 export interface TableProps {
   columns: columnsType[];
-  data: dataType[];
+  data:
+    | productType[]
+    | DistributorType[]
+    | DistributorInventoryType[]
+    | NewDistributorInventoryType[]
+    | {}[];
+  handleEdit?: (row: productType | DistributorType | DistributorType) => void;
+  handleDelete?: (row: productType | DistributorType | DistributorType) => void;
+  handleSelectItem?: (item: DistributorInventoryType | CustomerType) => void;
+  selectedItems?: DistributorInventoryType[];
 }
+
+export interface BaseType {}
+
+// export interface TableProps<T extends productType, DistributorType> {
+//   columns: columnsType[];
+//   data: T[];
+//   handleEdit: (row: T) => void;
+//   handleDelete: (row: T) => void;
+// }

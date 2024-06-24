@@ -3,6 +3,7 @@ import Button from "../Button/Button.tsx";
 import styles from "./AddEditProductForm.module.scss";
 import {
   addProdcuct,
+  addProduct,
   editProdcuct,
   getProductsData,
 } from "../../services/Manufacturer.services.ts";
@@ -51,7 +52,7 @@ const AddEditProductForm = ({
       if (productMode === "edit" && currentProduct) {
         await editProdcuct(currentProduct._id,data);
       } else if (productMode === "add") {
-        await addProdcuct(data);
+        await addProduct(data);
       }
       dispatch({ type: "RESET_FORM" });
       setModal(false);
