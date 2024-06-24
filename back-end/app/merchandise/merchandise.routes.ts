@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { Route } from "../routes/routes.types";
-import { merchandiseValidations } from "./merchandise.validations";
+import {
+    merchandiseValidations,
+    redeemRequestValidation,
+} from "./merchandise.validations";
 import merchandiseService from "./merchandise.service";
 import { ResponseHandler } from "../utility/response-handler";
 import { authPermissions } from "../utility/auth-permissions";
@@ -27,7 +30,7 @@ merchandiseRouter.post(
 );
 merchandiseRouter.get(
     "/allmerchandise",
-    authPermissions(["viewAllMerchandise"]),
+    authPermissions(["viewMerchandise"]),
     async (req, res, next) => {
         try {
             const result = await merchandiseService.getAllMerchandise();
@@ -37,4 +40,21 @@ merchandiseRouter.get(
         }
     }
 );
+
+merchandiseRouter.post(
+    "/redeem",
+    authPermissions(["redeemMerchandise"]),
+    ...redeemRequestValidation,
+    async (req, res, next) => {
+        try {
+            const result = await merchandiseService.reedeemMerchandises(
+                req.body
+            );
+            res.send(new ResponseHandler(result));
+        } catch (e) {
+            next(e);
+        }
+    }
+);
+
 export default new Route("/merchandise", merchandiseRouter);

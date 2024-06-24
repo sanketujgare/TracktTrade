@@ -16,8 +16,10 @@ const express_1 = require("express");
 const routes_types_1 = require("../routes/routes.types");
 const order_service_1 = __importDefault(require("./order.service"));
 const response_handler_1 = require("../utility/response-handler");
+const auth_permissions_1 = require("../utility/auth-permissions");
+const order_validations_1 = require("./order.validations");
 const orderRouter = (0, express_1.Router)();
-orderRouter.post("/placeorder", (req, res, next) => {
+orderRouter.post("/placeorder", (0, auth_permissions_1.authPermissions)(["placeOrder"]), ...order_validations_1.orderValidations, (req, res, next) => {
     try {
         const result = order_service_1.default.placeOrder(req.body);
         res.send(new response_handler_1.ResponseHandler(result));
@@ -26,7 +28,7 @@ orderRouter.post("/placeorder", (req, res, next) => {
         next(e);
     }
 });
-orderRouter.put("/update/:orderid", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+orderRouter.put("/update/:orderid", (0, auth_permissions_1.authPermissions)(["updateOrder"]), ...order_validations_1.UpdateOrderValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updates = req.body;
         const manufacturerId = req.currentUser._id;

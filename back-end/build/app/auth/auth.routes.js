@@ -27,7 +27,6 @@ authRouter.post("/login", ...auth_validations_1.loginValidations, (req, res, nex
         next(e);
     }
 }));
-// why post?
 authRouter.post("/logout", (req, res, next) => {
     var _a;
     try {

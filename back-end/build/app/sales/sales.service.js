@@ -14,24 +14,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extractCustomerDetails = exports.calculateTotalPrice = exports.createSales = void 0;
 const customer_service_1 = __importDefault(require("../customers/customer.service"));
-const inventoy_service_1 = __importDefault(require("../inventory/inventoy.service"));
+const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
 const user_service_1 = __importDefault(require("../users/user.service"));
 const sales_repo_1 = __importDefault(require("./sales.repo"));
 const sales_responses_1 = require("./sales.responses");
 const createSales = (sale) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield user_service_1.default.getSpecificUser(sale.distributorId);
-        yield inventoy_service_1.default.checkInventoryLevel(user, sale.products);
-        // await inventoyService.updateInventory(
-        //     user._id.toString(),
-        //     sale.products.map((product) => ({
-        //         productId: product.productId,
-        //         quantity: -product.quantity,
-        //     }))
-        // );
+        const user = yield user_service_1.default.getUserById(sale.distributorId);
+        // aggregation
+        yield inventory_service_1.default.checkInventoryLevel(user, sale.products);
+        yield inventory_service_1.default.updateInventory(user._id.toString(), sale.products.map((product) => ({
+            productId: product.productId,
+            quantity: -product.quantity,
+        })));
         const totalPrice = (0, exports.calculateTotalPrice)(sale);
         sale.totalPrice = totalPrice;
         const points = totalPrice / 1000;
+        // transactional
+        yield user_service_1.default.updatePointesEarned(sale.distributorId, points);
         const newSale = sales_repo_1.default.createSales(sale);
         if (!newSale)
             throw sales_responses_1.salesResponses.CAN_NOT_UPDATE_SALES;

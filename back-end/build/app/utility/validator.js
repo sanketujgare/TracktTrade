@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.query = exports.params = exports.body = exports.validator = void 0;
-const validator = (sourse, schema, passthrough = false) => (req, res, next) => {
+const validator = (source, schema, passthrough = false) => (req, res, next) => {
     try {
         if (passthrough) {
-            req[sourse] = schema.passthrough().parse(req[sourse]);
+            req[source] = schema.passthrough().parse(req[source]);
         }
-        req[sourse] = schema.parse(req[sourse]);
+        req[source] = schema.parse(req[source]);
         next();
     }
     catch (e) {
         next({
             statusCOde: 400,
-            message: "BAD REQUEST",
+            message: " BAD REQUEST ZOD ERROR",
             error: e,
         });
     }
