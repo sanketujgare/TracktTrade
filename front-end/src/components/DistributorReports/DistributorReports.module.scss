@@ -1,0 +1,110 @@
+.DistributorReportsContainer {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.Tabs {
+  display: flex;
+}
+
+.TabButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #555;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 0.5rem;
+}
+
+.TabButton:hover {
+  background-color: #ddd;
+}
+
+.Active {
+  background-color: #31c4e6;
+  background-image: linear-gradient(to right, #31c4e6, #1e90ff);
+  color: #fff;
+}
+
+.ChartTypeButtons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.ChartTypeButton {
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: #555;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ChartTypeButton:hover {
+  background-color: #ddd;
+}
+
+.TabContent {
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.DatePickerContainer {
+  position: relative;
+}
+
+.DatePickerToggle {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #31c4e6;
+  background-image: linear-gradient(to right, #31c4e6, #1e90ff);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto;
+}
+
+.DatePickerToggle:hover {
+  background-color: #1e90ff;
+}
+
+.DatePickerWrapper {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 10;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  //   display: none;
+}
+
+.DatePickerContainer:hover .DatePickerWrapper {
+  display: block;
+}
+
+.react-datepicker-wrapper {
+  display: inline-block;
+}

@@ -1,0 +1,40 @@
+@mixin Li($color) {
+  .Link {
+    color: $color;
+    list-style-type: none;
+    text-decoration: none;
+  }
+
+  padding: 0.5rem 0.5rem;
+  cursor: pointer;
+  transition: all ease 0.3s;
+  &:active {
+    transform: scale(1.05);
+  }
+}
+.SideBarList {
+  list-style-type: none;
+  color: white;
+  .LiTab {
+    color: white;
+    @include Li(whitesmoke);
+    // .Link {
+    //   color: whitesmoke;
+    //   list-style-type: none;
+    //   text-decoration: none;
+    // }
+
+    // padding: 0.5rem 0.5rem;
+    // cursor: pointer;
+    // transition: all ease 0.3s;
+    // &:hover {
+    //   transform: scale(1.05);
+    // }
+  }
+  .ActiveLiTab {
+    // background-color: #f0f0f0;
+    // color: blue;
+    // font-weight: bold;
+    @include Li(pink);
+  }
+}

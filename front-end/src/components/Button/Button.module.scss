@@ -1,0 +1,65 @@
+@mixin Button() {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  width: auto;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .ButtonText {
+    color: inherit;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.ButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+
+  .primaryButton {
+    @include Button();
+    background-color: #31c4e6;
+    background-image: linear-gradient(to right, #31c4e6, #1e90ff);
+  }
+
+  .EditButton {
+    @include Button();
+    width: 5rem;
+    background-color: #97f97c;
+    background-image: linear-gradient(to right, #97f97c, #5cd25c);
+  }
+
+  .DeleteButton {
+    @include Button();
+    background-color: #fa7c7c;
+    background-image: linear-gradient(to right, #fa7c7c, #f44336);
+  }
+
+  .modalButton {
+    @include Button();
+    background-color: #ccc;
+    background-image: linear-gradient(to right, #ccc, #8c8b8b);
+    color: #333;
+  }
+  .CancelButton {
+    @include Button();
+    background-color: #ccc;
+    background-image: linear-gradient(to right, #ccc, #8c8b8b);
+    color: #fff;
+  }
+}

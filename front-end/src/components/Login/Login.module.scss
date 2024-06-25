@@ -1,0 +1,21 @@
+.LoginContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+  background-color: white;
+  gap: 3rem;
+  box-shadow: 0px 0px 4px #ededed;
+  border-radius: 0.4rem;
+  
+  .Logo {
+    .FormHeader {
+      font-size: 2rem;
+      padding: 1rem;
+    }
+  }
+  .LoginForm {
+    flex: 1;
+  }
+}

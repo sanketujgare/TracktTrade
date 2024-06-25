@@ -1,0 +1,32 @@
+.SidebarContainer {
+  //   position: absolute;
+//   width: calc(0vw);
+  //   min-height: calc(100vh - 3rem);
+  min-height: 100vh;
+  background-color: #0c365f;
+  color: #ecf0f1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+
+  .SidebarList {
+    list-style-type: none;
+    li {
+      .Link {
+        color: whitesmoke;
+        text-decoration: none;
+      }
+
+      padding: 0.5rem 0.5rem;
+      cursor: pointer;
+      transition: all ease 0.3s;
+      &:hover {
+        transform: scale(1.05);
+      }
+      .Link {
+        list-style-type: none;
+      }
+    }
+  }
+}

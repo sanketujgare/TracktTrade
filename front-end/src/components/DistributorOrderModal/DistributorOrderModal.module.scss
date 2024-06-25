@@ -1,0 +1,35 @@
+/* DistributorOrderModal.module.scss */
+
+.Modal {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+
+  .Table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+
+    th,
+    td {
+      padding: 10px;
+      border: 1px solid #ddd;
+
+      .Input {
+        outline: none;
+        border-style: none;
+        border-bottom: 1px solid #ddd;
+      }
+    }
+    th {
+      background-color: #f0f0f0;
+      text-align: left;
+    }
+  }
+
+  .ButtonContainer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+  }
+}

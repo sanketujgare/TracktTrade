@@ -1,0 +1,13 @@
+.InputContainer {
+  padding: 0.5rem;
+  .Input {
+    padding: 0.5rem 0;
+    border: none;
+    outline: none;
+
+    border-bottom: 1px solid #ccc;
+    &:focus {
+      border-color: rgb(186, 120, 248);
+    }
+  }
+}

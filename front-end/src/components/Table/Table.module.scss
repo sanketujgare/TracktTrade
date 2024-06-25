@@ -1,0 +1,98 @@
+.TableContainer {
+  max-height: 18rem;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .CustomTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .THead {
+    background-color: #f5f5f5;
+    color: #333;
+    text-align: left;
+  }
+
+  .TRow {
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
+  .THeader,
+  .TData {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .Image {
+    max-width: 3rem;
+    max-height: 3rem;
+    border-radius: 0.25rem;
+  }
+
+  .Checkbox {
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+
+  .ButtonContainer {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .EditButton {
+    background-color: #31c4e6;
+    background-image: linear-gradient(to right, #31c4e6, #1e90ff);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .DeleteButton {
+    background-color: #f44336; // Red background for delete
+    background-image: linear-gradient(to right, #f44336, #e53935);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .EditButton:hover {
+    background-color: #1e90ff;
+  }
+
+  .DeleteButton:hover {
+    background-color: #e53935;
+  }
+}
