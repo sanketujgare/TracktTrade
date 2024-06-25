@@ -1,63 +1,68 @@
+import { useEffect, useReducer } from "react";
 import DropDown from "../DropDown/DropDown.tsx";
 import Pagination from "../Pagination/Pagination.tsx";
 import Search from "../Search/Search.tsx";
 import Table from "../Table/Table.tsx";
 import styles from "./ManufacturerOrders.module.scss";
-import { ManufacturerOrdersProps } from "./ManufacturerOrders.types.ts";
+import {
+  ManufacturerOrdersProps,
+  initialOrdersState,
+  OrderDataType,
+  ManufacturerOrdersColumns,
+  DistributorOrderDataType,
+} from "./ManufacturerOrders.types.ts";
+import {
+  getDistributorRequestOrders,
+  getDistributorsData,
+  getProductsData,
+} from "../../services/Manufacturer.services.ts";
+import { ManufacturerOrdersReducer } from "./ManufacturerOrders.reducer.ts";
 
 const ManufacturerOrders = ({}: ManufacturerOrdersProps) => {
   const [state, dispatch] = useReducer(
-    ManufacturerInventoryReducer,
-    InitialState
+    ManufacturerOrdersReducer,
+    initialOrdersState
   );
 
   useEffect(() => {
-    getManufacturerInventory();
-  }, []);
+    getDistributorOrders();
+    getDistributors();
+    getProducts();
+  }, []); // Add dependency array to avoid infinite loop
 
-  const getManufacturerInventory = async () => {
+  const getDistributorOrders = async () => {
     try {
-      const data = await getManufacturereInventoryData();
+      const data = await getDistributorRequestOrders();
       dispatch({
-        type: "SET_INVENTORY_DATA",
-        payload: { manufacturerInventoryData: data },
+        type: "SET_MANUFACTURERORDERS_DATA",
+        payload: { ordersData: data },
       });
-      console.log(data.message);
-    } catch (error: any) {
-      console.error(error.message);
+    } catch (error) {
+      console.error("Failed to fetch distributor orders:", error);
     }
   };
 
-  const updateManufacturerInventory = async () => {
+  const getDistributors = async () => {
     try {
-      const selectedItem = state.selectedItems[0];
-      if (!selectedItem || !selectedItem._id) {
-        console.error("Invalid item or _id is missing");
-        console.log(selectedItem);
-        return;
-      }
-
-      const { _id: productId, quantity } = selectedItem;
-      const dataToUpdate = { productId, quantity };
-      const data = await updateManufacturereInventoryData(dataToUpdate);
-      getManufacturerInventory();
-    } catch (error: any) {
-      console.error(error.message);
+      const data = await getDistributorsData();
+      dispatch({
+        type: "SET_DISTRIBUTORS_DATA",
+        payload: { distributorData: data },
+      });
+    } catch (error) {
+      console.error("Failed to fetch distributor data:", error);
     }
   };
-
-  const transformedData = flattenArrayOfObjects(
-    state.manufacturerInventoryData
-  );
-
-  const handleModal = () => {
-    dispatch({
-      type: "RESET_FORM",
-    });
-    dispatch({
-      type: "SET_MODAL",
-      payload: { modal: !state.modal },
-    });
+  const getProducts = async () => {
+    try {
+      const data = await getProductsData();
+      dispatch({
+        type: "SET_DISTRIBUTORS_DATA",
+        payload: { distributorData: data },
+      });
+    } catch (error) {
+      console.error("Failed to fetch distributor data:", error);
+    }
   };
 
   const handleSelect = (option: string) => {
@@ -74,38 +79,6 @@ const ManufacturerOrders = ({}: ManufacturerOrdersProps) => {
     });
   };
 
-  const handleSelectItem = (item) => {
-    dispatch({
-      type: "SET_SELECTED_ITEMS",
-      payload: { selectedItems: [item] },
-    });
-  };
-
-  const handleEdit = (row) => {
-    handleSelectItem(row);
-    handleModal();
-  };
-
-  const handleSelectedItemQuantity = (id: string, quantity: number) => {
-    const updatedItems = state.selectedItems.map((item) =>
-      item._id === id ? { ...item, quantity: quantity } : item
-    );
-
-    dispatch({
-      type: "SET_SELECTED_ITEMS",
-      payload: { selectedItems: updatedItems },
-    });
-  };
-
-  const handleOrder = () => {
-    updateManufacturerInventory();
-    handleModal();
-    dispatch({
-      type: "SET_SELECTED_ITEMS",
-      payload: { selectedItems: [] },
-    });
-  };
-
   const handlePageChange = (pageNumber: number) => {
     dispatch({
       type: "SET_CURRENT_PAGE",
@@ -113,17 +86,67 @@ const ManufacturerOrders = ({}: ManufacturerOrdersProps) => {
     });
   };
 
-  const totalPages = Math.ceil(state.manufacturerInventoryData.length / 10);
-  const currentData = transformedData.slice(
+  const filteredData = state.ordersData.filter((order) =>
+    order.products.some((product) =>
+      product.productid?.toLowerCase().includes(state.searchQuery.toLowerCase())
+    )
+  );
+
+  const totalPages = Math.ceil(filteredData.length / 10);
+  const currentData = filteredData.slice(
     (state.currentPage - 1) * 10,
     state.currentPage * 10
   );
 
+  const getDistributor = (distributorId: string) => {
+    const distributor = state.distributorData.find(
+      (dist) => dist._id === distributorId
+    );
+    // console.log(distributor);
+    return distributor ? distributor.name : "Unknown Distributor";
+  };
+
+  const getProduct = (_id: string) => {
+    const product = state.productsData.find((prod) => prod._id === _id);
+    return product
+      ? {
+          productName: product.productName,
+          productPrice: product.productPrice,
+          productImage: product.productImage,
+          productDescription: product.productDescription,
+        }
+      : { productName: "Unknown Product" };
+  };
+
+  if (
+    state.productsData.length > 0 &&
+    state.distributorData.length > 0 &&
+    state.ordersData.length > 0
+  ) {
+    const data = state.ordersData.map((item) => {
+      return {
+        name: getDistributor(item.distributorId),
+        status: item.status,
+        products: item.products.map((product) => ({
+          ...product,
+          ...getProduct(product._id),
+        })),
+      };
+    });
+  } else {
+    const data = [];
+  }
+
+  const handleCurrentOrder = (item: DistributorOrderDataType) => {
+    dispatch({ type: "SET_CURRENT_ORDER", payload: { currentOrder: item } });
+    dispatch({ type: "SET_MODAL", payload: { modal: !state.modal } });
+  };
+
   return (
-    <div className={styles.ProductsContainer}>
+    <div className={styles.OrdersContainer}>
       <div className={styles.SearchFeatures}>
         <DropDown
-          options={["All Products", "Category 1", "Category 2"]}
+          options={["Pending Orders", "Completed Orders"]}
           selected={state.selectedCategory}
           handleSelect={handleSelect}
         />
@@ -131,29 +154,18 @@ const ManufacturerOrders = ({}: ManufacturerOrdersProps) => {
       </div>
       <div className={styles.ProductList}>
         <Table
-          columns={ManufacturerInventoryColumns}
-          data={currentData}
-          handleEdit={handleEdit}
-          selectedItems={state.selectedItems}
+          columns={ManufacturerOrdersColumns} // Adjust columns as needed
+          data={data as DistributorOrderDataType}
+          handleSelectItem={handleCurrentOrder}
         />
       </div>
-      {state.modal && (
-        <div className={styles.ModalView}>
-          <div className={styles.ModalContent}>
-            <ManufacturerInventoryUpdateModal
-              selectedItems={state.selectedItems}
-              handleOrder={handleOrder}
-              handleClose={handleModal}
-              handleSelectedItemQuantity={handleSelectedItemQuantity}
-            />
-          </div>
-        </div>
-      )}
       <Pagination
         currentPage={state.currentPage}
         totalPages={totalPages}
         handlePageChange={handlePageChange}
       />
+
+      {state.modal && <div>{data}</div>}
     </div>
   );
 };

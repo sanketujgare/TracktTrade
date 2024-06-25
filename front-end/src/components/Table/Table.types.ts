@@ -3,6 +3,8 @@ import { DistributorInventoryType } from "../DistributorInventory/DistributorInv
 import { productType } from "../Products/Products.types";
 import { NewDistributorInventoryType } from "../DistributorOrderModal/DistributorOrderModal.types";
 import { CustomerType } from "../ManufacturerCustomers/ManufacturerCustomers.types";
+import { SaleData } from "../CustomerSales/CustomerSales.types";
+import { DistributorOrderDataType } from "../ManufacturerOrders/ManufacturerOrders.types";
 
 export interface columnsType {
   header: string;
@@ -19,7 +21,9 @@ export interface TableProps {
     | {}[];
   handleEdit?: (row: productType | DistributorType | DistributorType) => void;
   handleDelete?: (row: productType | DistributorType | DistributorType) => void;
-  handleSelectItem?: (item: DistributorInventoryType | CustomerType) => void;
+  handleSelectItem?: (
+    item: DistributorInventoryType | CustomerType | DistributorOrderDataType
+  ) => void;
   selectedItems?: DistributorInventoryType[];
 }
 

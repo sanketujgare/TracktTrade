@@ -29,3 +29,15 @@ export const orderDistributorInventory = async (updateData: {
     console.log(error.message);
   }
 };
+
+export const sellInventory = async (salesData) => {
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await AxiosInstance.post("sales/create-sales", salesData);
+    console.log(data);
+    //   console.log(response);
+    return data;
+  } catch (error: any) {
+    console.log(error.message);
+  }
+};

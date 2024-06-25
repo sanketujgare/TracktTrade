@@ -122,3 +122,15 @@ export const geManufacturertCustomersData = async () => {
     console.log(error.message);
   }
 };
+
+export const getDistributorRequestOrders = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await AxiosInstance.get("order/allorder/pending");
+    console.log(data);
+    //   console.log(response);
+    return data;
+  } catch (error: any) {
+    console.log(error.message);
+  }
+};

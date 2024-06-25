@@ -16,6 +16,8 @@ import ManufacturerReports from "../components/ManufacturerReports/ManufacturerR
 import DistributorReports from "../components/DistributorReports/DistributorReports";
 import ManufacturerInventory from "../components/ManufacturerInventory/ManufacturerInventory";
 import ManufacturerCustomers from "../components/ManufacturerCustomers/ManufacturerCustomers";
+import DistributorSales from "../components/DistributorSales/DistributorSales";
+import ManufacturerOrders from "../components/ManufacturerOrders/ManufacturerOrders";
 
 type predicate = () => boolean;
 
@@ -70,6 +72,10 @@ export const router = createBrowserRouter([
         path: "reports",
         element: <ManufacturerReports />,
       },
+      {
+        path: "orders",
+        element: <ManufacturerOrders />,
+      },
     ],
   },
   {
@@ -92,6 +98,10 @@ export const router = createBrowserRouter([
       {
         path: "reports",
         element: <DistributorReports />,
+      },
+      {
+        path: "sales",
+        element: <DistributorSales />,
       },
     ],
   },

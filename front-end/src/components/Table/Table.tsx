@@ -87,6 +87,17 @@ const Table = ({
                           buttonClass={"primaryButton"}
                         />
                       </div>
+                    ) : col.header === "Approve" ? (
+                      <div>
+                        <Button
+                          buttonText={"View"}
+                          // handleClick={() => handleEdit(row)}
+                          handleClick={() =>
+                            handleSelectItem ? handleSelectItem(row) : null
+                          }
+                          buttonClass={"primaryButton"}
+                        />
+                      </div>
                     ) : (
                       <span>{row[col.accessor as keyof typeof row]}</span>
                     )}
