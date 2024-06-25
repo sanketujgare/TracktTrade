@@ -11,6 +11,7 @@ exports.permissions = {
         "updateMerchandise",
         "updateInventory",
         "updateOrder",
+        "viewOrders",
         "viewInventory",
         "viewMerchandise",
         "viewCustomers",

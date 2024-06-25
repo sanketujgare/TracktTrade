@@ -22,39 +22,39 @@ salesRouter.post(
     }
 );
 
-salesRouter.get("/topperformers", async (req, res, next) => {
-    try {
-        console.log("here");
-        const results = await salesModel.aggregate([
-            {
-                $group: {
-                    _id: "$distributorId",
-                    totalRevenue: { $sum: "$totalPrice" },
-                },
-            },
-            { $sort: { totalRevenue: -1 } },
-            { $limit: 10 },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "_id",
-                    foreignField: "_id",
-                    as: "distributorDetails",
-                },
-            },
-            { $unwind: "$distributorDetails" },
-            {
-                $project: {
-                    distributorId: "$_id",
-                    totalRevenue: 1,
-                    distributorName: "$distributorDetails.name",
-                    _id: 0,
-                },
-            },
-        ]);
-        res.send(new ResponseHandler(results));
-    } catch (e) {
-        next(e);
-    }
-});
+// salesRouter.get("/topperformers", async (req, res, next) => {
+//     try {
+//         console.log("here");
+//         const results = await salesModel.aggregate([
+//             {
+//                 $group: {
+//                     _id: "$distributorId",
+//                     totalRevenue: { $sum: "$totalPrice" },
+//                 },
+//             },
+//             { $sort: { totalRevenue: -1 } },
+//             { $limit: 10 },
+//             {
+//                 $lookup: {
+//                     from: "users",
+//                     localField: "_id",
+//                     foreignField: "_id",
+//                     as: "distributorDetails",
+//                 },
+//             },
+//             { $unwind: "$distributorDetails" },
+//             {
+//                 $project: {
+//                     distributorId: "$_id",
+//                     totalRevenue: 1,
+//                     distributorName: "$distributorDetails.name",
+//                     _id: 0,
+//                 },
+//             },
+//         ]);
+//         res.send(new ResponseHandler(results));
+//     } catch (e) {
+//         next(e);
+//     }
+// });
 export default new Route("/sales", salesRouter);

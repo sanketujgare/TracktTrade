@@ -1,24 +1,26 @@
 import nodemailer from "nodemailer";
 
-const sendMail = async () => {
+const sendMail = async (mail: any) => {
     try {
-        const sender = await nodemailer.createTestAccount();
-
-        const transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false, // Use `true` for port 465, `false` for all other ports
+        const account = await nodemailer.createTestAccount();
+        let transporter = nodemailer.createTransport({
+            host: account.smtp.host,
+            port: account.smtp.port,
+            secure: account.smtp.secure,
             auth: {
-                user: "maddison53@ethereal.email",
-                pass: "jn7jnAPss4f63QBp6D",
+                user: "francesco.hane87@ethereal.email",
+                pass: "VBy5cydrEC5x7SU7VV",
+            },
+            tls: {
+                rejectUnauthorized: false,
             },
         });
-        const info = await transporter.sendMail({
-            from: '"Hey hey its just test mail 👻" <maddison53@ethereal.email>',
-            to: "yuvrajxt@gmail.com",
-            subject: "Test Email ✔",
-            text: "Hello world?",
-            html: "<b>Hello world?</b>",
+        await transporter.sendMail({
+            from: mail.from,
+            to: mail.to.join(","),
+            subject: mail.subject,
+            // text: "Hello world?",
+            html: mail.text,
         });
     } catch (e) {
         throw e;

@@ -7,8 +7,8 @@ export const placeOrder = (order: IOrderSchema) => {
     return newOrder;
 };
 
-export const getAllorders = async () => {
-    const orders = await orderModel.find();
+export const getAllorders = async (status: string) => {
+    const orders = await orderModel.find({ status: status });
     return orders;
 };
 

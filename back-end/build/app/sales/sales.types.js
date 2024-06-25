@@ -13,5 +13,5 @@ exports.salesSchema = zod_1.z.object({
         quantity: zod_1.z.number(),
         currentPrice: zod_1.z.number(),
     })),
-    totalPrice: zod_1.z.number(),
+    totalPrice: zod_1.z.number().optional(),
 });

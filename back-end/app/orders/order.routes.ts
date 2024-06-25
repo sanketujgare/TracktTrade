@@ -7,6 +7,20 @@ import { orderValidations, UpdateOrderValidations } from "./order.validations";
 
 const orderRouter = Router();
 
+orderRouter.get(
+    "/allorder/:field",
+    authPermissions(["viewOrders"]),
+    async (req, res, next) => {
+        try {
+            const status = req.params.field;
+            const result = await orderService.getAllorders(status);
+            res.send(new ResponseHandler(result));
+        } catch (e) {
+            next(e);
+        }
+    }
+);
+
 orderRouter.post(
     "/placeorder",
     authPermissions(["placeOrder"]),

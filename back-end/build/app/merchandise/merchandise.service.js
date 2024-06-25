@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reedeemMerchandises = exports.getMerchandiseById = exports.getAllMerchandise = exports.addMerchandise = void 0;
+exports.reedeemMerchandises = exports.getMerchandiseById = exports.getMerchandiseRequests = exports.getAllMerchandise = exports.addMerchandise = void 0;
 const user_service_1 = __importDefault(require("../users/user.service"));
 const merchandise_repo_1 = __importDefault(require("./merchandise.repo"));
 const merchandise_responses_1 = require("./merchandise.responses");
@@ -41,6 +41,41 @@ const getAllMerchandise = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllMerchandise = getAllMerchandise;
+const getMerchandiseRequests = (status) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pipeline = [
+            { $unwind: "$merchandiseRedeemed" },
+            { $match: { "merchandiseRedeemed.status": status } },
+            {
+                $lookup: {
+                    from: "merchandises",
+                    localField: "merchandiseRedeemed.merchandiseId",
+                    foreignField: "_id",
+                    as: "merchandiseDetails",
+                },
+            },
+            { $unwind: "$merchandiseDetails" },
+            {
+                $project: {
+                    userId: "$_id",
+                    userName: "$name",
+                    merchandiseId: "$merchandiseRedeemed.merchandiseId",
+                    merchandiseName: "$merchandiseDetails.merchandiseName",
+                    status: "$merchandiseRedeemed.status",
+                    createdAt: "$merchandiseRedeemed.createdAt",
+                },
+            },
+        ];
+        const merchandise = yield user_service_1.default.getMerchandiseRequests(pipeline);
+        if (!merchandise || merchandise.length === 0)
+            throw merchandise_responses_1.merchandiseResponses.MERCHANDISE_NOT_FOUND;
+        return merchandise;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.getMerchandiseRequests = getMerchandiseRequests;
 const getMerchandiseById = (merchandiseId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const merchandise = yield merchandise_repo_1.default.getMerchandiseById(merchandiseId);
@@ -77,4 +112,5 @@ exports.default = {
     getAllMerchandise: exports.getAllMerchandise,
     getMerchandiseById: exports.getMerchandiseById,
     reedeemMerchandises: exports.reedeemMerchandises,
+    getMerchandiseRequests: exports.getMerchandiseRequests,
 };

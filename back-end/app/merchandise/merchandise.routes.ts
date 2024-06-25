@@ -40,7 +40,15 @@ merchandiseRouter.get(
         }
     }
 );
-
+merchandiseRouter.get("/request/:status", async (req, res, next) => {
+    try {
+        const status = req.params.status;
+        const result = await merchandiseService.getMerchandiseRequests(status);
+        res.send(new ResponseHandler(result));
+    } catch (e) {
+        next(e);
+    }
+});
 merchandiseRouter.post(
     "/redeem",
     authPermissions(["redeemMerchandise"]),

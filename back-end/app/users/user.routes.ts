@@ -9,6 +9,7 @@ import {
 } from "./user.validations";
 import { permissionsToCreate, viewUser } from "../utility/pemissions";
 import { authPermissions } from "../utility/auth-permissions";
+import userRepo from "./user.repo";
 
 const userRouter = Router();
 
@@ -19,7 +20,12 @@ userRouter.post(
     async (req, res, next) => {
         try {
             const creatorId = req.currentUser._id;
-            const result = await userService.createUser(req.body, creatorId);
+            const creatorEmail = req.currentUser.email;
+            const result = await userService.createUser(
+                req.body,
+                creatorId,
+                creatorEmail
+            );
 
             res.send(new ResponseHandler(result));
         } catch (e) {
@@ -50,6 +56,7 @@ userRouter.get(
     async (req, res, next) => {
         try {
             const result = await userService.getAllDistributors();
+            // const result = await userRepo.getDistributorEmails();
             res.send(new ResponseHandler(result));
         } catch (e) {
             next(e);

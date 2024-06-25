@@ -1,9 +1,11 @@
 import userModel from "./user.schema";
+
 import {
     IPointsEarnedSchema,
     IUserSchema,
     IUserUpdateSchema,
 } from "./user.types";
+
 import { IInventorySchema } from "../inventory/inventory.types";
 import { IRedeemedSchema } from "../merchandise/merchandise.types";
 
@@ -31,7 +33,8 @@ export const addProductToInventory = async (newProduct: IInventorySchema) => {
     return isAdded;
 };
 
-export const getAllDistributors = () => userModel.find({ role: "Distributor" });
+export const getAllDistributors = () =>
+    userModel.find({ role: "Distributor" }, { password: 0 });
 
 export const getUserById = async (userId: string) => userModel.findById(userId);
 
@@ -42,6 +45,9 @@ export const getInventory = async (userId: string) => {
         .populate("inventory.productId");
     return inventory;
 };
+
+export const getMerchandiseRequests = async (pipeline: any) =>
+    userModel.aggregate(pipeline);
 
 export const updateUser = async (
     updates: Partial<IUserUpdateSchema>,
@@ -94,6 +100,7 @@ export default {
     addProductToInventory,
     getUserById,
     getInventory,
+    getMerchandiseRequests,
     updateInventory,
     updateUser,
     updatePointesEarned,

@@ -2,10 +2,14 @@ import productRepo from "./product.repo";
 import { productResponses } from "./product.responses";
 import { IProductSchema, IUpdatedFields } from "./product.types";
 import inventoryService from "../inventory/inventory.service";
+import userService from "../users/user.service";
+import mailTemplates from "../utility/mail-templates";
+import sendMail from "../utility/send-mail";
 
 export const addProduct = async (
     product: IProductSchema,
-    manufacturerId: string
+    manufacturerId: string,
+    from: string
 ) => {
     try {
         product.createdBy = manufacturerId;
@@ -13,8 +17,17 @@ export const addProduct = async (
 
         if (!newProduct) throw productResponses.CAN_NOT_ADD_PRODUCT;
 
-        // check for bottle neck.
         await inventoryService.addProductToInventory(newProduct._id.toString());
+        const emails = await userService.getUserEmails();
+
+        const mail = mailTemplates.newProduct(
+            emails,
+            newProduct.productName,
+            newProduct.productDescription,
+            from
+        );
+        await sendMail.sendMail(mail);
+
         return productResponses.PRODUCT_ADDED;
     } catch (e) {
         throw e;

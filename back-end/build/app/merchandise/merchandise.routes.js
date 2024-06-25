@@ -39,6 +39,16 @@ merchandiseRouter.get("/allmerchandise", (0, auth_permissions_1.authPermissions)
         next(e);
     }
 }));
+merchandiseRouter.get("/request/:status", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const status = req.params.status;
+        const result = yield merchandise_service_1.default.getMerchandiseRequests(status);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
 merchandiseRouter.post("/redeem", (0, auth_permissions_1.authPermissions)(["redeemMerchandise"]), ...merchandise_validations_1.redeemRequestValidation, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield merchandise_service_1.default.reedeemMerchandises(req.body);

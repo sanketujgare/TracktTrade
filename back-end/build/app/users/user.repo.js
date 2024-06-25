@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserById = exports.updateRedeemedMerchandises = exports.updatePointesEarned = exports.updateInventory = exports.updateUser = exports.getInventory = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.insertOne = exports.findUser = void 0;
+exports.deleteUserById = exports.updateRedeemedMerchandises = exports.updatePointesEarned = exports.updateInventory = exports.updateUser = exports.getMerchandiseRequests = exports.getInventory = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.insertOne = exports.findUser = void 0;
 const user_schema_1 = __importDefault(require("./user.schema"));
 const findUser = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_schema_1.default.findOne({
@@ -38,7 +38,7 @@ const addProductToInventory = (newProduct) => __awaiter(void 0, void 0, void 0, 
     return isAdded;
 });
 exports.addProductToInventory = addProductToInventory;
-const getAllDistributors = () => user_schema_1.default.find({ role: "Distributor" });
+const getAllDistributors = () => user_schema_1.default.find({ role: "Distributor" }, { password: 0 });
 exports.getAllDistributors = getAllDistributors;
 const getUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () { return user_schema_1.default.findById(userId); });
 exports.getUserById = getUserById;
@@ -50,6 +50,8 @@ const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () 
     return inventory;
 });
 exports.getInventory = getInventory;
+const getMerchandiseRequests = (pipeline) => __awaiter(void 0, void 0, void 0, function* () { return user_schema_1.default.aggregate(pipeline); });
+exports.getMerchandiseRequests = getMerchandiseRequests;
 const updateUser = (updates, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const isUpdated = yield user_schema_1.default.findByIdAndUpdate(userId, updates);
     return isUpdated;
@@ -81,6 +83,7 @@ exports.default = {
     addProductToInventory: exports.addProductToInventory,
     getUserById: exports.getUserById,
     getInventory: exports.getInventory,
+    getMerchandiseRequests: exports.getMerchandiseRequests,
     updateInventory: exports.updateInventory,
     updateUser: exports.updateUser,
     updatePointesEarned: exports.updatePointesEarned,

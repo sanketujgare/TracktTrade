@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserById = exports.updateRedeemedMerchandise = exports.checkPointsLevel = exports.calculateTotalPoints = exports.updatePointesEarned = exports.updateUser = exports.updateInventory = exports.getInventory = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.checkExisting = exports.createUser = exports.findUser = void 0;
+exports.deleteUserById = exports.updateRedeemedMerchandise = exports.checkPointsLevel = exports.calculateTotalPoints = exports.updatePointesEarned = exports.updateUser = exports.updateInventory = exports.getMerchandiseRequests = exports.getInventory = exports.getUserEmails = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.checkExisting = exports.createUser = exports.findUser = void 0;
 const auth_responses_1 = require("../auth/auth.responses");
 const encrypt_1 = require("../utility/encrypt");
 const user_repo_1 = __importDefault(require("./user.repo"));
@@ -20,6 +20,8 @@ const user_responses_1 = require("./user.responses");
 const inventory_responces_1 = require("../inventory/inventory.responces");
 const merchandise_service_1 = __importDefault(require("../merchandise/merchandise.service"));
 const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
+const mail_templates_1 = __importDefault(require("../utility/mail-templates"));
+const send_mail_1 = __importDefault(require("../utility/send-mail"));
 const findUser = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_repo_1.default.findUser(query);
@@ -31,15 +33,18 @@ const findUser = (query) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.findUser = findUser;
-const createUser = (newUser, creatorId) => __awaiter(void 0, void 0, void 0, function* () {
+const createUser = (newUser, creatorId, creatorEmail) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, exports.checkExisting)(newUser);
         newUser.inventory = yield inventory_service_1.default.getDefaultInventory();
         newUser.createdBy = creatorId;
+        const testPassword = newUser.password;
         newUser.password = yield (0, encrypt_1.encrypt)(newUser.password);
         const result = user_repo_1.default.insertOne(newUser);
         if (!result)
             throw user_responses_1.userResponses.CANNOT_CREATE_USER;
+        const mail = mail_templates_1.default.userRegistration(newUser.email, testPassword, newUser.username, creatorEmail);
+        yield send_mail_1.default.sendMail(mail);
         return user_responses_1.userResponses.USER_CREATED_SUCCESSFULLY;
     }
     catch (e) {
@@ -102,6 +107,16 @@ const getUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUserById = getUserById;
+const getUserEmails = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield (0, exports.getAllDistributors)();
+        return users.map((user) => user.email);
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.getUserEmails = getUserEmails;
 const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userInventory = yield user_repo_1.default.getInventory(userId);
@@ -113,6 +128,8 @@ const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getInventory = getInventory;
+const getMerchandiseRequests = (pipeline) => __awaiter(void 0, void 0, void 0, function* () { return user_repo_1.default.getMerchandiseRequests(pipeline); });
+exports.getMerchandiseRequests = getMerchandiseRequests;
 const updateInventory = (newInventory, userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const isUpdated = user_repo_1.default.updateInventory(newInventory, userId);
@@ -219,6 +236,7 @@ exports.default = {
     addProductToInventory: exports.addProductToInventory,
     getUserById: exports.getUserById,
     getInventory: exports.getInventory,
+    getMerchandiseRequests: exports.getMerchandiseRequests,
     updateInventory: exports.updateInventory,
     updateUser: exports.updateUser,
     updatePointesEarned: exports.updatePointesEarned,
@@ -226,4 +244,5 @@ exports.default = {
     updateRedeemedMerchandise: exports.updateRedeemedMerchandise,
     getAllDistributors: exports.getAllDistributors,
     deleteUserById: exports.deleteUserById,
+    getUserEmails: exports.getUserEmails,
 };

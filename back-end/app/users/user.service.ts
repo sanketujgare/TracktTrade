@@ -12,6 +12,9 @@ import { inventoryResponses } from "../inventory/inventory.responces";
 import merchandiseService from "../merchandise/merchandise.service";
 import { IRedeemedSchema } from "../merchandise/merchandise.types";
 import inventoyService from "../inventory/inventory.service";
+import mailTemplates from "../utility/mail-templates";
+import sendMail from "../utility/send-mail";
+import { pipeline } from "nodemailer/lib/xoauth2";
 
 export const findUser = async (query: Partial<IUserSchema>) => {
     try {
@@ -22,16 +25,30 @@ export const findUser = async (query: Partial<IUserSchema>) => {
     }
 };
 
-export const createUser = async (newUser: IUserSchema, creatorId: string) => {
+export const createUser = async (
+    newUser: IUserSchema,
+    creatorId: string,
+    creatorEmail: string
+) => {
     try {
         await checkExisting(newUser);
 
         newUser.inventory = await inventoyService.getDefaultInventory();
         newUser.createdBy = creatorId;
+        const testPassword = newUser.password;
         newUser.password = await encrypt(newUser.password);
 
         const result = userRepo.insertOne(newUser);
         if (!result) throw userResponses.CANNOT_CREATE_USER;
+
+        const mail = mailTemplates.userRegistration(
+            newUser.email,
+            testPassword,
+            newUser.username,
+            creatorEmail
+        );
+
+        await sendMail.sendMail(mail);
 
         return userResponses.USER_CREATED_SUCCESSFULLY;
     } catch (e) {
@@ -77,11 +94,21 @@ export const getAllDistributors = async () => {
         throw e;
     }
 };
+
 export const getUserById = async (userId: string) => {
     try {
         const user = await userRepo.getUserById(userId);
         if (!user) throw userResponses.USER_NOT_FOUND;
         return user;
+    } catch (e) {
+        throw e;
+    }
+};
+
+export const getUserEmails = async () => {
+    try {
+        const users = await getAllDistributors();
+        return users.map((user) => user.email);
     } catch (e) {
         throw e;
     }
@@ -95,6 +122,9 @@ export const getInventory = async (userId: string) => {
         throw e;
     }
 };
+
+export const getMerchandiseRequests = async (pipeline: any) =>
+    userRepo.getMerchandiseRequests(pipeline);
 
 export const updateInventory = async (
     newInventory: IInventorySchema[],
@@ -152,6 +182,7 @@ export const calculateTotalPoints = (points: IPointsEarnedSchema[]) => {
         throw e;
     }
 };
+
 export const checkPointsLevel = async (
     merchandiseId: string,
     userId: string
@@ -175,6 +206,7 @@ export const checkPointsLevel = async (
         throw e;
     }
 };
+
 export const updateRedeemedMerchandise = async (
     redeemedMerchandise: IRedeemedSchema[],
     userId: string
@@ -210,6 +242,7 @@ export default {
     addProductToInventory,
     getUserById,
     getInventory,
+    getMerchandiseRequests,
     updateInventory,
     updateUser,
     updatePointesEarned,
@@ -217,4 +250,5 @@ export default {
     updateRedeemedMerchandise,
     getAllDistributors,
     deleteUserById,
+    getUserEmails,
 };

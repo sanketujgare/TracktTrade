@@ -13,24 +13,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const sendMail = () => __awaiter(void 0, void 0, void 0, function* () {
+const sendMail = (mail) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const sender = yield nodemailer_1.default.createTestAccount();
-        const transporter = nodemailer_1.default.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false, // Use `true` for port 465, `false` for all other ports
+        const account = yield nodemailer_1.default.createTestAccount();
+        let transporter = nodemailer_1.default.createTransport({
+            host: account.smtp.host,
+            port: account.smtp.port,
+            secure: account.smtp.secure,
             auth: {
-                user: "maddison53@ethereal.email",
-                pass: "jn7jnAPss4f63QBp6D",
+                user: "francesco.hane87@ethereal.email",
+                pass: "VBy5cydrEC5x7SU7VV",
+            },
+            tls: {
+                rejectUnauthorized: false,
             },
         });
-        const info = yield transporter.sendMail({
-            from: '"Hey hey its just test mail 👻" <maddison53@ethereal.email>',
-            to: "yuvrajxt@gmail.com",
-            subject: "Test Email ✔",
-            text: "Hello world?",
-            html: "<b>Hello world?</b>",
+        yield transporter.sendMail({
+            from: mail.from,
+            to: mail.to.join(","),
+            subject: mail.subject,
+            // text: "Hello world?",
+            html: mail.text,
         });
     }
     catch (e) {

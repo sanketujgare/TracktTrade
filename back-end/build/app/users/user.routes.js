@@ -23,7 +23,8 @@ const userRouter = (0, express_1.Router)();
 userRouter.post("/create-user", (0, auth_permissions_1.authPermissions)(pemissions_1.permissionsToCreate), ...user_validations_1.createValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const creatorId = req.currentUser._id;
-        const result = yield user_service_1.default.createUser(req.body, creatorId);
+        const creatorEmail = req.currentUser.email;
+        const result = yield user_service_1.default.createUser(req.body, creatorId, creatorEmail);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
@@ -43,6 +44,7 @@ userRouter.get("/getuser/:id", ...user_validations_1.getAndDeleteValidations, (0
 userRouter.get("/distributors", (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_service_1.default.getAllDistributors();
+        // const result = await userRepo.getDistributorEmails();
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {

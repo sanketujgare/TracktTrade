@@ -13,7 +13,7 @@ export const permissions: IPermissions = {
         "updateMerchandise",
         "updateInventory",
         "updateOrder",
-
+        "viewOrders",
         "viewInventory",
         "viewMerchandise",
         "viewCustomers",

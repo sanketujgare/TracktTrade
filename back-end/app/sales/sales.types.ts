@@ -14,7 +14,7 @@ export const salesSchema = z.object({
             currentPrice: z.number(),
         })
     ),
-    totalPrice: z.number(),
+    totalPrice: z.number().optional(),
 });
 
 export interface ISalesSchema extends z.infer<typeof salesSchema> {}

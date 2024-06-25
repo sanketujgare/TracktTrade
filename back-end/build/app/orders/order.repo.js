@@ -20,8 +20,8 @@ const placeOrder = (order) => {
     return newOrder;
 };
 exports.placeOrder = placeOrder;
-const getAllorders = () => __awaiter(void 0, void 0, void 0, function* () {
-    const orders = yield order_schema_1.default.find();
+const getAllorders = (status) => __awaiter(void 0, void 0, void 0, function* () {
+    const orders = yield order_schema_1.default.find({ status: status });
     return orders;
 });
 exports.getAllorders = getAllorders;

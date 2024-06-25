@@ -14,12 +14,15 @@ export const placeOrder = (order: IOrderSchema) => {
     }
 };
 
-export const getAllorders = async () => {
+export const getAllorders = async (status: string) => {
     try {
-        const orders = orderRepo.getAllorders();
+        status = status || "";
+        const orders = orderRepo.getAllorders(status);
         if (!orders) throw orderResponses.ORDERS_NOT_FOUND;
         return orders;
-    } catch (e) {}
+    } catch (e) {
+        throw e;
+    }
 };
 
 export const updateOrderStatus = async (
@@ -69,6 +72,7 @@ export const updateOrderStatus = async (
 };
 
 export default {
+    getAllorders,
     placeOrder,
     updateOrderStatus,
 };

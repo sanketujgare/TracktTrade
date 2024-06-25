@@ -1,3 +1,4 @@
+import userRepo from "../users/user.repo";
 import userService from "../users/user.service";
 import merchandiseRepo from "./merchandise.repo";
 import { merchandiseResponses } from "./merchandise.responses";
@@ -27,6 +28,42 @@ export const getAllMerchandise = async () => {
         throw e;
     }
 };
+
+export const getMerchandiseRequests = async (status: string) => {
+    try {
+        const pipeline = [
+            { $unwind: "$merchandiseRedeemed" },
+            { $match: { "merchandiseRedeemed.status": status } },
+            {
+                $lookup: {
+                    from: "merchandises",
+                    localField: "merchandiseRedeemed.merchandiseId",
+                    foreignField: "_id",
+                    as: "merchandiseDetails",
+                },
+            },
+            { $unwind: "$merchandiseDetails" },
+            {
+                $project: {
+                    userId: "$_id",
+                    userName: "$name",
+                    merchandiseId: "$merchandiseRedeemed.merchandiseId",
+                    merchandiseName: "$merchandiseDetails.merchandiseName",
+                    status: "$merchandiseRedeemed.status",
+                    createdAt: "$merchandiseRedeemed.createdAt",
+                },
+            },
+        ];
+
+        const merchandise = await userService.getMerchandiseRequests(pipeline);
+        if (!merchandise || merchandise.length === 0)
+            throw merchandiseResponses.MERCHANDISE_NOT_FOUND;
+        return merchandise;
+    } catch (e) {
+        throw e;
+    }
+};
+
 export const getMerchandiseById = async (merchandiseId: string) => {
     try {
         const merchandise = await merchandiseRepo.getMerchandiseById(
@@ -66,4 +103,5 @@ export default {
     getAllMerchandise,
     getMerchandiseById,
     reedeemMerchandises,
+    getMerchandiseRequests,
 };

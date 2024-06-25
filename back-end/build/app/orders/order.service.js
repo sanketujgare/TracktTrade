@@ -29,14 +29,17 @@ const placeOrder = (order) => {
     }
 };
 exports.placeOrder = placeOrder;
-const getAllorders = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllorders = (status) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const orders = order_repo_1.default.getAllorders();
+        status = status || "";
+        const orders = order_repo_1.default.getAllorders(status);
         if (!orders)
             throw order_responses_1.orderResponses.ORDERS_NOT_FOUND;
         return orders;
     }
-    catch (e) { }
+    catch (e) {
+        throw e;
+    }
 });
 exports.getAllorders = getAllorders;
 const updateOrderStatus = (updates, orderId, manufacturerId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,6 +70,7 @@ const updateOrderStatus = (updates, orderId, manufacturerId) => __awaiter(void 0
 });
 exports.updateOrderStatus = updateOrderStatus;
 exports.default = {
+    getAllorders: exports.getAllorders,
     placeOrder: exports.placeOrder,
     updateOrderStatus: exports.updateOrderStatus,
 };

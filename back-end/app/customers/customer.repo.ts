@@ -25,7 +25,6 @@ export const updatePurchaseHistroy = async (
 
 export const getAllCustomers = async () => {
     const customers = await customerModel.find();
-    console.log(customers);
     return customers;
 };
 export default {

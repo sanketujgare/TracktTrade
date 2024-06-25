@@ -23,7 +23,8 @@ const productRouter = (0, express_1.Router)();
 productRouter.post("/add-product", (0, auth_permissions_1.authPermissions)(pemissions_1.permissionsToCreate), ...product_validations_1.productValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const manufacturerId = req.currentUser._id;
-        const result = yield product_service_1.default.addProduct(req.body, manufacturerId);
+        const creatorEmail = req.currentUser.email;
+        const result = yield product_service_1.default.addProduct(req.body, manufacturerId, creatorEmail);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {

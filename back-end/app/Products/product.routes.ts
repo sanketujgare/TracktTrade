@@ -18,9 +18,11 @@ productRouter.post(
     async (req, res, next) => {
         try {
             const manufacturerId = req.currentUser._id;
+            const creatorEmail = req.currentUser.email;
             const result = await productService.addProduct(
                 req.body,
-                manufacturerId
+                manufacturerId,
+                creatorEmail
             );
             res.send(new ResponseHandler(result));
         } catch (e) {
