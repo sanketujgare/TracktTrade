@@ -14,7 +14,7 @@ export const productResponses: IProductResponses = {
         message: "CAN NOT UPDATE PRODUCT",
     },
     PRODUCT_UPDATED: {
-        statusCode: 400,
+        statusCode: 200,
         message: "PRODUCT UPDATED",
     },
     PRODUCT_DELETED_SUCCESSFULLY: {

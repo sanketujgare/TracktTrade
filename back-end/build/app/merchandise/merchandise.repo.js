@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMerchandiseById = exports.getAllMerchandise = exports.insertOne = void 0;
+exports.deleteById = exports.findByIdAndUpdate = exports.getMerchandiseById = exports.getAllMerchandise = exports.insertOne = void 0;
 const merchandise_schema_1 = __importDefault(require("./merchandise.schema"));
 const insertOne = (merchandise) => {
     const newMerchandise = new merchandise_schema_1.default(merchandise);
@@ -20,8 +20,11 @@ const insertOne = (merchandise) => {
     return newMerchandise;
 };
 exports.insertOne = insertOne;
-const getAllMerchandise = () => __awaiter(void 0, void 0, void 0, function* () {
-    const merchandise = yield merchandise_schema_1.default.find();
+const getAllMerchandise = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
+    const merchandise = yield merchandise_schema_1.default
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit);
     return merchandise;
 });
 exports.getAllMerchandise = getAllMerchandise;
@@ -30,8 +33,14 @@ const getMerchandiseById = (merchandiseId) => __awaiter(void 0, void 0, void 0, 
     return merchandise;
 });
 exports.getMerchandiseById = getMerchandiseById;
+const findByIdAndUpdate = (merchandiseId, updates) => merchandise_schema_1.default.findByIdAndUpdate({ _id: merchandiseId }, { $set: updates });
+exports.findByIdAndUpdate = findByIdAndUpdate;
+const deleteById = (merchandiseId) => merchandise_schema_1.default.findByIdAndDelete({ _id: merchandiseId });
+exports.deleteById = deleteById;
 exports.default = {
     insertOne: exports.insertOne,
     getAllMerchandise: exports.getAllMerchandise,
     getMerchandiseById: exports.getMerchandiseById,
+    deleteById: exports.deleteById,
+    findByIdAndUpdate: exports.findByIdAndUpdate,
 };

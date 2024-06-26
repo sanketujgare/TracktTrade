@@ -4,7 +4,7 @@ import { IProductSchema, IUpdatedFields } from "./product.types";
 import inventoryService from "../inventory/inventory.service";
 import userService from "../users/user.service";
 import mailTemplates from "../utility/mail-templates";
-import sendMail from "../utility/send-mail";
+import sendMail from "../utility/mail-service";
 
 export const addProduct = async (
     product: IProductSchema,
@@ -34,9 +34,11 @@ export const addProduct = async (
     }
 };
 
-export const getAllProduct = async () => {
+export const getAllProduct = async (page?: number, limit?: number) => {
     try {
-        const products = await productRepo.getAllProduct();
+        page = page || 1;
+        limit = limit || 10;
+        const products = await productRepo.getAllProduct(page, limit);
         if (!products) throw productResponses.PRODUCTS_NOT_FOUND;
         return products;
     } catch (e) {

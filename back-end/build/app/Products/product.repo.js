@@ -20,8 +20,11 @@ const insertOne = (product) => {
     return newProduct;
 };
 exports.insertOne = insertOne;
-const getAllProduct = () => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_schema_1.default.find();
+const getAllProduct = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
+    const products = yield product_schema_1.default
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit);
     return products;
 });
 exports.getAllProduct = getAllProduct;

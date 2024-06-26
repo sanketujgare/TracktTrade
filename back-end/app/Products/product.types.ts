@@ -14,10 +14,10 @@ export const productSchema = z.object({
 });
 
 export const updatedFields = z.object({
-    productName: z.string(),
-    productDescription: z.string(),
-    productPrice: z.number(),
-    productImage: z.string(),
+    productName: z.string().optional(),
+    productDescription: z.string().optional(),
+    productPrice: z.number().optional(),
+    productImage: z.string().optional(),
     updatedBy: z.string().optional(),
     updatedAt: z.string().optional(),
 });

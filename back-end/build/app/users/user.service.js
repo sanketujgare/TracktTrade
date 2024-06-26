@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserById = exports.updateRedeemedMerchandise = exports.checkPointsLevel = exports.calculateTotalPoints = exports.updatePointesEarned = exports.updateUser = exports.updateInventory = exports.getMerchandiseRequests = exports.getInventory = exports.getUserEmails = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.checkExisting = exports.createUser = exports.findUser = void 0;
+exports.deleteUserById = exports.updateMerchandiseRequestStatus = exports.updateRedeemedMerchandise = exports.checkPointsLevel = exports.calculateTotalPoints = exports.updatePointesEarned = exports.updateUser = exports.updateInventory = exports.getMerchandiseRequests = exports.getInventory = exports.getUserEmails = exports.getUserById = exports.getAllDistributors = exports.addProductToInventory = exports.checkExisting = exports.createUser = exports.findUser = void 0;
 const auth_responses_1 = require("../auth/auth.responses");
 const encrypt_1 = require("../utility/encrypt");
 const user_repo_1 = __importDefault(require("./user.repo"));
@@ -21,7 +21,7 @@ const inventory_responces_1 = require("../inventory/inventory.responces");
 const merchandise_service_1 = __importDefault(require("../merchandise/merchandise.service"));
 const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
 const mail_templates_1 = __importDefault(require("../utility/mail-templates"));
-const send_mail_1 = __importDefault(require("../utility/send-mail"));
+const mail_service_1 = __importDefault(require("../utility/mail-service"));
 const findUser = (query) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_repo_1.default.findUser(query);
@@ -44,7 +44,7 @@ const createUser = (newUser, creatorId, creatorEmail) => __awaiter(void 0, void 
         if (!result)
             throw user_responses_1.userResponses.CANNOT_CREATE_USER;
         const mail = mail_templates_1.default.userRegistration(newUser.email, testPassword, newUser.username, creatorEmail);
-        yield send_mail_1.default.sendMail(mail);
+        yield mail_service_1.default.sendMail(mail);
         return user_responses_1.userResponses.USER_CREATED_SUCCESSFULLY;
     }
     catch (e) {
@@ -83,9 +83,11 @@ const addProductToInventory = (product) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.addProductToInventory = addProductToInventory;
-const getAllDistributors = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllDistributors = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const distributors = yield user_repo_1.default.getAllDistributors();
+        page = page || 1;
+        limit = limit || 10;
+        const distributors = yield user_repo_1.default.getAllDistributors(page, limit);
         if (!distributors)
             throw user_responses_1.userResponses.NO_DISTRIBUTOR_FOUND;
         return distributors;
@@ -191,7 +193,7 @@ const checkPointsLevel = (merchandiseId, userId) => __awaiter(void 0, void 0, vo
         const merchandise = yield merchandise_service_1.default.getMerchandiseById(merchandiseId);
         const user = yield user_repo_1.default.getUserById(userId);
         if (!(user === null || user === void 0 ? void 0 : user.totalPoints) || !(merchandise === null || merchandise === void 0 ? void 0 : merchandise.pointsRequired))
-            throw "example";
+            throw "INSUFFICIENT POINTS";
         if (user.totalPoints < merchandise.pointsRequired) {
             throw user_responses_1.userResponses.INSUFFICIENT_POINTS;
         }
@@ -216,6 +218,8 @@ const updateRedeemedMerchandise = (redeemedMerchandise, userId) => __awaiter(voi
     }
 });
 exports.updateRedeemedMerchandise = updateRedeemedMerchandise;
+const updateMerchandiseRequestStatus = (updates) => __awaiter(void 0, void 0, void 0, function* () { return user_repo_1.default.updateMerchandiseRequestStatus(updates); });
+exports.updateMerchandiseRequestStatus = updateMerchandiseRequestStatus;
 const deleteUserById = (userId, deletedBy) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (deletedBy.toString() === userId)
@@ -242,6 +246,7 @@ exports.default = {
     updatePointesEarned: exports.updatePointesEarned,
     checkPointsLevel: exports.checkPointsLevel,
     updateRedeemedMerchandise: exports.updateRedeemedMerchandise,
+    updateMerchandiseRequestStatus: exports.updateMerchandiseRequestStatus,
     getAllDistributors: exports.getAllDistributors,
     deleteUserById: exports.deleteUserById,
     getUserEmails: exports.getUserEmails,

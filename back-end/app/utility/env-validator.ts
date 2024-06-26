@@ -5,6 +5,9 @@ export const envValidator = z.object({
     PORT: z.coerce.number(),
     MONGO_URI: z.string(),
     JWT_SECRET: z.string(),
+    MANIPULATE_TOKEN: z.string(),
+    SMTP_USERNAME: z.string(),
+    SMTP_PASSWORD: z.string(),
 });
 
 interface Env extends z.infer<typeof envValidator> {}

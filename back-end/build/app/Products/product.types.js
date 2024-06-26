@@ -14,10 +14,10 @@ exports.productSchema = zod_1.z.object({
     updatedAt: zod_1.z.string().optional(),
 });
 exports.updatedFields = zod_1.z.object({
-    productName: zod_1.z.string(),
-    productDescription: zod_1.z.string(),
-    productPrice: zod_1.z.number(),
-    productImage: zod_1.z.string(),
+    productName: zod_1.z.string().optional(),
+    productDescription: zod_1.z.string().optional(),
+    productPrice: zod_1.z.number().optional(),
+    productImage: zod_1.z.string().optional(),
     updatedBy: zod_1.z.string().optional(),
     updatedAt: zod_1.z.string().optional(),
 });

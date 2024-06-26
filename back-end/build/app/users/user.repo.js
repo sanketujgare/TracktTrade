@@ -38,9 +38,12 @@ const addProductToInventory = (newProduct) => __awaiter(void 0, void 0, void 0, 
     return isAdded;
 });
 exports.addProductToInventory = addProductToInventory;
-const getAllDistributors = () => user_schema_1.default.find({ role: "Distributor" }, { password: 0 });
+const getAllDistributors = (page, limit) => user_schema_1.default
+    .find({ role: "Distributor" }, { password: 0 })
+    .skip((page - 1) * limit)
+    .limit(limit);
 exports.getAllDistributors = getAllDistributors;
-const getUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () { return user_schema_1.default.findById(userId); });
+const getUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () { return user_schema_1.default.findById(userId, { password: 0 }); });
 exports.getUserById = getUserById;
 const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const inventory = yield user_schema_1.default
@@ -72,6 +75,15 @@ const updateRedeemedMerchandises = (newRedeemed, userId) => __awaiter(void 0, vo
     return isUpdated;
 });
 exports.updateRedeemedMerchandises = updateRedeemedMerchandises;
+const updateMerchandiseRequestStatus = (updates) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_schema_1.default.updateOne({
+        _id: updates.userId,
+        "merchandiseRedeemed.merchandiseId": updates.merchandiseId,
+    }, {
+        $set: { "merchandiseRedeemed.$.status": updates.status },
+    });
+    return result;
+});
 const deleteUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const isDeleted = user_schema_1.default.findByIdAndDelete({ _id: userId });
     return isDeleted;
@@ -88,6 +100,7 @@ exports.default = {
     updateUser: exports.updateUser,
     updatePointesEarned: exports.updatePointesEarned,
     updateRedeemedMerchandises: exports.updateRedeemedMerchandises,
+    updateMerchandiseRequestStatus,
     getAllDistributors: exports.getAllDistributors,
     deleteUserById: exports.deleteUserById,
 };

@@ -31,16 +31,27 @@ productRouter.post("/add-product", (0, auth_permissions_1.authPermissions)(pemis
         next(e);
     }
 }));
-productRouter.get("/allproducts", (0, auth_permissions_1.authPermissions)(["viewProducts"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+productRouter.get("/allproducts/:page/:limit", (0, auth_permissions_1.authPermissions)(["viewProducts"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield product_service_1.default.getAllProduct();
+        const { page, limit } = req.params;
+        const result = yield product_service_1.default.getAllProduct(parseInt(page), parseInt(limit));
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
         next(e);
     }
 }));
-productRouter.put("/update/:id", (0, auth_permissions_1.authPermissions)(["updateProduct"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+productRouter.get("/product/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const productId = req.params.id;
+        const result = yield product_service_1.default.getProductById(productId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+productRouter.put("/update/:id", (0, auth_permissions_1.authPermissions)(["updateProduct"]), ...product_validations_1.updateValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const productId = req.params.id;
         const userId = req.currentUser._id;

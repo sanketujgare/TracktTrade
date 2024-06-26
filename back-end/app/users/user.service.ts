@@ -10,11 +10,13 @@ import { IInventorySchema } from "../inventory/inventory.types";
 import { userResponses } from "./user.responses";
 import { inventoryResponses } from "../inventory/inventory.responces";
 import merchandiseService from "../merchandise/merchandise.service";
-import { IRedeemedSchema } from "../merchandise/merchandise.types";
+import {
+    IRedeemedSchema,
+    IUdpateRequestSchema,
+} from "../merchandise/merchandise.types";
 import inventoyService from "../inventory/inventory.service";
 import mailTemplates from "../utility/mail-templates";
-import sendMail from "../utility/send-mail";
-import { pipeline } from "nodemailer/lib/xoauth2";
+import sendMail from "../utility/mail-service";
 
 export const findUser = async (query: Partial<IUserSchema>) => {
     try {
@@ -85,9 +87,11 @@ export const addProductToInventory = async (product: IInventorySchema) => {
     }
 };
 
-export const getAllDistributors = async () => {
+export const getAllDistributors = async (page?: number, limit?: number) => {
     try {
-        const distributors = await userRepo.getAllDistributors();
+        page = page || 1;
+        limit = limit || 10;
+        const distributors = await userRepo.getAllDistributors(page, limit);
         if (!distributors) throw userResponses.NO_DISTRIBUTOR_FOUND;
         return distributors;
     } catch (e) {
@@ -192,7 +196,8 @@ export const checkPointsLevel = async (
             merchandiseId
         );
         const user = await userRepo.getUserById(userId);
-        if (!user?.totalPoints || !merchandise?.pointsRequired) throw "example";
+        if (!user?.totalPoints || !merchandise?.pointsRequired)
+            throw "INSUFFICIENT POINTS";
 
         if (user.totalPoints < merchandise.pointsRequired) {
             throw userResponses.INSUFFICIENT_POINTS;
@@ -223,6 +228,10 @@ export const updateRedeemedMerchandise = async (
     }
 };
 
+export const updateMerchandiseRequestStatus = async (
+    updates: IUdpateRequestSchema
+) => userRepo.updateMerchandiseRequestStatus(updates);
+
 export const deleteUserById = async (userId: String, deletedBy: String) => {
     try {
         if (deletedBy.toString() === userId)
@@ -248,6 +257,7 @@ export default {
     updatePointesEarned,
     checkPointsLevel,
     updateRedeemedMerchandise,
+    updateMerchandiseRequestStatus,
     getAllDistributors,
     deleteUserById,
     getUserEmails,

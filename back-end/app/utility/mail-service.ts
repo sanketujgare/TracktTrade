@@ -8,8 +8,8 @@ const sendMail = async (mail: any) => {
             port: account.smtp.port,
             secure: account.smtp.secure,
             auth: {
-                user: "francesco.hane87@ethereal.email",
-                pass: "VBy5cydrEC5x7SU7VV",
+                user: process.env.SMTP_USERNAME,
+                pass: process.env.SMTP_PASSWORD,
             },
             tls: {
                 rejectUnauthorized: false,
@@ -19,7 +19,6 @@ const sendMail = async (mail: any) => {
             from: mail.from,
             to: mail.to.join(","),
             subject: mail.subject,
-            // text: "Hello world?",
             html: mail.text,
         });
     } catch (e) {

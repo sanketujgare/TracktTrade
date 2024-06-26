@@ -7,7 +7,10 @@ import {
 } from "./user.types";
 
 import { IInventorySchema } from "../inventory/inventory.types";
-import { IRedeemedSchema } from "../merchandise/merchandise.types";
+import {
+    IRedeemedSchema,
+    IUdpateRequestSchema,
+} from "../merchandise/merchandise.types";
 
 export const findUser = async (query: Partial<IUserSchema>) => {
     const user = await userModel.findOne({
@@ -33,16 +36,21 @@ export const addProductToInventory = async (newProduct: IInventorySchema) => {
     return isAdded;
 };
 
-export const getAllDistributors = () =>
-    userModel.find({ role: "Distributor" }, { password: 0 });
+export const getAllDistributors = (page: number, limit: number) =>
+    userModel
+        .find({ role: "Distributor" }, { password: 0 })
+        .skip((page - 1) * limit)
+        .limit(limit);
 
-export const getUserById = async (userId: string) => userModel.findById(userId);
+export const getUserById = async (userId: string) =>
+    userModel.findById(userId, { password: 0 });
 
 export const getInventory = async (userId: string) => {
     const inventory = await userModel
         .findById(userId)
         .select("inventory")
         .populate("inventory.productId");
+
     return inventory;
 };
 
@@ -90,6 +98,21 @@ export const updateRedeemedMerchandises = async (
     return isUpdated;
 };
 
+const updateMerchandiseRequestStatus = async (
+    updates: IUdpateRequestSchema
+) => {
+    const result = await userModel.updateOne(
+        {
+            _id: updates.userId,
+            "merchandiseRedeemed.merchandiseId": updates.merchandiseId,
+        },
+        {
+            $set: { "merchandiseRedeemed.$.status": updates.status },
+        }
+    );
+    return result;
+};
+
 export const deleteUserById = async (userId: String) => {
     const isDeleted = userModel.findByIdAndDelete({ _id: userId });
     return isDeleted;
@@ -105,6 +128,7 @@ export default {
     updateUser,
     updatePointesEarned,
     updateRedeemedMerchandises,
+    updateMerchandiseRequestStatus,
     getAllDistributors,
     deleteUserById,
 };

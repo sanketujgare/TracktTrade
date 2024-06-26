@@ -18,7 +18,7 @@ const product_responses_1 = require("./product.responses");
 const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
 const user_service_1 = __importDefault(require("../users/user.service"));
 const mail_templates_1 = __importDefault(require("../utility/mail-templates"));
-const send_mail_1 = __importDefault(require("../utility/send-mail"));
+const mail_service_1 = __importDefault(require("../utility/mail-service"));
 const addProduct = (product, manufacturerId, from) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         product.createdBy = manufacturerId;
@@ -28,7 +28,7 @@ const addProduct = (product, manufacturerId, from) => __awaiter(void 0, void 0, 
         yield inventory_service_1.default.addProductToInventory(newProduct._id.toString());
         const emails = yield user_service_1.default.getUserEmails();
         const mail = mail_templates_1.default.newProduct(emails, newProduct.productName, newProduct.productDescription, from);
-        yield send_mail_1.default.sendMail(mail);
+        yield mail_service_1.default.sendMail(mail);
         return product_responses_1.productResponses.PRODUCT_ADDED;
     }
     catch (e) {
@@ -36,9 +36,11 @@ const addProduct = (product, manufacturerId, from) => __awaiter(void 0, void 0, 
     }
 });
 exports.addProduct = addProduct;
-const getAllProduct = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllProduct = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const products = yield product_repo_1.default.getAllProduct();
+        page = page || 1;
+        limit = limit || 10;
+        const products = yield product_repo_1.default.getAllProduct(page, limit);
         if (!products)
             throw product_responses_1.productResponses.PRODUCTS_NOT_FOUND;
         return products;

@@ -10,4 +10,8 @@ exports.salesResponses = {
         statusCode: 200,
         message: "SALES UPDATED SUCCESSFULLY",
     },
+    NO_DATA_FOUND: {
+        statusCode: 404,
+        message: "NO DATA FOUND",
+    },
 };

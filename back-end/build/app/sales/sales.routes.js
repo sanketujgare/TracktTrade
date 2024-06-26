@@ -28,39 +28,42 @@ salesRouter.post("/create-sales", (0, auth_permissions_1.authPermissions)(["crea
         next(e);
     }
 }));
-// salesRouter.get("/topperformers", async (req, res, next) => {
-//     try {
-//         console.log("here");
-//         const results = await salesModel.aggregate([
-//             {
-//                 $group: {
-//                     _id: "$distributorId",
-//                     totalRevenue: { $sum: "$totalPrice" },
-//                 },
-//             },
-//             { $sort: { totalRevenue: -1 } },
-//             { $limit: 10 },
-//             {
-//                 $lookup: {
-//                     from: "users",
-//                     localField: "_id",
-//                     foreignField: "_id",
-//                     as: "distributorDetails",
-//                 },
-//             },
-//             { $unwind: "$distributorDetails" },
-//             {
-//                 $project: {
-//                     distributorId: "$_id",
-//                     totalRevenue: 1,
-//                     distributorName: "$distributorDetails.name",
-//                     _id: 0,
-//                 },
-//             },
-//         ]);
-//         res.send(new ResponseHandler(results));
-//     } catch (e) {
-//         next(e);
-//     }
-// });
+salesRouter.get("/salesperproduct", (0, auth_permissions_1.authPermissions)(["viewSalesPerProduct"]), ...sales_validation_1.dateRangeValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { startdate, enddate, distributorId } = req.query;
+        const start = new Date(startdate);
+        const end = new Date(enddate);
+        const userId = distributorId;
+        const result = yield sales_service_1.default.getSalesPerProduct(start, end, userId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+salesRouter.get("/topperformers", (0, auth_permissions_1.authPermissions)(["viewTopPerformers"]), ...sales_validation_1.dateRangeValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { startdate, enddate } = req.query;
+        const start = new Date(startdate);
+        const end = new Date(enddate);
+        const result = yield sales_service_1.default.getTopPerformers(start, end);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+salesRouter.get("/topselling", (0, auth_permissions_1.authPermissions)(["viewTopSelling"]), ...sales_validation_1.dateRangeValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { startdate, enddate, distributorId } = req.query;
+        const start = new Date(startdate);
+        const end = new Date(enddate);
+        const userId = distributorId;
+        const result = yield sales_service_1.default.getTopSellingProducts(start, end, userId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
 exports.default = new routes_types_1.Route("/sales", salesRouter);

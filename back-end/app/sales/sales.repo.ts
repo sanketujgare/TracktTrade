@@ -6,6 +6,10 @@ export const createSales = (sale: ISalesSchema) => {
     newSale.save();
     return newSale;
 };
+
+export const aggregate = (pipeline: any) => salesModel.aggregate(pipeline);
+
 export default {
     createSales,
+    aggregate,
 };

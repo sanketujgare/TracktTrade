@@ -3,6 +3,7 @@ import { Route } from "../routes/routes.types";
 import {
     getAndDeleteValidations,
     productValidations,
+    updateValidations,
 } from "./product.validations";
 import productService from "./product.service";
 import { ResponseHandler } from "../utility/response-handler";
@@ -32,11 +33,15 @@ productRouter.post(
 );
 
 productRouter.get(
-    "/allproducts",
+    "/allproducts/:page/:limit",
     authPermissions(["viewProducts"]),
     async (req, res, next) => {
         try {
-            const result = await productService.getAllProduct();
+            const { page, limit } = req.params;
+            const result = await productService.getAllProduct(
+                parseInt(page),
+                parseInt(limit)
+            );
             res.send(new ResponseHandler(result));
         } catch (e) {
             next(e);
@@ -44,10 +49,19 @@ productRouter.get(
     }
 );
 
+productRouter.get("/product/:id", async (req, res, next) => {
+    try {
+        const productId = req.params.id;
+        const result = await productService.getProductById(productId);
+        res.send(new ResponseHandler(result));
+    } catch (e) {
+        next(e);
+    }
+});
 productRouter.put(
     "/update/:id",
     authPermissions(["updateProduct"]),
-
+    ...updateValidations,
     async (req, res, next) => {
         try {
             const productId = req.params.id;

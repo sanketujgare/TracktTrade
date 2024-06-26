@@ -19,3 +19,10 @@ export const salesSchema = z.object({
 
 export interface ISalesSchema extends z.infer<typeof salesSchema> {}
 export interface ISaleResponses extends IUserResponses {}
+
+export const dateRangeSchema = z.object({
+    startdate: z.string(),
+    enddate: z.string(),
+    distributorId: z.string().optional(),
+});
+export interface IDateRangeSchema extends z.infer<typeof dateRangeSchema> {}

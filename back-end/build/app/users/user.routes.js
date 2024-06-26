@@ -31,20 +31,30 @@ userRouter.post("/create-user", (0, auth_permissions_1.authPermissions)(pemissio
         next(e);
     }
 }));
-userRouter.get("/getuser/:id", ...user_validations_1.getAndDeleteValidations, (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userRouter.get("/profile", (0, auth_permissions_1.authPermissions)(["viewProfile"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.params.id;
-        const result = user_service_1.default.getUserById(userId);
+        const userId = req.currentUser._id;
+        const result = yield user_service_1.default.getUserById(userId);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
         next(e);
     }
 }));
-userRouter.get("/distributors", (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userRouter.get("/getuser/:id", ...user_validations_1.getAndDeleteValidations, (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield user_service_1.default.getAllDistributors();
-        // const result = await userRepo.getDistributorEmails();
+        const userId = req.params.id;
+        const result = yield user_service_1.default.getUserById(userId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+userRouter.get("/distributors/:page/:limit", (0, auth_permissions_1.authPermissions)(pemissions_1.viewUser), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { page, limit } = req.params;
+        const result = yield user_service_1.default.getAllDistributors(parseInt(page), parseInt(limit));
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
@@ -73,4 +83,4 @@ userRouter.delete("/delete/:id", (0, auth_permissions_1.authPermissions)(["delet
         next(e);
     }
 }));
-exports.default = new routes_types_1.Route("/users", userRouter);
+exports.default = new routes_types_1.Route("/user", userRouter);
