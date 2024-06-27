@@ -1,69 +1,66 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import styles from "./AddEditDistributorForm.module.scss";
-import {
-  AddEditDistributorFormProps,
-  DistributorSchemaType,
-  distributorFormSchema,
-} from "./AddEditDistributorForm.types.ts";
 import { useForm } from "react-hook-form";
-import {
-  DistributorFormFields,
-  DistributorType,
-} from "../DistributorList/DistributorList.types.ts";
 import Button from "../Button/Button.tsx";
+import styles from "./AddEditMerchandiseForm.module.scss";
 import {
-  addDistributor,
-  editDistributor,
-  getDistributorsData,
+  AddEditMerchandiseFormProps,
+  MerchandiseSchemaType,
+  merchandiseSchema,
+} from "./AddEditMerchandiseForm.types.ts";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  MerchandiseFormFields,
+  MerchandiseType,
+} from "../ManufacturerMerchandise/ManufacturerMerchandise.types.ts";
+import {
+  addMerchandise,
+  editMerchandise,
+  getMerchandiseData,
 } from "../../services/Manufacturer.services.ts";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-const AddEditDistributorForm = ({
+const AddEditMerchandiseForm = ({
   setModal,
   dispatch,
-  currentDistributor,
-  DistributorMode,
-}: AddEditDistributorFormProps) => {
+  currentMerchandise,
+  merchandiseMode,
+}: AddEditMerchandiseFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<DistributorSchemaType>({
-    resolver: zodResolver(distributorFormSchema),
-    defaultValues: currentDistributor,
+  } = useForm<MerchandiseSchemaType>({
+    resolver: zodResolver(merchandiseSchema),
+    defaultValues: currentMerchandise,
   });
 
-  const onSubmit = async (data: DistributorType) => {
+  const handleMerchandise = async (data: MerchandiseType) => {
     try {
-      if (DistributorMode === "edit" && currentDistributor) {
-        await editDistributor(currentDistributor._id, data);
-        toast("Produt is updated!");
-      } else if (DistributorMode === "add") {
-        toast("Produt is added!");
-        data.role = "Distributor";
-        await addDistributor(data);
+      if (merchandiseMode === "edit" && currentMerchandise) {
+        await editMerchandise(currentMerchandise._id, data);
+      } else if (merchandiseMode === "add") {
+        await addMerchandise(data);
       }
       dispatch({ type: "RESET_FORM" });
       setModal(false);
       dispatch({
-        type: "SET_DISTRIBUTORS_DATA",
-        payload: { data: await getDistributorsData() },
+        type: "SET_MERCHANDISE_DATA",
+        payload: { data: await getMerchandiseData() },
       });
     } catch (error: any) {
       console.error(error.message);
     }
   };
+  const onSubmit = (data: MerchandiseType) => {
+    handleMerchandise(data);
+  };
 
   return (
     <div className={styles.FormContainer}>
       <div className={styles.FormHeader}>
-        <h3 className={styles.FormHeading}>Add Distributor</h3>
+        <h3 className={styles.FormHeading}>Add Products</h3>
       </div>
       <form className={styles.Form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.InputList}>
-          {DistributorFormFields.map((field) => (
+          {MerchandiseFormFields.map((field) => (
             <div className={styles.InputContainer} key={field.name}>
               <input
                 placeholder={field.placeholder}
@@ -81,7 +78,7 @@ const AddEditDistributorForm = ({
           {/* <button type="submit" className={styles.primaryButton}></button> */}
 
           <Button
-            buttonText={DistributorMode === "edit" ? "Update" : "Add"}
+            buttonText={merchandiseMode === "edit" ? "Update" : "Add"}
             buttonClass="primaryButton"
           />
         </div>
@@ -97,4 +94,4 @@ const AddEditDistributorForm = ({
   );
 };
 
-export default AddEditDistributorForm;
+export default AddEditMerchandiseForm;

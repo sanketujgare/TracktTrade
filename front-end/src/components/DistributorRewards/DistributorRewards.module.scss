@@ -1,0 +1,94 @@
+.DistributorRewardsContainer {
+  position: relative;
+
+  .PointsContainer {
+    position: absolute;
+    right: 1rem;
+    top: 0.7rem;
+    background-color: rgb(88, 205, 247);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    .totalPoints {
+      color: black;
+    }
+  }
+
+  .AddButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .SearchFeatures {
+    display: flex;
+  }
+  .ProductList {
+  }
+  .ModalView {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .ModalContent {
+    // padding: 4rem;
+    position: absolute;
+    // position: relative;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 4px;
+
+    margin-bottom: 0.5rem;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+
+    .ReedemModal {
+      padding: 4rem;
+      display: flex;
+      flex-direction: column;
+
+      .ReedemModalHeader {
+        font-size: 2rem;
+      }
+      .MerchandiseInfo {
+        display: flex;
+        flex-direction: column;
+        // justify-content: center;
+        // align-items: center;
+
+        .MerchandiseContent {
+          display: flex;
+          gap: 0.5rem;
+          span {
+            flex: 3;
+            font-size: 1.3em;
+          }
+          p {
+            flex: 1;
+            font-size: 1.3rem;
+          }
+        }
+        .MerchandiseImage {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .Image {
+            width: 6rem;
+          }
+        }
+      }
+    }
+  }
+
+  .CloseForm {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
