@@ -1,77 +1,130 @@
- 
 .SalesFormContainer {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 0.8rem;
-  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  border-radius: 1rem;
+  flex: 1;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   max-width: 50rem;
-  margin: 0 auto;
+  margin: auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1rem;
+}
+
+.SalesHeader {
+  text-align: center;
+  color: #333;
+  font-size: 1.5rem;
+  // margin-bottom: 1.25rem;
 }
 
 .CustomerDetails {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+  background-color: #f9f9f9;
+  z-index: 1;
+  padding-bottom: 1rem;
+  border-bottom: 0.0625rem solid #ccc;
+}
 
-  input {
-    padding: 0.8rem;
-    font-size: 1rem;
-    border: 0.1rem solid #ccc;
-    border-radius: 0.4rem;
-  }
+.CustomerDetails input {
+  padding: 0.625rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.3125rem;
+  font-size: 1rem;
+  width: 100%;
 }
 
 .ItemSelection {
-  margin-bottom: 2rem;
-
-  input {
-    padding: 0.8rem;
-    font-size: 1rem;
-    border: 0.1rem solid #ccc;
-    border-radius: 0.4rem;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-
-  .Suggestions {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-
-    li {
-      padding: 0.5rem;
-      cursor: pointer;
-      border-bottom: 0.1rem solid #ccc;
-
-      &:hover {
-        background-color: #f0f0f0;
-      }
-    }
-  }
-
-  .QuantityInput {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 1rem;
-
-    input {
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 0.1rem solid #ccc;
-      border-radius: 0.4rem;
-      width: 100%;
-    }
-
-    button {
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 0.4rem;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
 }
+
+.ItemSelection .Input {
+  padding: 0.625rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.3125rem;
+  font-size: 1rem;
+  width: 100%;
+  margin-bottom: 0.625rem;
+}
+
+.Suggestions {
+  position: absolute;
+  width: 100%;
+  top: 3rem;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.3125rem;
+  list-style: none;
+  padding: 0.625rem;
+  margin: 0;
+  max-height: 12.5rem;
+}
+
+.Suggestions li {
+  padding: 0.5rem;
+  cursor: pointer;
+  &:hover {
+    background-color: #eee;
+  }
+}
+
+.SelectedItems {
+  max-height: 8rem;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem;
+  // margin-top: 0.625rem;
+  // padding: 1rem;
+}
+
+.SelectedItem {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.3125rem;
+  background-color: #fff;
+}
+
+.SelectedItem span {
+  flex: 1;
+  font-size: 1rem;
+  color: #333;
+}
+
+.SelectedItem label {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.SelectedItem input {
+  padding: 0.5rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.3125rem;
+  width: 5rem;
+}
+
+.SelectedItem button {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.3125rem;
+  background-color: #ff6b6b;
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    background-color: #ff4c4c;
+  }
 }

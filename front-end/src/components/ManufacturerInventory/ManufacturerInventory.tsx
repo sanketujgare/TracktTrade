@@ -321,14 +321,18 @@ const ManufacturerInventory = ({}: ManufacturerInventoryProps) => {
     });
   };
 
-  const totalPages = Math.ceil(state.manufacturerInventoryData.length / 10);
+  const totalPages = Math.ceil(
+    state.manufacturerInventoryData
+      ? state.manufacturerInventoryData.length / 10
+      : 0
+  );
   const currentData = transformedData.slice(
     (state.currentPage - 1) * 10,
     state.currentPage * 10
   );
 
   return (
-    <div className={styles.ProductsContainer}>
+    <div className={styles.InventoryContainer}>
       <div className={styles.SearchFeatures}>
         <DropDown
           options={["All Products", "Category 1", "Category 2"]}

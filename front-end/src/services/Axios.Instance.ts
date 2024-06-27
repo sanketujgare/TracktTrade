@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AxiosInstance = axios.create({
-  baseURL: "https://f21e-115-160-223-174.ngrok-free.app",
+  baseURL: "http://localhost:3000",
   headers: {
     "ngrok-skip-browser-warning": "skip-browser-warning",
   },

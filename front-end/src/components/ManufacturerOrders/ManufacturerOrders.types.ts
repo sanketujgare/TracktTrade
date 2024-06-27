@@ -14,14 +14,32 @@ export interface OrderDataType {
 }
 
 export interface DistributorOrderDataType {
+  orderId: string;
+  distributorId: string;
   name: String;
   status: string;
   productName: string;
   productPrice: string;
   productDescription: string;
   productImage: string;
+  quantity: string;
 }
 
+export interface transformDataType {
+  orderId: string;
+  distributorId: string;
+  name: string;
+  status: string;
+  products: {
+    _id: string;
+    productid: string;
+    productName: string;
+    productPrice: string;
+    productDescription: string;
+    productImage: string;
+    quantity: string;
+  }[];
+}
 export interface initialOrdersStateType {
   ordersData: OrderDataType[];
   currentOrder: DistributorOrderDataType | null;
@@ -31,6 +49,7 @@ export interface initialOrdersStateType {
   searchQuery: string;
   distributorData: DistributorType[];
   productsData: productType[];
+  transFormedData: transformDataType[];
   modal: boolean;
 }
 
@@ -43,6 +62,7 @@ export const initialOrdersState: initialOrdersStateType = {
   searchQuery: "",
   distributorData: [],
   productsData: [],
+  transFormedData: [],
   modal: false,
 };
 
@@ -66,10 +86,14 @@ export type ManufacturerOrdersAction =
       payload: { currentOrder: DistributorOrderDataType };
     }
   | { type: "SET_CURRENT_PAGE"; payload: { currentPage: number } }
-  | { type: "SET_MODAL"; payload: { modal: boolean } };
+  | { type: "SET_MODAL"; payload: { modal: boolean } }
+  | {
+      type: "SET_TRANSFORMED_DATA";
+      payload: { transFormedData: transformDataType[] };
+    };
 
 export const ManufacturerOrdersColumns = [
-  { header: "Name", accessor: "name" },
+  { header: "DistributorName", accessor: "name" },
   { header: "Status", accessor: "status" },
   { header: "Approve", accessor: "approve" },
 ];

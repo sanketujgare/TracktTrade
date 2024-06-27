@@ -33,6 +33,11 @@ export const ManufacturerOrdersReducer = (
         ...state,
         searchQuery: action.payload.searchQuery,
       };
+    case "SET_MODAL":
+      return {
+        ...state,
+        modal: action.payload.modal,
+      };
     case "SET_CURRENT_ORDER":
       return {
         ...state,
@@ -42,6 +47,11 @@ export const ManufacturerOrdersReducer = (
       return {
         ...state,
         currentPage: action.payload.currentPage,
+      };
+    case "SET_TRANSFORMED_DATA":
+      return {
+        ...state,
+        transFormedData: action.payload.transFormedData,
       };
     default:
       return state;

@@ -7,28 +7,45 @@ import { logoutRequst } from "../../services/Authentication.services.ts";
 const sidebarTabs = {
   manufacturer: [
     { tabName: "Home", path: "/manufacturer" },
-
+    { tabName: "Products", path: "/manufacturer/products" },
     { tabName: "Inventory", path: "/manufacturer/inventory" },
     { tabName: "Distributors", path: "/manufacturer/distributors" },
     { tabName: "Orders", path: "/manufacturer/orders" },
     { tabName: "Customers", path: "/manufacturer/customers" },
-    { tabName: "Merchandise", path: "/manufacturer/merchandise" },
+
+    {
+      tabName: "Merchandise",
+      path: [
+        {
+          tabName: "Merchandise",
+          path: "merchandise",
+        },
+        {
+          tabName: "Requests",
+          path: "merchandiserequests",
+        },
+      ],
+    },
     {
       tabName: "Reports",
       path: [
         {
-          tabName: "topProducts",
-          path: "manufacturer/top10sellingproducts",
+          tabName: "Reports",
+          path: "reports",
         },
         {
-          tabName: "topDistributors",
-          path: "manufacturer/top10sellingproducts",
+          tabName: "TopProducts",
+          path: "reports/topsellingproducts",
+        },
+        {
+          tabName: "topPerformers",
+          path: "reports/topperformers",
         },
       ],
     },
   ],
   distributor: [
-    { tabName: "Home", path: "/boardMember" },
+    { tabName: "Home", path: "/distributor/home" },
     { tabName: "Inventory", path: "/distributor/inventory" },
     { tabName: "Sales", path: "/distributor/sales" },
     { tabName: "Rewards", path: "/distributor/rewards" },

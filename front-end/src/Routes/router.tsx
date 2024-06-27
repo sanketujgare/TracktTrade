@@ -3,14 +3,14 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import { GUARDS } from "./guard";
 
 import DistributorPage from "../pages/DistributorPage/DistributorPage";
-import Manufactureradmin from "../pages/ManufactureradminPage/Manufactureradmin";
+import Manufactureradmin from "../pages/ManufactureradminPage/ManufactureradminPage";
 import Login from "../components/Login/Login";
 import LoginPage from "../pages/LoginPage/LoginPage";
 import Logout from "../components/Logout/Logout";
 import Products from "../components/Products/Products";
 import ManufacturerDashBoard from "../components/ManufacturerDashBoard/ManufacturerDashBoard";
 import DistributorList from "../components/DistributorList/DistributorList";
-import ManufactureradminPage from "../pages/ManufactureradminPage/Manufactureradmin";
+import ManufactureradminPage from "../pages/ManufactureradminPage/ManufactureradminPage";
 import DistributorInventory from "../components/DistributorInventory/DistributorInventory";
 import ManufacturerReports from "../components/ManufacturerReports/ManufacturerReports";
 import DistributorReports from "../components/DistributorReports/DistributorReports";
@@ -18,6 +18,13 @@ import ManufacturerInventory from "../components/ManufacturerInventory/Manufactu
 import ManufacturerCustomers from "../components/ManufacturerCustomers/ManufacturerCustomers";
 import DistributorSales from "../components/DistributorSales/DistributorSales";
 import ManufacturerOrders from "../components/ManufacturerOrders/ManufacturerOrders";
+import ManufacturerMerchandise from "../components/ManufacturerMerchandise/ManufacturerMerchandise";
+import DistributorRewards from "../components/DistributorRewards/DistributorRewards";
+import MerchandiseRequests from "../components/MerchandiseRequests/MerchandiseRequests";
+import ReportsContainer from "../components/PerformersReportsContainer/ReportsContainer";
+import ProductsReportsContainer from "../components/ProductsReportsContainer/ProductsReportsContainer";
+import DistributorReportsContainer from "../components/DistributorReportsContainer/DistributorReportsContainer";
+import DistributorHome from "../components/DistributorHome/DistributorHome";
 
 type predicate = () => boolean;
 
@@ -28,7 +35,6 @@ const canActivate = (
   guards: predicate[],
   to: string = "/"
 ) => {
-  // console.log("hello");
   return () => {
     // console.log(to);
     if (!guards.every((guard) => guard())) return <Navigate to={to} />;
@@ -53,7 +59,7 @@ export const router = createBrowserRouter([
 
     children: [
       {
-        path: "",
+        path: "products",
         element: <Products />,
       },
       {
@@ -68,13 +74,47 @@ export const router = createBrowserRouter([
         path: "Customers",
         element: <ManufacturerCustomers />,
       },
-      {
-        path: "reports",
-        element: <ManufacturerReports />,
-      },
+
       {
         path: "orders",
         element: <ManufacturerOrders />,
+      },
+      {
+        path: "merchandise",
+        element: <ManufacturerMerchandise />,
+      },
+      {
+        path: "merchandiserequests",
+        element: <MerchandiseRequests />,
+      },
+      // {
+      //   path: "reports",
+      //   element: <ManufacturerReports />,
+      // },
+      // {
+      //   path: "reports/topsellingproducts",
+      //   element: <ProductsReportsContainer />,
+      // },
+      // {
+      //   path: "reports/topperformers",
+      //   element: <ReportsContainer />,
+      // },
+      {
+        path: "reports",
+        children: [
+          {
+            path: "",
+            element: <ManufacturerReports />,
+          },
+          {
+            path: "topsellingproducts",
+            element: <ProductsReportsContainer />,
+          },
+          {
+            path: "topperformers",
+            element: <ReportsContainer />,
+          },
+        ],
       },
     ],
   },
@@ -88,8 +128,8 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "",
-        Component: () => <div>Hello</div>,
+        path: "home",
+        element: <DistributorHome />,
       },
       {
         path: "inventory",
@@ -97,11 +137,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "reports",
-        element: <DistributorReports />,
+        element: <DistributorReportsContainer />,
       },
       {
         path: "sales",
         element: <DistributorSales />,
+      },
+      {
+        path: "rewards",
+        element: <DistributorRewards />,
       },
     ],
   },
