@@ -95,10 +95,7 @@ export const router = createBrowserRouter([
       //   path: "reports/topsellingproducts",
       //   element: <ProductsReportsContainer />,
       // },
-      // {
-      //   path: "reports/topperformers",
-      //   element: <ReportsContainer />,
-      // },
+
       {
         path: "reports",
         children: [
