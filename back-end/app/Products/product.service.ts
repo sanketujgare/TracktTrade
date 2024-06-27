@@ -5,6 +5,8 @@ import inventoryService from "../inventory/inventory.service";
 import userService from "../users/user.service";
 import mailTemplates from "../utility/mail-templates";
 import sendMail from "../utility/mail-service";
+import userRepo from "../users/user.repo";
+import { Types } from "mongoose";
 
 export const addProduct = async (
     product: IProductSchema,
@@ -75,6 +77,20 @@ export const updateProduct = async (
 };
 export const deleteProduct = async (productId: string) => {
     try {
+        const pipline = [
+            { $unwind: "$inventory" },
+            {
+                $match: {
+                    "inventory.productId": new Types.ObjectId(productId),
+                    "inventory.quantity": { $gt: 0 },
+                },
+            },
+            { $limit: 1 },
+        ];
+        const productInInventory = await userRepo.aggregate(pipline);
+        if (productInInventory.length > 0 || !productInInventory) {
+            throw "Product cannot be deleted as it is still in inventory with quantity greater than zero.";
+        }
         const isDeleted = await productRepo.deleteProduct(productId);
         if (!isDeleted) throw productResponses.CAN_NOT_DELETE_PRODUCT;
         return productResponses.PRODUCT_DELETED_SUCCESSFULLY;

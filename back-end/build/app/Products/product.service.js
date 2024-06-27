@@ -19,6 +19,8 @@ const inventory_service_1 = __importDefault(require("../inventory/inventory.serv
 const user_service_1 = __importDefault(require("../users/user.service"));
 const mail_templates_1 = __importDefault(require("../utility/mail-templates"));
 const mail_service_1 = __importDefault(require("../utility/mail-service"));
+const user_repo_1 = __importDefault(require("../users/user.repo"));
+const mongoose_1 = require("mongoose");
 const addProduct = (product, manufacturerId, from) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         product.createdBy = manufacturerId;
@@ -77,6 +79,21 @@ const updateProduct = (updatedFields, productId, userId) => __awaiter(void 0, vo
 exports.updateProduct = updateProduct;
 const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const pipline = [
+            { $unwind: "$inventory" },
+            {
+                $match: {
+                    "inventory.productId": new mongoose_1.Types.ObjectId(productId),
+                    "inventory.quantity": { $gt: 0 },
+                },
+            },
+            { $limit: 1 },
+        ];
+        const productInInventory = yield user_repo_1.default.aggregate(pipline);
+        console.log(productInInventory);
+        if (productInInventory.length > 0 || !productInInventory) {
+            throw "Product cannot be deleted as it is still in inventory with quantity greater than zero.";
+        }
         const isDeleted = yield product_repo_1.default.deleteProduct(productId);
         if (!isDeleted)
             throw product_responses_1.productResponses.CAN_NOT_DELETE_PRODUCT;

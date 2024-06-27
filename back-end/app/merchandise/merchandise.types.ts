@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { IUserResponses } from "../users/user.types";
 export const merchandiseSchema = z.object({
-    merchandiseName: z.string(),
-    merchandiseDescription: z.string(),
-    pointsRequired: z.number(),
-    merchandiseImage: z.string(),
+    merchandiseName: z.string().trim().min(1),
+    merchandiseDescription: z.string().trim().min(1),
+    pointsRequired: z.number().min(1),
+    merchandiseImage: z.string().trim().min(10),
     createdBy: z.string().optional(),
     updatedBy: z.string().optional(),
     isDeleted: z.string().optional(),

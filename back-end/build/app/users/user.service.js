@@ -130,7 +130,7 @@ const getInventory = (userId) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getInventory = getInventory;
-const getMerchandiseRequests = (pipeline) => __awaiter(void 0, void 0, void 0, function* () { return user_repo_1.default.getMerchandiseRequests(pipeline); });
+const getMerchandiseRequests = (pipeline) => __awaiter(void 0, void 0, void 0, function* () { return user_repo_1.default.aggregate(pipeline); });
 exports.getMerchandiseRequests = getMerchandiseRequests;
 const updateInventory = (newInventory, userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {

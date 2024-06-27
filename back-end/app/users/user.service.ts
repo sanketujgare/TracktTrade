@@ -128,7 +128,7 @@ export const getInventory = async (userId: string) => {
 };
 
 export const getMerchandiseRequests = async (pipeline: any) =>
-    userRepo.getMerchandiseRequests(pipeline);
+    userRepo.aggregate(pipeline);
 
 export const updateInventory = async (
     newInventory: IInventorySchema[],

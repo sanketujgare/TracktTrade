@@ -54,8 +54,7 @@ export const getInventory = async (userId: string) => {
     return inventory;
 };
 
-export const getMerchandiseRequests = async (pipeline: any) =>
-    userModel.aggregate(pipeline);
+export const aggregate = async (pipeline: any) => userModel.aggregate(pipeline);
 
 export const updateUser = async (
     updates: Partial<IUserUpdateSchema>,
@@ -123,7 +122,7 @@ export default {
     addProductToInventory,
     getUserById,
     getInventory,
-    getMerchandiseRequests,
+    aggregate,
     updateInventory,
     updateUser,
     updatePointesEarned,
