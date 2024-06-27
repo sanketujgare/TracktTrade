@@ -7,9 +7,9 @@ const Customer = ({ data, handleCloseModal }: CustomerProps) => {
     <div className={styles.CustomerContainer}>
       <h3 className={styles.CustomerHeader}>Customer Details</h3>
       <div className={styles.CustomerDetails}>
-        <p>Name: {data.customerName}</p>
-        <p>Mobile Number: {data.customerMobileNumber}</p>
-        <p>Email: {data.customerEmail}</p>
+        <p>Name: {data.name}</p>
+        <p>Mobile Number: {data.mobileNumber}</p>
+        <p>Email: {data.email}</p>
       </div>
       <div className={styles.CloseForm}>
         <Button

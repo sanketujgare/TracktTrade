@@ -103,6 +103,7 @@ export type InitialStateType = {
   selectedCategory: "All Distributors" | string;
   searchQuery: string;
   deleteModal: boolean;
+  currentPage: number;
 };
 
 export type DistributorsAction =
@@ -115,59 +116,60 @@ export type DistributorsAction =
   | { type: "RESET_FORM" }
   | { type: "SET_SELECTED_CATEGORY"; payload: { selectedCategory: string } }
   | { type: "SET_SEARCH_QUERY"; payload: { searchQuery: string } }
-  | { type: "SET_DELETE_MODAL"; payload: { deleteModal: boolean } };
+  | { type: "SET_DELETE_MODAL"; payload: { deleteModal: boolean } }
+  | { type: "SET_CURRENT_PAGE"; payload: { currentPage: number } };
 
 type RowType = productType | DistributorType;
 
-export const distributors: DistributorType[] = [
-  {
-    _id: "62f8dff1d1b2b2e8dcd1f1e3",
-    username: "john_doe",
-    password: "password123",
-    email: "abc@gmail.com",
-    name: "John Doe",
-    role: "Distributor",
-    mobileNumber: "123-456-7890",
-    totalPoints: 1500,
-  },
-  {
-    _id: "62f8e0a2d1b2b2e8dcd1f1e4",
-    username: "jane_smith",
-    password: "securepass456",
-    email: "def@gmail.com",
-    name: "Jane Smith",
-    role: "Distributor",
-    mobileNumber: "098-765-4321",
-    totalPoints: 3000,
-  },
-  {
-    _id: "62f8e0c4d1b2b2e8dcd1f1e5",
-    username: "alice_wonder",
-    password: "wonderland789",
-    email: "ghi@gmail.com",
-    name: "Alice Wonder",
-    role: "Distributor",
-    mobileNumber: "456-789-0123",
-    totalPoints: 2500,
-  },
-  {
-    _id: "62f8e0e6d1b2b2e8dcd1f1e6",
-    username: "bob_builder",
-    password: "builder456",
-    email: "jkl@gmail.com",
-    name: "Bob Builder",
-    role: "Distributor",
-    mobileNumber: "321-654-0987",
-    totalPoints: 2000,
-  },
-  {
-    _id: "62f8e108d1b2b2e8dcd1f1e7",
-    username: "charlie_chaplin",
-    password: "funnybone123",
-    email: "lmn@gmail.com",
-    name: "Charlie Chaplin",
-    role: "Distributor",
-    mobileNumber: "789-012-3456",
-    totalPoints: 1000,
-  },
-];
+// export const distributors: DistributorType[] = [
+//   {
+//     _id: "62f8dff1d1b2b2e8dcd1f1e3",
+//     username: "john_doe",
+//     password: "password123",
+//     email: "abc@gmail.com",
+//     name: "John Doe",
+//     role: "Distributor",
+//     mobileNumber: "123-456-7890",
+//     totalPoints: 1500,
+//   },
+//   {
+//     _id: "62f8e0a2d1b2b2e8dcd1f1e4",
+//     username: "jane_smith",
+//     password: "securepass456",
+//     email: "def@gmail.com",
+//     name: "Jane Smith",
+//     role: "Distributor",
+//     mobileNumber: "098-765-4321",
+//     totalPoints: 3000,
+//   },
+//   {
+//     _id: "62f8e0c4d1b2b2e8dcd1f1e5",
+//     username: "alice_wonder",
+//     password: "wonderland789",
+//     email: "ghi@gmail.com",
+//     name: "Alice Wonder",
+//     role: "Distributor",
+//     mobileNumber: "456-789-0123",
+//     totalPoints: 2500,
+//   },
+//   {
+//     _id: "62f8e0e6d1b2b2e8dcd1f1e6",
+//     username: "bob_builder",
+//     password: "builder456",
+//     email: "jkl@gmail.com",
+//     name: "Bob Builder",
+//     role: "Distributor",
+//     mobileNumber: "321-654-0987",
+//     totalPoints: 2000,
+//   },
+//   {
+//     _id: "62f8e108d1b2b2e8dcd1f1e7",
+//     username: "charlie_chaplin",
+//     password: "funnybone123",
+//     email: "lmn@gmail.com",
+//     name: "Charlie Chaplin",
+//     role: "Distributor",
+//     mobileNumber: "789-012-3456",
+//     totalPoints: 1000,
+//   },
+// ];

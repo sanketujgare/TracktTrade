@@ -2,7 +2,6 @@ import { useState } from "react";
 import Button from "../Button/Button.tsx";
 import styles from "./AddEditProductForm.module.scss";
 import {
-  addProdcuct,
   addProduct,
   editProdcuct,
   getProductsData,
@@ -50,7 +49,7 @@ const AddEditProductForm = ({
     // }
     try {
       if (productMode === "edit" && currentProduct) {
-        await editProdcuct(currentProduct._id,data);
+        await editProdcuct(currentProduct._id, data);
       } else if (productMode === "add") {
         await addProduct(data);
       }

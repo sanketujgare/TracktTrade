@@ -97,11 +97,7 @@ const ManufacturerCustomers = ({}: ManufacturerCustomersProps) => {
       <div className={styles.ProductList}>
         <Table
           columns={Customercolumns}
-          //   data={state.customerdata}
-          data={customerData}
-          // data={distributors}
-          //   handleDelete={handleDeleteModal}
-          // handleEdit={handleEdit}
+          data={state.customerdata}
           handleSelectItem={handleView}
         />
       </div>

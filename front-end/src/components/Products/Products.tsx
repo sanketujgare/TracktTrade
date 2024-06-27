@@ -20,10 +20,12 @@ import Search from "../Search/Search.tsx";
 import Modal from "../Modal/Modal.tsx";
 import Pagination from "../Pagination/Pagination.tsx";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Products = ({}: ProductsProps) => {
   const [state, dispatch] = useReducer(ProductsReducer, InitialState);
 
- 
   const totalPages = 10;
   const itemsPerPage = 10;
   const indexOfLastItem = state.currentPage * itemsPerPage;
@@ -38,11 +40,11 @@ const Products = ({}: ProductsProps) => {
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [state.currentPage]);
 
   const getProducts = async () => {
     try {
-      const data = await getProductsData();
+      const data = await getProductsData(state.currentPage, 10);
       dispatch({ type: "SET_PRODUCTS_DATA", payload: { data } });
     } catch (error: any) {
       console.error(error.message);
@@ -92,6 +94,11 @@ const Products = ({}: ProductsProps) => {
       type: "SET_DELETE_MODAL",
       payload: { deleteModal: true },
     });
+  };
+  console.log(state.deleteModal);
+  const handlecloseDeleteModal = () => {
+    dispatch({ type: "SET_DELETE_MODAL", payload: { deleteModal: false } });
+    console.log(state.deleteModal);
   };
 
   // const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -169,7 +176,7 @@ const Products = ({}: ProductsProps) => {
             <div className={styles.CloseForm}>
               <Button
                 buttonText="X"
-                handleClick={handleDeleteModal}
+                handleClick={handlecloseDeleteModal}
                 buttonClass="modalButton"
               />
             </div>

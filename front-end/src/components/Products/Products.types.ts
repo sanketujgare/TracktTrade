@@ -82,7 +82,7 @@ export type InitialStateType = {
   currentProduct: productType | {};
   productMode: "add" | "edit";
   selectedCategory: "All Products" | string;
-  searchQuery: "";
+  searchQuery: string;
   deleteModal: boolean;
   currentPage: number;
 };

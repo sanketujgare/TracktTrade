@@ -90,7 +90,6 @@ const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function*
             { $limit: 1 },
         ];
         const productInInventory = yield user_repo_1.default.aggregate(pipline);
-        console.log(productInInventory);
         if (productInInventory.length > 0 || !productInInventory) {
             throw "Product cannot be deleted as it is still in inventory with quantity greater than zero.";
         }

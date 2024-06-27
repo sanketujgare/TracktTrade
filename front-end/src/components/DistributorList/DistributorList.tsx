@@ -13,7 +13,11 @@ import DropDown from "../DropDown/DropDown.tsx";
 import Search from "../Search/Search.tsx";
 import Table from "../Table/Table.tsx";
 import AddEditDistributorForm from "../AddEditDistributorForm/AddEditDistributorForm.tsx";
-import { deleteDistributor, getDistributorsData } from "../../services/Manufacturer.services.ts";
+import {
+  deleteDistributor,
+  getDistributorsData,
+} from "../../services/Manufacturer.services.ts";
+import Pagination from "../Pagination/Pagination.tsx";
 
 export const InitialState: InitialStateType = {
   data: [],
@@ -30,11 +34,16 @@ const DistributorList = ({}: DistributorListProps) => {
 
   useEffect(() => {
     getDistributors();
-  }, []);
+  }, [state.currentPage]);
+
+  const totalPages = 10;
+  const itemsPerPage = 10;
+  const indexOfLastItem = state.currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   const getDistributors = async () => {
     try {
-      const data = await getDistributorsData();
+      const data = await getDistributorsData(state.currentPage, 10);
       dispatch({ type: "SET_DISTRIBUTORS_DATA", payload: { data } });
     } catch (error: any) {
       console.error(error.message);
@@ -96,6 +105,13 @@ const DistributorList = ({}: DistributorListProps) => {
   //   });
   // };
 
+  const handlePageChange = (pageNumber: number) => {
+    dispatch({
+      type: "SET_CURRENT_PAGE",
+      payload: { currentPage: pageNumber },
+    });
+  };
+
   const handleSelect = (option: string) => {
     dispatch({
       type: "SET_SELECTED_CATEGORY",
@@ -134,7 +150,7 @@ const DistributorList = ({}: DistributorListProps) => {
       <div className={styles.ProductList}>
         <Table
           columns={columns}
-            data={state.data}
+          data={state.data}
           // data={distributors}
           handleDelete={handleDeleteModal}
           handleEdit={handleEdit}
@@ -173,6 +189,11 @@ const DistributorList = ({}: DistributorListProps) => {
           </div>
         </div>
       )}
+      <Pagination
+        currentPage={state.currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+      />
     </div>
   );
 };

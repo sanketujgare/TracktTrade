@@ -134,109 +134,114 @@ const CustomerSales = ({}: CustomerSalesProps) => {
 
   return (
     <div className={styles.SalesFormContainer}>
-      <h3>Sell Inventory</h3>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.CustomerDetails}>
-          <input
-            type="text"
-            {...register("customerName", { required: true })}
-            placeholder="Customer Name"
-            value={state.customerData.customerName}
-            onChange={(e) =>
-              dispatch({
-                type: "SET_CUSTOMER_DETAIL",
-                field: "customerName",
-                value: e.target.value,
-              })
-            }
-          />
-          <input
-            type="text"
-            {...register("customerMobileNumber", { required: true })}
-            placeholder="Customer Mobile Number"
-            value={state.customerData.customerMobileNumber}
-            onChange={(e) =>
-              dispatch({
-                type: "SET_CUSTOMER_DETAIL",
-                field: "customerMobileNumber",
-                value: e.target.value,
-              })
-            }
-          />
-          <input
-            type="email"
-            {...register("customerEmail", { required: true })}
-            placeholder="Customer Email"
-            value={state.customerData.customerEmail}
-            onChange={(e) =>
-              dispatch({
-                type: "SET_CUSTOMER_DETAIL",
-                field: "customerEmail",
-                value: e.target.value,
-              })
-            }
-          />
-        </div>
-        <div className={styles.ItemSelection}>
-          <input
-            type="text"
-            value={state.searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            placeholder="Search for an item..."
-          />
-          {state.suggestions.length > 0 && (
-            <ul className={styles.Suggestions}>
-              {state.suggestions.map((item) => (
-                <li key={item._id} onClick={() => handleItemSelect(item)}>
-                  {item.productName}
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className={styles.SelectedItems}>
-            {state.selectedItems.map((item) => (
-              <div key={item.productId} className={styles.SelectedItem}>
-                <span>{item.productName}</span>
-                <label htmlFor="Quantity">Quantity</label>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "UPDATE_ITEM_QUANTITY",
-                      productId: item.productId,
-                      quantity: parseInt(e.target.value, 10),
-                    })
-                  }
-                />
-                <label htmlFor="CurrentPrice">Price</label>
-                <input
-                  type="number"
-                  value={item.currentPrice}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "UPDATE_ITEM_PRICE",
-                      productId: item.productId,
-                      currentPrice: parseInt(e.target.value, 10),
-                    })
-                  }
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveItem(item.productId)}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+      <h3 className={styles.SalesHeader}>Sell Inventory</h3>
+      <div className={styles.container}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.CustomerDetails}>
+            <input
+              type="text"
+              {...register("customerName", { required: true })}
+              placeholder="Customer Name"
+              value={state.customerData.customerName}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_CUSTOMER_DETAIL",
+                  field: "customerName",
+                  value: e.target.value,
+                })
+              }
+            />
+            <input
+              type="text"
+              {...register("customerMobileNumber", { required: true })}
+              placeholder="Customer Mobile Number"
+              value={state.customerData.customerMobileNumber}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_CUSTOMER_DETAIL",
+                  field: "customerMobileNumber",
+                  value: e.target.value,
+                })
+              }
+            />
+            <input
+              type="email"
+              {...register("customerEmail", { required: true })}
+              placeholder="Customer Email"
+              value={state.customerData.customerEmail}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_CUSTOMER_DETAIL",
+                  field: "customerEmail",
+                  value: e.target.value,
+                })
+              }
+            />
           </div>
-        </div>
-        <Button
-          buttonText="Sell"
-          handleClick={handleSubmit(onSubmit)}
-          buttonClass="primaryButton"
-        />
-      </form>
+          <div className={styles.ItemSelection}>
+            <input
+              className={styles.Input}
+              type="text"
+              value={state.searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Select an item..."
+            />
+            {state.suggestions.length > 0 && (
+              <ul className={styles.Suggestions}>
+                {state.suggestions.map((item) => (
+                  <li key={item._id} onClick={() => handleItemSelect(item)}>
+                    {item.productName}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className={styles.SelectedItems}>
+              {state.selectedItems.map((item) => (
+                <div key={item.productId} className={styles.SelectedItem}>
+                  <span>{item.productName}</span>
+                  <label htmlFor="Quantity">Quantity</label>
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    required="true"
+                    onChange={(e) =>
+                      dispatch({
+                        type: "UPDATE_ITEM_QUANTITY",
+                        productId: item.productId,
+                        quantity: parseInt(e.target.value, 10),
+                      })
+                    }
+                  />
+                  <label htmlFor="CurrentPrice">Current Price</label>
+                  <input
+                    type="number"
+                    value={item.currentPrice}
+                    required="true"
+                    onChange={(e) =>
+                      dispatch({
+                        type: "UPDATE_ITEM_PRICE",
+                        productId: item.productId,
+                        currentPrice: parseInt(e.target.value, 10),
+                      })
+                    }
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveItem(item.productId)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <Button
+            buttonText="Sell"
+            handleClick={handleSubmit(onSubmit)}
+            buttonClass="primaryButton"
+          />
+        </form>
+      </div>
     </div>
   );
 };

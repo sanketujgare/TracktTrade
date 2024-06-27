@@ -10,15 +10,7 @@ import { router } from "./Routes/router";
 const App = () => {
   return (
     <div>
-      {/* <Button buttonText="submit" handleClick={() => console.log("hello")} /> */}
-      {/* <Input type="text" placehodlerText="Type Username" /> */}
-      {/* <Login /> */}
-      {/* <LoginPage /> */}
-      
-
-      <RouterProvider router={router}>
-        
-      </RouterProvider>
+      <RouterProvider router={router}></RouterProvider>
     </div>
   );
 };

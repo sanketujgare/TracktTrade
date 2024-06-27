@@ -60,7 +60,7 @@ const Table = ({
                         <Button
                           buttonText={"Delete"}
                           handleClick={() =>
-                            handleEdit ? handleEdit(row) : null
+                            handleEdit ? handleDelete(row) : null
                           }
                           buttonClass={"DeleteButton"}
                         />
@@ -91,6 +91,17 @@ const Table = ({
                       <div>
                         <Button
                           buttonText={"View"}
+                          // handleClick={() => handleEdit(row)}
+                          handleClick={() =>
+                            handleSelectItem ? handleSelectItem(row) : null
+                          }
+                          buttonClass={"primaryButton"}
+                        />
+                      </div>
+                    ) : col.header === "Reedem" ? (
+                      <div>
+                        <Button
+                          buttonText={"Reedem"}
                           // handleClick={() => handleEdit(row)}
                           handleClick={() =>
                             handleSelectItem ? handleSelectItem(row) : null

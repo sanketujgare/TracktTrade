@@ -7,9 +7,9 @@ export interface CustomerType {
 }
 
 export const Customercolumns = [
-  { header: "Name", accessor: "customerName" },
-  { header: "MobileNumber", accessor: "customerMobileNumber" },
-  { header: "Email", accessor: "customerEmail" },
+  { header: "Name", accessor: "name" },
+  { header: "MobileNumber", accessor: "mobileNumber" },
+  { header: "Email", accessor: "email" },
   { header: "View", accessor: "ViewButtons" },
 ];
 
@@ -43,10 +43,10 @@ export const InitialState: InitialStateType = {
   searchQuery: "",
 };
 
-export const customerData: CustomerType[] = [
-  {
-    customerName: "Jay Singh",
-    customerMobileNumber: "7865353372",
-    customerEmail: "jay.singh@gmail.com",
-  },
-];
+// export const customerData: CustomerType[] = [
+//   {
+//     customerName: "Jay Singh",
+//     customerMobileNumber: "7865353372",
+//     customerEmail: "jay.singh@gmail.com",
+//   },
+// ];
