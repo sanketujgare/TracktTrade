@@ -17,6 +17,9 @@ import {
   getDistributorsData,
 } from "../../services/Manufacturer.services.ts";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const AddEditDistributorForm = ({
   setModal,
   dispatch,
@@ -36,7 +39,9 @@ const AddEditDistributorForm = ({
     try {
       if (DistributorMode === "edit" && currentDistributor) {
         await editDistributor(currentDistributor._id, data);
+        toast("Produt is updated!");
       } else if (DistributorMode === "add") {
+        toast("Produt is added!");
         data.role = "Distributor";
         await addDistributor(data);
       }
@@ -65,7 +70,6 @@ const AddEditDistributorForm = ({
                 className={styles.Input}
                 {...register(field.name, field.validation)}
                 type={field.type}
-                
               />
               {errors[field.name] && (
                 <p className={styles.Error}>
