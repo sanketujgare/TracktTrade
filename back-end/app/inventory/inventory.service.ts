@@ -141,6 +141,7 @@ export const updateInventory = async (
         throw e;
     }
 };
+
 export default {
     getDefaultInventory,
     addProductToInventory,

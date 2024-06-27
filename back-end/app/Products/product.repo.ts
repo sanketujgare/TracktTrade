@@ -7,8 +7,11 @@ export const insertOne = (product: IProductSchema) => {
     return newProduct;
 };
 
-export const getAllProduct = async () => {
-    const products = await productModel.find();
+export const getAllProduct = async (page: number, limit: number) => {
+    const products = await productModel
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit);
     return products;
 };
 

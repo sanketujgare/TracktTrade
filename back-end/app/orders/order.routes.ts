@@ -7,6 +7,25 @@ import { orderValidations, UpdateOrderValidations } from "./order.validations";
 
 const orderRouter = Router();
 
+orderRouter.get(
+    "/allorder/:field/:page/:limit",
+    authPermissions(["viewOrders"]),
+    async (req, res, next) => {
+        try {
+            const { page, limit } = req.params;
+            const status = req.params.field;
+            const result = await orderService.getAllOrders(
+                status,
+                parseInt(page),
+                parseInt(limit)
+            );
+            res.send(new ResponseHandler(result));
+        } catch (e) {
+            next(e);
+        }
+    }
+);
+
 orderRouter.post(
     "/placeorder",
     authPermissions(["placeOrder"]),
@@ -36,7 +55,6 @@ orderRouter.put(
                 orderId,
                 manufacturerId
             );
-
             res.send(new ResponseHandler(result));
         } catch (e) {
             next(e);

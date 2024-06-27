@@ -7,6 +7,9 @@ exports.envValidator = zod_1.z.object({
     PORT: zod_1.z.coerce.number(),
     MONGO_URI: zod_1.z.string(),
     JWT_SECRET: zod_1.z.string(),
+    MANIPULATE_TOKEN: zod_1.z.string(),
+    SMTP_USERNAME: zod_1.z.string(),
+    SMTP_PASSWORD: zod_1.z.string(),
 });
 const validateEnv = () => {
     try {

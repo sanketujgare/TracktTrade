@@ -22,4 +22,28 @@ exports.merchandiseResponses = {
         statusCode: 200,
         message: "REQUESTED TO REDDEM MERCHANDISE",
     },
+    CAN_NOT_UPDATE_REQUEST_STATUS: {
+        statusCode: 400,
+        message: " CAN NOT UPDATE REWUEST STATUS",
+    },
+    MERCHANDISE_APPROVED: {
+        statusCode: 200,
+        message: "MERCHANDISE APPROVED",
+    },
+    CAN_NOT_UPDATE_MERCHANDISE: {
+        statusCode: 400,
+        message: "CAN NOT UPDATE MERCHANDISE",
+    },
+    MERCHANDISE_UPDATED: {
+        statusCode: 200,
+        message: "MERCHANDISE UPDATED SUCCESSFULLY",
+    },
+    CAN_NOT_DELETE_MERCHANDISE: {
+        statusCode: 400,
+        message: "CAN NOT DELETE MERCHANDISE",
+    },
+    MERCHANDISE_DELETED: {
+        statusCode: 200,
+        message: "MERCHANDISE DELETED SUCCESSFULLY",
+    },
 };

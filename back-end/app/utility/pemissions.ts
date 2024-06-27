@@ -13,7 +13,7 @@ export const permissions: IPermissions = {
         "updateMerchandise",
         "updateInventory",
         "updateOrder",
-
+        "viewOrders",
         "viewInventory",
         "viewMerchandise",
         "viewCustomers",
@@ -23,7 +23,14 @@ export const permissions: IPermissions = {
         "viewCustomer",
         "deleteProduct",
         "deleteUser",
+        "deleteMerchandise",
         "viewOwnInventory",
+        "viewRedeemRequest",
+        "approveMerchandise",
+        "viewSalesPerProduct",
+        "viewTopPerformers",
+        "viewTopSelling",
+        "viewProfile",
     ],
     Distributor: [
         "redeemMerchandise",
@@ -31,6 +38,11 @@ export const permissions: IPermissions = {
         "createSales",
         "viewProducts",
         "viewOwnInventory",
+        "viewMerchandise",
+        "viewTopSelling",
+        "viewRedeemRequest",
+        "viewSalesPerProduct",
+        "viewProfile",
     ],
 };
 
@@ -44,4 +56,3 @@ export const permissionsToCreate = [
     "createMerchandise",
 ];
 export const viewUser = ["viewCustomer", "viewDistributor"];
-export const updateDistributor = [""];

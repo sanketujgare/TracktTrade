@@ -12,7 +12,7 @@ inventoryRouter.get(
     authPermissions(["viewOwnInventory"]),
     async (req, res, next) => {
         try {
-            // await sendMail.sendMail();
+            // const { page, limit } = req.params;
             const userId = req.currentUser._id;
             const result = await inventoryService.getInventory(userId);
             res.send(new ResponseHandler(result));

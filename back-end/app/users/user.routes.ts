@@ -9,6 +9,7 @@ import {
 } from "./user.validations";
 import { permissionsToCreate, viewUser } from "../utility/pemissions";
 import { authPermissions } from "../utility/auth-permissions";
+import userRepo from "./user.repo";
 
 const userRouter = Router();
 
@@ -19,8 +20,26 @@ userRouter.post(
     async (req, res, next) => {
         try {
             const creatorId = req.currentUser._id;
-            const result = await userService.createUser(req.body, creatorId);
+            const creatorEmail = req.currentUser.email;
+            const result = await userService.createUser(
+                req.body,
+                creatorId,
+                creatorEmail
+            );
 
+            res.send(new ResponseHandler(result));
+        } catch (e) {
+            next(e);
+        }
+    }
+);
+userRouter.get(
+    "/profile",
+    authPermissions(["viewProfile"]),
+    async (req, res, next) => {
+        try {
+            const userId = req.currentUser._id;
+            const result = await userService.getUserById(userId);
             res.send(new ResponseHandler(result));
         } catch (e) {
             next(e);
@@ -36,7 +55,7 @@ userRouter.get(
     async (req, res, next) => {
         try {
             const userId = req.params.id;
-            const result = userService.getUserById(userId);
+            const result = await userService.getUserById(userId);
             res.send(new ResponseHandler(result));
         } catch (e) {
             next(e);
@@ -45,11 +64,15 @@ userRouter.get(
 );
 
 userRouter.get(
-    "/distributors",
+    "/distributors/:page/:limit",
     authPermissions(viewUser),
     async (req, res, next) => {
         try {
-            const result = await userService.getAllDistributors();
+            const { page, limit } = req.params;
+            const result = await userService.getAllDistributors(
+                parseInt(page),
+                parseInt(limit)
+            );
             res.send(new ResponseHandler(result));
         } catch (e) {
             next(e);
@@ -93,4 +116,4 @@ userRouter.delete(
     }
 );
 
-export default new Route("/users", userRouter);
+export default new Route("/user", userRouter);

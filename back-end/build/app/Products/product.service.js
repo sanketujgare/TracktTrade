@@ -16,14 +16,21 @@ exports.deleteProduct = exports.updateProduct = exports.getProductById = exports
 const product_repo_1 = __importDefault(require("./product.repo"));
 const product_responses_1 = require("./product.responses");
 const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
-const addProduct = (product, manufacturerId) => __awaiter(void 0, void 0, void 0, function* () {
+const user_service_1 = __importDefault(require("../users/user.service"));
+const mail_templates_1 = __importDefault(require("../utility/mail-templates"));
+const mail_service_1 = __importDefault(require("../utility/mail-service"));
+const user_repo_1 = __importDefault(require("../users/user.repo"));
+const mongoose_1 = require("mongoose");
+const addProduct = (product, manufacturerId, from) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         product.createdBy = manufacturerId;
         const newProduct = product_repo_1.default.insertOne(product);
         if (!newProduct)
             throw product_responses_1.productResponses.CAN_NOT_ADD_PRODUCT;
-        // check for bottle neck.
         yield inventory_service_1.default.addProductToInventory(newProduct._id.toString());
+        const emails = yield user_service_1.default.getUserEmails();
+        const mail = mail_templates_1.default.newProduct(emails, newProduct.productName, newProduct.productDescription, from);
+        yield mail_service_1.default.sendMail(mail);
         return product_responses_1.productResponses.PRODUCT_ADDED;
     }
     catch (e) {
@@ -31,9 +38,11 @@ const addProduct = (product, manufacturerId) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.addProduct = addProduct;
-const getAllProduct = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllProduct = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const products = yield product_repo_1.default.getAllProduct();
+        page = page || 1;
+        limit = limit || 10;
+        const products = yield product_repo_1.default.getAllProduct(page, limit);
         if (!products)
             throw product_responses_1.productResponses.PRODUCTS_NOT_FOUND;
         return products;
@@ -70,6 +79,21 @@ const updateProduct = (updatedFields, productId, userId) => __awaiter(void 0, vo
 exports.updateProduct = updateProduct;
 const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const pipline = [
+            { $unwind: "$inventory" },
+            {
+                $match: {
+                    "inventory.productId": new mongoose_1.Types.ObjectId(productId),
+                    "inventory.quantity": { $gt: 0 },
+                },
+            },
+            { $limit: 1 },
+        ];
+        const productInInventory = yield user_repo_1.default.aggregate(pipline);
+        console.log(productInInventory);
+        if (productInInventory.length > 0 || !productInInventory) {
+            throw "Product cannot be deleted as it is still in inventory with quantity greater than zero.";
+        }
         const isDeleted = yield product_repo_1.default.deleteProduct(productId);
         if (!isDeleted)
             throw product_responses_1.productResponses.CAN_NOT_DELETE_PRODUCT;

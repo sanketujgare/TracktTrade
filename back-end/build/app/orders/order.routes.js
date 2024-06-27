@@ -19,6 +19,17 @@ const response_handler_1 = require("../utility/response-handler");
 const auth_permissions_1 = require("../utility/auth-permissions");
 const order_validations_1 = require("./order.validations");
 const orderRouter = (0, express_1.Router)();
+orderRouter.get("/allorder/:field/:page/:limit", (0, auth_permissions_1.authPermissions)(["viewOrders"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { page, limit } = req.params;
+        const status = req.params.field;
+        const result = yield order_service_1.default.getAllOrders(status, parseInt(page), parseInt(limit));
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
 orderRouter.post("/placeorder", (0, auth_permissions_1.authPermissions)(["placeOrder"]), ...order_validations_1.orderValidations, (req, res, next) => {
     try {
         const result = order_service_1.default.placeOrder(req.body);

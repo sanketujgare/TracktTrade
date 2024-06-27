@@ -7,11 +7,19 @@ export const placeOrder = (order: IOrderSchema) => {
     return newOrder;
 };
 
-export const getAllorders = async () => {
-    const orders = await orderModel.find();
+export const getAllorders = async (
+    status: string,
+    page: number,
+    limit: number
+) => {
+    const orders = await orderModel
+        .find({ status: status })
+        .skip((page - 1) * limit)
+        .limit(limit);
     return orders;
 };
 
+export const aggregate = (pipeline: any) => orderModel.aggregate(pipeline);
 export const getSpecificOrder = async (orderId: string) => {
     const order = await orderModel.findById(orderId);
     return order;
@@ -30,4 +38,5 @@ export default {
     getAllorders,
     getSpecificOrder,
     updateOrderStatus,
+    aggregate,
 };

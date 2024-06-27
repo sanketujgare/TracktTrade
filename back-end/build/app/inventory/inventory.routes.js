@@ -21,7 +21,7 @@ const auth_permissions_1 = require("../utility/auth-permissions");
 const inventoryRouter = (0, express_1.Router)();
 inventoryRouter.get("/getinventory", (0, auth_permissions_1.authPermissions)(["viewOwnInventory"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // await sendMail.sendMail();
+        // const { page, limit } = req.params;
         const userId = req.currentUser._id;
         const result = yield inventory_service_1.default.getInventory(userId);
         res.send(new response_handler_1.ResponseHandler(result));

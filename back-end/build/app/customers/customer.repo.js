@@ -32,7 +32,6 @@ const updatePurchaseHistroy = (newHistory, userId) => __awaiter(void 0, void 0, 
 exports.updatePurchaseHistroy = updatePurchaseHistroy;
 const getAllCustomers = () => __awaiter(void 0, void 0, void 0, function* () {
     const customers = yield customer_schema_1.default.find();
-    console.log(customers);
     return customers;
 });
 exports.getAllCustomers = getAllCustomers;

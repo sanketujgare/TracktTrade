@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.extractCustomerDetails = exports.calculateTotalPrice = exports.createSales = void 0;
+exports.getTopSellingProducts = exports.getTopPerformers = exports.getSalesPerProduct = exports.extractCustomerDetails = exports.calculateTotalPrice = exports.createSales = void 0;
 const customer_service_1 = __importDefault(require("../customers/customer.service"));
 const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
 const user_service_1 = __importDefault(require("../users/user.service"));
@@ -78,6 +78,187 @@ const extractCustomerDetails = (sale) => {
     }
 };
 exports.extractCustomerDetails = extractCustomerDetails;
+const getSalesPerProduct = (startDate, endDate, distributorId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const matchStage = {
+            createdAt: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate),
+            },
+        };
+        if (distributorId) {
+            matchStage.distributorId = distributorId;
+        }
+        const pipeline = [
+            {
+                $match: matchStage,
+            },
+            {
+                $unwind: "$products",
+            },
+            {
+                $group: {
+                    _id: "$products.productId",
+                    totalQuantity: { $sum: "$products.quantity" },
+                    totalRevenue: {
+                        $sum: {
+                            $multiply: [
+                                "$products.quantity",
+                                "$products.currentPrice",
+                            ],
+                        },
+                    },
+                },
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "productDetails",
+                },
+            },
+            {
+                $unwind: "$productDetails",
+            },
+            {
+                $project: {
+                    productId: "$_id",
+                    productName: "$productDetails.productName",
+                    totalQuantity: 1,
+                    totalRevenue: 1,
+                },
+            },
+            {
+                $sort: { totalQuantity: -1 },
+            },
+        ];
+        const sales = yield sales_repo_1.default.aggregate(pipeline);
+        if (!sales || sales.length === 0)
+            throw sales_responses_1.salesResponses.NO_DATA_FOUND;
+        return sales;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.getSalesPerProduct = getSalesPerProduct;
+const getTopPerformers = (startDate, endDate) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pipeline = [
+            {
+                $match: {
+                    createdAt: {
+                        $gte: new Date(startDate),
+                        $lte: new Date(endDate),
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: "$distributorId",
+                    totalSales: { $sum: "$totalPrice" },
+                },
+            },
+            {
+                $sort: { totalSales: -1 },
+            },
+            {
+                $limit: 10,
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "distributorDetails",
+                },
+            },
+            {
+                $unwind: "$distributorDetails",
+            },
+            {
+                $project: {
+                    _id: 0,
+                    distributorId: "$_id",
+                    totalSales: 1,
+                    distributorName: "$distributorDetails.name",
+                },
+            },
+        ];
+        const topPerformers = yield sales_repo_1.default.aggregate(pipeline);
+        if (!topPerformers)
+            throw sales_responses_1.salesResponses.NO_DATA_FOUND;
+        return topPerformers;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.getTopPerformers = getTopPerformers;
+const getTopSellingProducts = (startDate, endDate, distributorId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const matchStage = {
+            createdAt: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate),
+            },
+        };
+        if (distributorId) {
+            matchStage.distributorId = distributorId;
+        }
+        const pipeline = [
+            {
+                $match: matchStage,
+            },
+            {
+                $unwind: "$products",
+            },
+            {
+                $group: {
+                    _id: "$products.productId",
+                    totalQuantitySold: { $sum: "$products.quantity" },
+                },
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "productDetails",
+                },
+            },
+            {
+                $unwind: "$productDetails",
+            },
+            {
+                $project: {
+                    _id: 0,
+                    productId: "$_id",
+                    productName: "$productDetails.productName",
+                    totalQuantitySold: 1,
+                },
+            },
+            {
+                $sort: { totalQuantitySold: -1 },
+            },
+            {
+                $limit: 10,
+            },
+        ];
+        const products = yield sales_repo_1.default.aggregate(pipeline);
+        if (!products)
+            throw sales_responses_1.salesResponses.NO_DATA_FOUND;
+        return products;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.getTopSellingProducts = getTopSellingProducts;
 exports.default = {
     createSales: exports.createSales,
+    getSalesPerProduct: exports.getSalesPerProduct,
+    getTopPerformers: exports.getTopPerformers,
+    getTopSellingProducts: exports.getTopSellingProducts,
 };

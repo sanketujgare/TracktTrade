@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.salesSchema = void 0;
+exports.dateRangeSchema = exports.salesSchema = void 0;
 const zod_1 = require("zod");
 exports.salesSchema = zod_1.z.object({
     _id: zod_1.z.string().optional(),
@@ -13,5 +13,10 @@ exports.salesSchema = zod_1.z.object({
         quantity: zod_1.z.number(),
         currentPrice: zod_1.z.number(),
     })),
-    totalPrice: zod_1.z.number(),
+    totalPrice: zod_1.z.number().optional(),
+});
+exports.dateRangeSchema = zod_1.z.object({
+    startdate: zod_1.z.string(),
+    enddate: zod_1.z.string(),
+    distributorId: zod_1.z.string().optional(),
 });

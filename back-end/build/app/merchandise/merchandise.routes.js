@@ -30,9 +30,21 @@ merchandiseRouter.post("/add-merchandise", (0, auth_permissions_1.authPermission
         next(e);
     }
 });
-merchandiseRouter.get("/allmerchandise", (0, auth_permissions_1.authPermissions)(["viewMerchandise"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+merchandiseRouter.get("/allmerchandise/:page/:limit", (0, auth_permissions_1.authPermissions)(["viewMerchandise"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield merchandise_service_1.default.getAllMerchandise();
+        const { page, limit } = req.params;
+        const result = yield merchandise_service_1.default.getAllMerchandise(parseInt(page), parseInt(limit));
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+merchandiseRouter.get("/request/:status/:page/:limit", (0, auth_permissions_1.authPermissions)(["viewRedeemRequest"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { status, page, limit } = req.params;
+        const distributorId = req.query.userid;
+        const result = yield merchandise_service_1.default.getMerchandiseRequests(status, parseInt(page), parseInt(limit), distributorId);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {
@@ -42,6 +54,36 @@ merchandiseRouter.get("/allmerchandise", (0, auth_permissions_1.authPermissions)
 merchandiseRouter.post("/redeem", (0, auth_permissions_1.authPermissions)(["redeemMerchandise"]), ...merchandise_validations_1.redeemRequestValidation, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield merchandise_service_1.default.reedeemMerchandises(req.body);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+merchandiseRouter.put("/approve", (0, auth_permissions_1.authPermissions)(["approveMerchandise"]), ...merchandise_validations_1.approveValidations, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield merchandise_service_1.default.updateMerchandiseRequestStatus(req.body);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+merchandiseRouter.put("/update/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const manufacturerId = req.currentUser._id;
+        const merchandiseId = req.params.id;
+        const result = yield merchandise_service_1.default.findByIdAndUpdate(merchandiseId, req.body, manufacturerId);
+        res.send(new response_handler_1.ResponseHandler(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+merchandiseRouter.delete("/delete/:id", (0, auth_permissions_1.authPermissions)(["deleteMerchandise"]), ...merchandise_validations_1.deleteAndUpdateValidation, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const merchandiseId = req.params.id;
+        const result = yield merchandise_service_1.default.deleteById(merchandiseId);
         res.send(new response_handler_1.ResponseHandler(result));
     }
     catch (e) {

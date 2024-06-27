@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOrderStatus = exports.getAllorders = exports.placeOrder = void 0;
+exports.getAllOrders = exports.updateOrderStatus = exports.placeOrder = void 0;
 const inventory_service_1 = __importDefault(require("../inventory/inventory.service"));
 const user_service_1 = __importDefault(require("../users/user.service"));
 const order_repo_1 = __importDefault(require("./order.repo"));
@@ -29,16 +29,6 @@ const placeOrder = (order) => {
     }
 };
 exports.placeOrder = placeOrder;
-const getAllorders = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const orders = order_repo_1.default.getAllorders();
-        if (!orders)
-            throw order_responses_1.orderResponses.ORDERS_NOT_FOUND;
-        return orders;
-    }
-    catch (e) { }
-});
-exports.getAllorders = getAllorders;
 const updateOrderStatus = (updates, orderId, manufacturerId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderToComplete = yield order_repo_1.default.getSpecificOrder(orderId);
@@ -66,7 +56,89 @@ const updateOrderStatus = (updates, orderId, manufacturerId) => __awaiter(void 0
     }
 });
 exports.updateOrderStatus = updateOrderStatus;
+const getAllOrders = (status, page, limit) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const pipeline = [
+            {
+                $match: {
+                    status: status,
+                },
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "distributorId",
+                    foreignField: "_id",
+                    as: "distributor",
+                },
+            },
+            {
+                $unwind: "$distributor",
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "products.productId",
+                    foreignField: "_id",
+                    as: "productDetails",
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    distributorId: 1,
+                    distributorName: "$distributor.name",
+                    status: 1,
+                    products: {
+                        $map: {
+                            input: "$products",
+                            as: "p",
+                            in: {
+                                productId: "$$p.productId",
+                                quantity: "$$p.quantity",
+                                productName: {
+                                    $arrayElemAt: [
+                                        {
+                                            $map: {
+                                                input: {
+                                                    $filter: {
+                                                        input: "$productDetails",
+                                                        as: "pd",
+                                                        cond: {
+                                                            $eq: [
+                                                                "$$pd._id",
+                                                                "$$p.productId",
+                                                            ],
+                                                        },
+                                                    },
+                                                },
+                                                as: "filteredProduct",
+                                                in: "$$filteredProduct.productName",
+                                            },
+                                        },
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+        ];
+        const orders = yield order_repo_1.default.aggregate(pipeline);
+        if (!orders)
+            throw order_responses_1.orderResponses.ORDERS_NOT_FOUND;
+        return orders;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.getAllOrders = getAllOrders;
 exports.default = {
+    getAllOrders: exports.getAllOrders,
     placeOrder: exports.placeOrder,
     updateOrderStatus: exports.updateOrderStatus,
 };

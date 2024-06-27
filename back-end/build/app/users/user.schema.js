@@ -63,8 +63,8 @@ const userSchema = new base_schema_1.BaseSchema({
             },
             status: {
                 type: String,
-                enum: ["Pending", "Completed"],
-                default: "Pending",
+                enum: ["pending", "completed"],
+                default: "pending",
             },
             createdAt: {
                 type: Date,

@@ -14,14 +14,6 @@ export const placeOrder = (order: IOrderSchema) => {
     }
 };
 
-export const getAllorders = async () => {
-    try {
-        const orders = orderRepo.getAllorders();
-        if (!orders) throw orderResponses.ORDERS_NOT_FOUND;
-        return orders;
-    } catch (e) {}
-};
-
 export const updateOrderStatus = async (
     updates: IStatusUpdate,
     orderId: string,
@@ -68,7 +60,91 @@ export const updateOrderStatus = async (
     }
 };
 
+export const getAllOrders = async (
+    status: string,
+    page: number,
+    limit: number
+) => {
+    try {
+        const pipeline = [
+            {
+                $match: {
+                    status: status,
+                },
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "distributorId",
+                    foreignField: "_id",
+                    as: "distributor",
+                },
+            },
+            {
+                $unwind: "$distributor",
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "products.productId",
+                    foreignField: "_id",
+                    as: "productDetails",
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    distributorId: 1,
+                    distributorName: "$distributor.name",
+                    status: 1,
+                    products: {
+                        $map: {
+                            input: "$products",
+                            as: "p",
+                            in: {
+                                productId: "$$p.productId",
+                                quantity: "$$p.quantity",
+                                productName: {
+                                    $arrayElemAt: [
+                                        {
+                                            $map: {
+                                                input: {
+                                                    $filter: {
+                                                        input: "$productDetails",
+                                                        as: "pd",
+                                                        cond: {
+                                                            $eq: [
+                                                                "$$pd._id",
+                                                                "$$p.productId",
+                                                            ],
+                                                        },
+                                                    },
+                                                },
+                                                as: "filteredProduct",
+                                                in: "$$filteredProduct.productName",
+                                            },
+                                        },
+                                        0,
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+        ];
+        const orders = await orderRepo.aggregate(pipeline);
+        if (!orders) throw orderResponses.ORDERS_NOT_FOUND;
+        return orders;
+    } catch (e) {
+        throw e;
+    }
+};
+
 export default {
+    getAllOrders,
     placeOrder,
     updateOrderStatus,
 };
